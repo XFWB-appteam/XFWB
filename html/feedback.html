@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>云API</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <!-- <link rel="stylesheet" type="text/css" href="../css/aui.2.0.css"/> -->
+    <link rel="stylesheet" type="text/css" href="../css/aui.css" />
+    <style>
+        .empty {
+            text-align: center;
+            padding: 120px 0;
+        }
+
+        div,
+        select,
+        input {
+            font-size: 16px;
+        }
+
+        .fill {
+            width: 100%;
+        }
+
+        div,
+        div select,
+        div input {
+            font-size: 0.9rem;
+        }
+    </style>
+    <script type="text/javascript" src="../script/api.js"></script>
+    <script type="text/javascript" src="../script/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript">
+        // var project_info1 = api.page.info;
+
+        //如果是测试任务就显示...  如果是排查任务就显示...
+        function cclose() {
+            api.closeWin();
+        }
+
+        //提交的点击事件
+        function doclick() {
+            //向后台提交数据  并返回上一个界面
+
+            if (null == document.getElementById("area").value || "" == document.getElementById("area").value) {
+                alert("您输入的内容为空");
+            } else {
+                api.closeWin();
+
+            }
+        }
+    </script>
+</head>
+
+<body style="background-color:#fff">
+    <header class="aui-bar aui-bar-nav" style="background-color:#00B2B4">
+        <div class="aui-pull-left aui-btn">
+            <span class="aui-iconfont aui-icon-left" onclick="cclose()"></span>
+        </div>
+        <div class="aui-title total-color" style="font-size:16px">意见反馈</div>
+        <!--
+            <div>任务类型</div> -->
+    </header>
+
+    <div style="margin-top:50px">
+
+
+        <textarea id="area" style="width:80%;height:170px;border: 1px solid #ccc;margin:10px;border-radius:7px;margin-left:7%;" placeholder="请输入您的意见" type="text" required></textarea>
+
+    </div>
+
+
+    <p class=" define-color" style="margin:190px 40px 20px 40px;border-radius:0.2rem;;text-align:center;height:1.8rem;color:#000;padding: 0.3rem 0rem;color:white;font-size:0.8rem" onclick="doclick()">提交</p>
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>Hello APP</title>
+    <link rel="stylesheet" type="text/css" href="../css/aui.css" />
+    <link rel="stylesheet" href="css/jquery-editable-select.min.csss">
+	<style>
+  body{
+    background-color: #ffffff;
+  }
+  h3{
+    display:inline-block;
+    color:#009688;
+
+  }
+  .aui-list .aui-list-item {
+    display: block;
+}
+span{
+  color:#7B7B7B
+}
+.content{
+  color:#AEAEAE
+}
+	</style>
+</head>
+<body>
+<input type="text" name="" value="">
+<div class="" style="margin-top:12px;margin-left:12px">
+
+      <label for="" style="float:left;width:21%"><h3>设施名称</h3></label>
+
+</div>
+<div class="" style="margin-top:12px;margin-left:12px">
+  <h3>已记录测试项</h3><span>&nbsp;&nbsp;a</span>
+</div>
+<div class="">
+<ul class="aui-list aui-list-in">
+            <li class="aui-list-item">
+                <div class="aui-list-item-inner">
+                    <div class="aui-list-item-title">a.测试火灾报警和故障报警功能</div>
+
+                </div>
+
+                <div class="content">
+                  每个回路各不少于2个，应正常报警显示（拍照打印结果）
+                </div>
+            </li>
+            <li class="aui-list-item">
+                <div class="aui-list-item-inner">
+                    <div class="aui-list-item-title">b.测试火灾报警和故障报警功能</div>
+                </div>
+            </li>
+            <li class="aui-list-item">
+                <div class="aui-list-item-inner">
+                    <div class="aui-list-item-title">c.测试火灾报警和故障报警功能</div>
+                </div>
+            </li>
+        </ul>
+</div>
+</body>
+<script type="text/javascript" src="script/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="script/jquery-editable-select.min.js"></script>
+</script>
+<script type="text/javascript">
+    apiready = function(){
+        api.parseTapmode();
+
+    };
+</script>
+</html>

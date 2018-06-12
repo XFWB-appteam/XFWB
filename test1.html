@@ -1,0 +1,72 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>演示：可以输入也可以下拉选择的select</title>
+<meta name="keywords" content="jquery" />
+<meta name="description" content="Helloweba演示平台，演示XHTML、CSS、jquery、PHP案例和示例" />
+<link rel="stylesheet" type="text/css" href="css/jquery-editable-select.min.css"/>
+<style type="text/css">
+.demo{margin:50px auto 10px auto;padding:10px;width:100px;}
+</style>
+</head>
+<body>
+<div id="main">
+   <div class="demo">
+		<select id="editable-select" class="form-control">
+    <!-- <option>Alfa Romeo</option>
+    <option>Audi</option>
+	<option>中国人民银行</option>
+    <option>中国人民</option>
+    <option>中国</option>
+    <option>BMW</option>
+    <option>Citroen</option>
+    <option>Fiat</option>
+    <option>Ford</option>
+    <option>Jaguar</option>
+    <option>Jeep</option>
+    <option>Lancia</option>
+    <option>Land Rover</option>
+    <option>Mercedes</option>
+    <option>Mini</option>
+    <option>Nissan</option>
+    <option>Opel</option>
+    <option>Peugeot</option>
+    <option>Porsche</option>
+    <option>Renault</option> -->
+</select>
+
+	</div>
+</div>
+
+<script type="text/javascript" src="script/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="script/jquery-editable-select.min.js"></script>
+<script type="text/javascript" src="script/api.js"></script>
+<script type="text/javascript">
+var a=['BMW','Citroen','Mini','Nissan','Opel','Porsche','Renault','Fiat','Jeep','Lancia'];
+apiready = function(){};
+  for(var i=0;i<10;i++){
+    $("#editable-select").append("<option value='"+a[i]+"'>"+a[i]+"</option>");
+  }
+
+    $('#editable-select').editableSelect({
+    	         effects: 'slide',
+               onSelect: function (element) {
+         alert("Selected!");
+     }
+    });
+
+
+    // $("#editable-select").blur(function () {
+    //  var checkText=$("#editable-select").find("option:selected").text();
+    //   alert(checkText);
+    //    var checkValue=$("#editable-select").val();
+    //    alert(checkValue);
+    //   });
+
+
+</script>
+</body>
+</html>

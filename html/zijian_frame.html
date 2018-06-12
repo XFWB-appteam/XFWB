@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>应用</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/aui.2.0.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/aui.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/aui-skin.css"/>
+    <style>
+      .aui-content ul li div div i.aui-icon-edit{
+          color: #F36D18;
+          font-weight: bolder;
+      }
+      .aui-content ul li div div i.aui-icon-pencil{
+          color: #F4CB62;
+          font-weight: bolder;
+      }
+      .aui-content ul li div div i.aui-icon-info{
+          color: #62B08C;
+          font-weight: bolder;
+      }
+    </style>
+</head>
+<body>
+    <div class="aui-content aui-margin-b-15">
+        <ul class="aui-list aui-list-in">
+            <li class="aui-list-item aui-list-item-middle">
+                <div class="aui-list-item-inner aui-list-item-arrow" onclick="fnOpenPlansetWin();">
+                    <div class="aui-list-item-title"><i class="aui-iconfont aui-icon-edit"></i>&emsp;按计划自建</div>
+                </div>
+            </li>
+            <li class="aui-list-item">
+                <div class="aui-list-item-inner aui-list-item-arrow" onclick="fnOpenTempsetWin();">
+                    <div class="aui-list-item-title"><i class="aui-iconfont aui-icon-pencil"></i>&emsp;临时自建任务</div>
+                </div>
+            </li>
+            <li class="aui-list-item">
+                <div class="aui-list-item-inner aui-list-item-arrow" onclick="fnOpenUnsubmitWin();">
+                    <div class="aui-list-item-title"><i class="aui-iconfont aui-icon-info"></i>&emsp;管理未提交任务</div>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+</body>
+</html>
+<script type="text/javascript" src="script/api.js"></script>
+<script type="text/javascript">
+  apiready = function(){
+  }
+  function fnOpenPlansetWin () {
+   api.openWin({
+       name: 'planset_win',
+       url: './planset_win.html',
+       pageParam: {
+          name: 'test'
+       }
+   });
+  }
+  function fnOpenTempsetWin () {
+   api.openWin({
+       name: 'tempset_win',
+       url: './tempset_win.html',
+       pageParam: {
+          name: 'test'
+       }
+   });
+  }
+  function fnOpenUnsubmitWin () {
+   api.openWin({
+       name: 'Manage_Uncommitted',
+       url: './Manage_Uncommitted.html',
+       pageParam: {
+          name: 'test'
+       }
+   });
+  }
+</script>

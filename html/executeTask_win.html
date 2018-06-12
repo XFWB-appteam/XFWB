@@ -1,0 +1,74 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <link rel="stylesheet" type="text/css" href="../css/aui.css" />
+</head>
+<body>
+    <header class="aui-bar aui-bar-nav" id="aui-header">
+        <a class="aui-btn aui-pull-left" tapmode onclick="closeWin()">
+            <span class="aui-iconfont aui-icon-left"></span>
+        </a>
+        <div class="aui-title">执行任务</div>
+    </header>
+    <footer class="aui-bar aui-bar-tab" id="footer">
+        <div class="aui-bar-tab-item aui-padded-l-15 aui-padded-r-15">
+          <!--下面的div是写接收任务，逻辑是点击接受任务后，修改状态，跳到上一个页面-->
+            <div id="acceptBtn" class="aui-btn aui-btn-block aui-btn-sm aui-btn-info" onclick="executeTask()"  ><i class="aui-iconfont  aui-font-size-16"></i>执行任务</div>
+        </div>
+    </footer>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/jquery-1.4.2.min.js"></script>
+<script type="text/javascript">
+    var task_json = '数据出错，请联系工作人员';
+    apiready = function(){
+        api.parseTapmode();
+        var header = $api.byId('aui-header');
+        $api.fixStatusBar(header);
+        var headerPos = $api.offset(header);
+        var body_h = $api.offset($api.dom('body')).h;
+        var footerH = $api.offset($api.byId('footer')).h;
+        //接收上个页面传过来的数据，然后把它解析出来后更新到对应的div中
+        var project_info = api.pageParam.task_info;
+
+        api.openFrame({
+            name: 'executeTask',
+            url: 'executeTask_frm.html',
+            bounces: true,
+            rect: {
+                x: 0,
+                y: headerPos.h,
+                w: 'auto',
+                h: api.winHeight-headerPos.h-footerH
+            },
+            pageParam:{
+              "task_info":project_info
+            }
+
+        })
+    };
+    function closeWin(){
+        api.closeWin({
+        });
+    }
+    function executeTask()
+    {
+      var project_info = api.pageParam.task_info;
+      api.openWin({
+          name: 'executeTestTask_win',
+          url: './executeTestTask_win.html',
+          pageParam: {
+              "task_info": project_info
+          }
+      });
+
+    }
+    function getAllInfomation(temp)
+    {
+       task_json = temp;
+    }
+</script>
+</html>

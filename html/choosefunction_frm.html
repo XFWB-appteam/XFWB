@@ -1,0 +1,133 @@
+<!doctype html>
+<html>
+
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+        <title>APICloud APP</title>
+        <link rel="stylesheet" type="text/css" href="../css/api.css" />
+        <style>
+            html {
+                width: 100%;
+                height: 100%;
+                background: transparent;
+            }
+
+            body {
+                background: rgba(0, 0, 0, 0.4);
+                width: 100%;
+                height: 100%;
+            }
+
+            .floatbox {
+                position: absolute;
+                text-align: center;
+                background: #fff;
+                bottom: 0;
+            }
+
+            .floatheader {
+                height: 40px;
+                line-height: 40px;
+                font-size: 14px;
+                color: #999;
+                text-align: left;
+                margin-left: 20px;
+            }
+
+            .floatbody {
+                border-bottom: 1px solid #D0D2D6;
+            }
+
+            .floatbodybtn {
+                width: 20px;
+                height: 20px;
+                background: #0fc;
+            }
+
+            .floatfooter {
+                height: 40px;
+                line-height: 40px;
+                font-size: 18px;
+            }
+
+            .row {
+                display: -webkit-box;
+                display: -webkit-flex;
+            }
+
+            .col {
+                -webkit-box-flex: 1;
+                -webkit-flex: 1;
+                flex: 1;
+                padding: 10px;
+            }
+
+            .col img {
+                width: 50%;
+                display: block;
+                margin: 0 auto;
+            }
+
+            .col span {
+                font-size: 12px;
+                padding-top: 10px;
+            }
+
+            .btn-hov {
+                background-color: #D1D4D7;
+            }
+        </style>
+    </head>
+
+    <body tapmode onclick="fnClose()">
+        <div class="floatbox">
+            <div class="floatheader">请选择要添加的信息</div>
+            <div class="floatbody">
+
+                <div class="row">
+                    <div class="col" tapmode="btn-hov" onclick="fnOpenVoice()">
+                        <img src="../image/plus.jpg" alt="">
+                        <span>语音</span>
+                    </div>
+                    <div class="col" tapmode="btn-hov" onclick="fnOpenText()">
+                        <img src="../image/plus.jpg" alt="">
+                        <span>文字</span>
+                    </div>
+                    <div class="col" tapmode="btn-hov" onclick="fnOpenPhoto()">
+                        <img src="../image/plus.jpg" alt="">
+                        <span>拍照</span>
+                    </div>
+                    <div class="col" tapmode="btn-hov" onclick="fnOpenVideo()">
+                        <img src="../image/plus.jpg" alt="">
+                        <span>视频</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+    <script type="text/javascript" src="../script/api.js"></script>
+    <script type="text/javascript">
+    //可以参考apicloud的share样式，现在先用底部的
+        var transvalue = "我分享了一个东西";
+        function fnOpenVoice() {
+          alert("暂不支持，敬请期待");
+        };
+        function fnOpenText() {
+          alert("暂不支持，敬请期待");
+        };
+        function fnOpenPhoto() {
+          alert("暂不支持，敬请期待");
+        };
+        function fnOpenVideo() {
+          alert("暂不支持，敬请期待");
+        };
+
+        function fnClose() {
+          api.closeFrame({
+
+          });
+        };
+    </script>
+
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>按计划自建</title>
+
+    <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/aui.2.0.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/aui.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/aui-skin.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/aui-iconfont.ttf"/>
+	<style>
+  .flex-list{
+    padding:0;
+    margin:-100;
+    list-style:none;
+    display:-webkit-box;display:-moz-box;display:-ms-flexbox;
+    display:-webkit-flex;
+    display:flex;
+    -webkit-flex-flow:row nowrap;
+    justify-content: center;
+    height:40px;
+    background-color: #fff;
+  }
+  .flex-list li{
+    -webkit-box-flex:1;
+    -webkit-flex:1;
+    flex: 1;
+    width: 100%;
+    height: 40px;
+    line-height: 40px;
+    font-size: 13px;color: #00b2b4;text-align: center;
+  }
+  .flex-list li.active {
+    font-size: 14px;
+    color: #00b2b4;
+    font-weight: bolder;
+  }
+	</style>
+</head>
+<body>
+  <header class="aui-bar aui-bar-nav" style="background-color:#00b2b4">
+          <div class="aui-pull-left aui-btn" >
+              <span class="aui-iconfont aui-icon-left" tapmode onclick="fnClosePlanset0Win();"></span>
+          </div>
+          <div id="title" class="aui-title"></div>
+  </header>
+  <ul class="flex-list">
+      <li tapmode="hover" onclick="randomSwitchBtn1( this );" class="flex-con active" >计划完成情况</li>
+      <li tapmode="hover" onclick="randomSwitchBtn1( this );" class="flex-con" >未完成维保项目</li>
+  </ul>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript">
+    apiready = function(){
+      $api.fixStatusBar( $api.dom('.aui-bar') );
+      api.setStatusBarStyle({
+          style: 'dark',
+          color: '#6ab494'
+      });
+      var header = $api.html($api.byId('title'),api.pageParam.name);//获取上一个页面的名称
+      funIniGroup1();
+    }
+    function fnClosePlanset0Win(){
+      api.closeWin({
+          name: 'planset0_win',
+          type:"push",                //动画类型（详见动画类型常量）
+          subType:"from_right",       //动画子类型（详见动画子类型常量）
+          duration:200                //动画过渡时间，默认300毫秒
+      });
+    }
+    //计划完成情况、未完成维保项目设置为一个framegroup
+      function funIniGroup1(){
+          var eNavLis = $api.domAll('ul li'),
+              frames = [];
+                  frames.push( {
+                      name: 'zijian_frame',
+                      url: './zijian_frame.html',
+                      bgColor : 'rgba(0,0,0,.2)',
+                      bounces:false
+                  } )
+                  frames.push( {
+                      name: 'jieshou_frame',
+                      url: './jieshou_frame.html',
+                      bgColor : 'rgba(0,0,0,.2)',
+                      bounces:false
+                  } )
+                  api.openFrameGroup({
+                      name: 'group2',
+                      scrollEnabled: false,
+                      rect: {
+                          x: 0,
+                          y:115,
+                          w: 'auto',
+                          h: 300
+                      },
+                      index: 0,
+                      frames: frames
+                  }, function (ret, err) {
+                    api.setFrameGroupAttr({
+                    name: 'group2',
+                    hidden: false
+                    });
+                  });
+      }
+      // 随意切换按钮
+      function randomSwitchBtn1( tag ) {
+          if( tag == $api.dom('ul li.active') )return;
+          var eNavLis = $api.domAll('ul li'),
+              index = 0;
+              for (var i = 0,len = eNavLis.length; i < len; i++) {
+                  if( tag == eNavLis[i] ){
+                      index = i;
+                  }else{
+                      $api.removeCls(eNavLis[i], 'active');
+                  }
+              }
+          $api.addCls( eNavLis[index], 'active');
+          api.setFrameGroupIndex({
+              name: 'group2',
+              index: index
+          });
+      }
+</script>
+</html>

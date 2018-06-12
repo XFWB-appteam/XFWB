@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>应用</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/aui.2.0.css" />
+    <style>
+
+    </style>
+</head>
+<body>
+        <ul class="aui-list aui-list-in">
+          <li class="aui-list-item">
+             <img src="../image/notice.png" style="width:10%;height:10%;margin-top:6px;margin-right:10px">
+              <div class="aui-list-item-inner aui-list-item-arrow">
+                  通知提醒
+              </div>
+          </li>
+            <li class="aui-list-item" onclick="toRecord()">
+               <img src="../image/record.png" style="width:10%;height:10%;margin-top:6px;margin-right:10px">
+                <div class="aui-list-item-inner aui-list-item-arrow">
+                    工作日志
+                </div>
+            </li>
+            <li class="aui-list-item">
+               <img src="../image/help.png" style="width:10%;height:10%;margin-top:6px;margin-right:10px">
+                <div class="aui-list-item-inner aui-list-item-arrow">
+                    使用帮助
+                </div>
+            </li>
+            <li class="aui-list-item">
+               <img src="../image/fire.png" style="width:10%;height:10%;margin-top:6px;margin-right:10px">
+                <div class="aui-list-item-inner aui-list-item-arrow">
+                    火灾隐患
+                </div>
+            </li>
+        </ul>
+</body>
+</html>
+
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/jquery-1.4.2.min.js"></script>
+<script>
+  function toRecord(){
+  //  alert("工作日志");
+  api.openWin({
+      name: 'jobRecord',
+      url: './jobRecord.html',
+      pageParam: {
+          name: 'test'
+      }
+  });
+
+  }
+</script>

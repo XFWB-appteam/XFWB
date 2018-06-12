@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+      <title>title</title>
+      <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+      <style>
+          body{
+
+          }
+      </style>
+  </head>
+  <body>
+      <button type="button" name="button" id="button1" style="padding:10px;margin:10px">按钮1</button>
+      <button type="button" name="button" id="button2" style="padding:10px;margin:10px">按钮2</button>
+  </body>
+  <script type="text/javascript" src="../script/api.js"></script>
+  <script type="text/javascript">
+      apiready = function(){
+
+      };
+        $api.addEvt($api.byId('button1'),'click',function(){
+          var UIListView = api.require('UIListView');
+          UIListView.hide();
+          var UICalendar = api.require('UICalendar');
+
+          UICalendar.open({
+              rect: {
+                  x: 30,
+                  y: api.frameHeight / 2 - 170,
+                  w: api.frameWidth - 60,
+                  h: 340
+              },
+              styles: {
+                  bg: 'rgba(0,0,0,0)',
+                  week: {
+                      weekdayColor: '#3b3b3b',
+                      weekendColor: '#a8d400',
+                      size: 12
+                  },
+                  date: {
+                      color: '#3b3b3b',
+                      selectedColor: '#fff',
+                      selectedBg: '#a8d500',
+                      size: 12
+                  },
+                  today: {
+                      color: 'rgb(230,46,37)',
+                      bg: ''
+                  },
+                  specialDate: {
+                      color: '#a8d500',
+                      bg: 'widget://image/a.png'
+                  }
+              },
+              specialDate: [{
+                  date: '2015-06-01'
+              }],
+              switchMode: 'vertical',
+              fixedOn: api.frameName,
+              fixed: false
+          }, function(ret, err) {
+              if (ret) {
+                  alert(JSON.stringify(ret));
+              } else {
+                  alert(JSON.stringify(err));
+              }
+          });
+
+        });
+          $api.addEvt($api.byId('button2'),'click',function(){
+              var UICalendar = api.require('UICalendar');
+            UICalendar.hide();
+            var UIListView = api.require('UIListView');
+      UIListView.open({
+          rect: {
+              x: 20,
+              y: 60,
+              w: api.winWidth,
+              h: api.frameHeight
+          },
+          data: [{
+              uid: '1001',
+              imgPath: 'widget://res/img/apicloud.png',
+              title: '标题',
+              subTitle: '子标题，说明文字',
+              remark: '备注',
+              icon: ''
+          }, {
+              uid: '1001',
+              imgPath: 'widget://res/img/apicloud.png',
+              title: '标题',
+              subTitle: '子标题，说明文字',
+              remark: '备注',
+              icon: ''
+          }, {
+              uid: '1001',
+              imgPath: 'widget://res/img/apicloud.png',
+              title: '标题',
+              subTitle: '子标题，说明文字',
+              remark: '备注',
+              icon: ''
+          }, {
+              uid: '1001',
+              imgPath: 'widget://res/img/apicloud.png',
+              title: '标题',
+              subTitle: '子标题，说明文字',
+              remark: '备注',
+              icon: ''
+          }, {
+              uid: '1001',
+              imgPath: 'widget://res/img/apicloud.png',
+              title: '标题',
+              subTitle: '子标题，说明文字',
+              remark: '备注',
+              icon: ''
+          }, {
+              uid: '1001',
+              imgPath: 'widget://res/img/apicloud.png',
+              title: '标题',
+              subTitle: '子标题，说明文字',
+              remark: '备注',
+              icon: ''
+          }, {
+              uid: '1001',
+              imgPath: 'widget://res/img/apicloud.png',
+              title: '标题',
+              subTitle: '子标题，说明文字',
+              remark: '备注',
+              icon: ''
+          }, {
+              uid: '1001',
+              imgPath: 'widget://res/img/apicloud.png',
+              title: '标题',
+              subTitle: '子标题，说明文字',
+              remark: '备注',
+              icon: ''
+          }, {
+              uid: '1001',
+              imgPath: 'widget://res/img/apicloud.png',
+              title: '标题',
+              subTitle: '子标题，说明文字',
+              remark: '备注',
+              icon: ''
+          }, {
+              uid: '1001',
+              imgPath: 'widget://res/img/apicloud.png',
+              title: '标题',
+              subTitle: '子标题，说明文字',
+              remark: '备注',
+              icon: ''
+          }, {
+              uid: '1001',
+              imgPath: 'widget://res/img/apicloud.png',
+              title: '标题',
+              subTitle: '子标题，说明文字',
+              remark: '备注',
+              icon: ''
+          }, {
+              uid: '1001',
+              imgPath: 'widget://res/img/apicloud.png',
+              title: '标题',
+              subTitle: '子标题，说明文字',
+              remark: '备注',
+              icon: ''
+          }, {
+              uid: '1001',
+              imgPath: 'widget://res/img/apicloud.png',
+              title: '标题',
+              subTitle: '子标题，说明文字',
+              remark: '备注',
+              icon: ''
+
+          }],
+          rightBtns: [{
+              bgColor: '#388e8e',
+              activeBgColor: '',
+              width: 70,
+              title: '按钮',
+              titleSize: 12,
+              titleColor: '#fff',
+              icon: '',
+              iconWidth: 20
+          }],
+          styles: {
+              borderColor: '#696969',
+              item: {
+                  bgColor: '#AFEEEE',
+                  activeBgColor: '#F5F5F5',
+                  height: 55.0,
+                  imgWidth: 40,
+                  imgHeight: 40,
+                  imgCorner: 4,
+                  placeholderImg: '',
+                  titleSize: 12.0,
+                  titleColor: '#000',
+                  subTitleSize: 12.0,
+                  subTitleColor: '#000',
+                  remarkColor: '#000',
+                  remarkSize: 16,
+                  remarkIconWidth: 30
+              }
+          },
+          fixedOn: api.frameName
+      }, function(ret, err) {
+          if (ret) {
+              alert(JSON.stringify(ret));
+          } else {
+              alert(JSON.stringify(err));
+          }
+      });
+
+
+          });
+
+  </script>
+  </html>

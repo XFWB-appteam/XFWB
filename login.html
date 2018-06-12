@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+      <title>title</title>
+      <link rel="stylesheet" type="text/css" href="css/api.css"/>
+      <link rel="stylesheet" href="css/aui.css">
+      <style>
+      html,body{width:100%; position:relative;}
+
+   .words{
+     font-size: 20px; position: absolute; top:25%; left: 10%; width: 80%;}
+   .imgw{position: fixed}
+    img{ height: 100%; width: auto; width:100%;max-width:100%;overflow:hidden; }
+    button{
+      color:#009688
+    }
+
+      </style>
+  </head>
+  <body>
+        <div class="imgw">
+        <img src="img/background.png" style="">
+        <div class="words">
+          <img src="img/login.png" style="width:20%;height:20%;margin-left:15%;margin-bottom:-40px;;">
+          <label for="" style="margin-left:42%;margin-bottom:40px;">内蒙古消防综合管理平台</label>
+          <ul>
+          <li style="border-radius: 30px;background-color:#FFFFFF;margin-bottom:20px">
+            <label for="" style="float:left;margin-left:4%;margin-top:3%;width:20%"><img src="img/zhanhao.png" style="width:50%"></label>
+            <input  class="login" style="width:70%" type="text"/>
+          </li>
+          <li style="border-radius: 30px;background-color:#FFFFFF">
+            <label for=""style="float:left;margin-left:4%;margin-top:3%;width:20%"><img src="img/mima.png" style="width:50%"></label>
+            <input class="login" type="text" style="width:70%"/></li>
+        </ul>
+      <button id="button" style="display:block;border-radius: 30px;width:96%;margin: 10% auto;background-color:#FFFFFF;height:40px;">登录</button>
+      </div>
+    </div>
+
+  </body>
+  <script type="text/javascript" src="script/api.js"></script>
+  <script type="text/javascript">
+      apiready = function(){
+
+      }
+      var login = document.getElementsByClassName('login');
+
+    $api.addEvt($api.byId('button'),'click',function(){
+      var login = document.getElementsByClassName('login');
+    var zhanghao = login[0].value;
+    var password = login[1].value;
+    api.openWin({
+        name: 'index.html',
+        url: 'index.html'
+    });
+  });
+      //alert(zhanghao);
+    //   api.ajax({
+    //       url: 'http://192.168.0.29/www/shop/index.php/Login/login1',
+    //       method: 'post',
+    //       dataType: 'text', //该参数若不传，则默认为json<div class="aui-tips aui-margin-b-15">2
+    //
+    //       data: {
+    //       values:{name: zhanghao, password: password} //键值对
+    //       }
+    //       },function(ret,err){
+    //       if (ret) {
+    //       //api.alert({msg:JSON.stringify(ret)});
+    //       alert(ret);
+    //       // $api.setStorage('zhanghao',zhanghao);
+    //       // $api.setStorage('password',password);
+    //
+    //       } else {
+    //       api.alert(err);
+    //       };
+    //       });
+    //
+    // });
+
+
+
+// api.ajax({
+//     url: 'http://192.168.1.102/www/shop/index.php/Login/login1',
+//     method: 'post',
+//     headers: {
+//         'Content-Type': 'application/json'
+//     },
+//     data: {
+//         body: {
+//           zhanghao_data: zhanghao
+//           password_data: password
+//         }
+//     }
+// }, function(ret, err) {
+//     if (ret) {
+//         api.alert({ msg: JSON.stringify(ret) });
+//     } else {
+//         api.alert({ msg: JSON.stringify(err) });
+//     }
+// });
+//
+//     })
+  </script>
+  </html>

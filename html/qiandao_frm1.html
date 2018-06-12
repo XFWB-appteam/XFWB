@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+      <title>title</title>
+      <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+      <style>
+          body{
+
+          }
+      </style>
+  </head>
+  <body>
+  </body>
+  <script type="text/javascript" src="../script/api.js"></script>
+  <script type="text/javascript">
+  var winHeight,
+    map,
+    lat,
+    lon;
+    apiready = function(){
+      winHeight = api.pageParam.height;
+        api.parseTapmode();
+        map = api.require('bMap');
+        getLocation();
+    };
+    function open(){
+    map.open({
+        rect: {
+            x: 0,
+            y: winHeight,
+            w: api.winWidth,
+            h: api.frameHeight
+        },
+        center: {
+            lon: lon,
+            lat: lat
+        },
+        zoomLevel: 15,
+        showUserLocation: true,
+        fixedOn: '',
+        fixed: true
+    }, function(ret){
+      if (ret.status) {
+        //alert('地图打开成功');
+    }
+    });
+    }
+    function getLocation(){
+      map.getLocation({
+        accuracy: '100m',
+        autoStop: true,
+        filter: 1
+    }, function(ret, err){
+        if(ret.status){
+            lat = ret.lat;
+            lon = ret.lon;
+          //  alert(JSON.stringify(ret));
+           $api.setStorage('lat',ret.lat);
+           $api.setStorage('lon',ret.lon);
+              open();
+        }else{
+            alert(err.code);
+        }
+    });
+    }
+  </script>
+  </html>

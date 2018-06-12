@@ -1,0 +1,161 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>按计划自建</title>
+
+    <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/aui.2.0.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/aui.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/aui-skin.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/aui-iconfont.ttf"/>
+	<style>
+  body{background:#eee;}
+  *{ margin: 0; padding: 0; }
+  img{border:0;}
+  ul,li{list-style-type:none;}
+  a {color:#00b2b4;text-decoration:none;}
+  a:hover {color:#00b2b4;}
+  .treebox{ width: 100%; margin: 0spx auto; background-color:#00b2b4; }
+  .menu{ overflow: hidden; border-color: #fff; border-style: solid ; border-width: 0 0px 0px ; }
+/*第一层*/
+  .menu li.level1>a{
+  display:block;
+  height: 45px;
+  line-height: 45px;
+  color: #fff;
+  padding-left: 50px;
+  border-bottom: 1px solid #000;
+  font-size: 16px;
+  position: relative;
+  transition:all .5s ease 0s;
+ }
+ .menu li.level1 a.current{ background: #F4CB62; }
+
+ /*============小箭头*/
+ .level1 i{ width: 20px; height: 10px; background-image:url(../image/arrow.png); background-repeat: no-repeat; display: block; position: absolute; right: 20px; top: 20px; }
+.level1 i.right{ background-position: 0 -10px; }
+
+ /*第二层*/
+ .menu li ul{ overflow: hidden; }
+ .menu li ul.level2{ display: none;background: #fff;  }
+ .menu li ul.level2 li a{
+  display: block;
+  height: 45px;
+  line-height: 45px;
+  color: #F4CB62;
+  text-indent: 60px;
+  /*border-bottom: 1px solid #ddd; */
+  font-size: 14px;
+   transition:all 1s ease 0s;
+ }
+	</style>
+</head>
+<body>
+<header class="aui-bar aui-bar-nav" style="background-color:#00b2b4">
+        <div class="aui-pull-left aui-btn" >
+            <span class="aui-iconfont aui-icon-left" tapmode onclick="fnClosePlansetWin();"></span>
+        </div>
+        <div class="aui-title">计划提醒</div>
+</header>
+<div style="text-align:center;clear:both">
+      <script src="./gg_bd_ad_720x90.js" type="text/javascript"></script>
+      <script src="./follow.js" type="text/javascript"></script>
+</div>
+<div class="treebox">
+      <ul class="menu">
+          <li class="level1">
+            <a href="#none"><em class="ico ico1"></em>中建国际中心<i class="right"></i></a>
+            <ul class="level2">
+              <li><a href="javascript:;" style="color:#bbb;">2018年1月计划:已完成</a></li>
+              <li><a href="javascript:;" style="color:#bbb;">2018年2月计划:已完成</a></li>
+              <li><a href="javascript:;" style="color:#bbb;">2018年3月计划:已完成</a></li>
+              <li id="undo" tapmode onclick="fnOpenPlanset0Win();"><a href="javascript:;">2018年4月计划</a></li>
+            </ul>
+          </li>
+          <li class="level1">
+            <a href="#none"><em class="ico ico2"></em>导航一<i></i></a>
+            <ul class="level2">
+              <li><a href="javascript:;">导航选项</a></li>
+              <li><a href="javascript:;">导航选项</a></li>
+              <li><a href="javascript:;">导航选项</a></li>
+              <li><a href="javascript:;">导航选项</a></li>
+            </ul>
+          </li>
+        <li class="level1">
+          <a href="#none"><em class="ico ico3"></em>导航一<i></i></a>
+            <ul class="level2">
+      <li><a href="javascript:;">导航选项</a></li>
+      <li><a href="javascript:;">导航选项</a></li>
+      <li><a href="javascript:;">导航选项</a></li>
+      <li><a href="javascript:;">导航选项</a></li>
+    </ul>
+  </li>
+  <li class="level1">
+    <a href="#none"><em class="ico ico4"></em>导航一<i></i></a>
+    <ul class="level2">
+      <li><a href="javascript:;">导航选项</a></li>
+      <li><a href="javascript:;">导航选项</a></li>
+      <li><a href="javascript:;">导航选项</a></li>
+      <li><a href="javascript:;">导航选项</a></li>
+    </ul>
+  </li>
+</ul>
+</div>
+
+<!-- 引入 jQuery -->
+<script src="../script/jquery1.8.3.min.js"></script>
+<script src="../script/easing.js"></script>
+<script>
+//等待dom元素加载完毕.
+$(function(){
+$(".treebox .level1>a").click(function(){
+  $(this).addClass('current')   //给当前元素添加"current"样式
+  .find('i').addClass('down')   //小箭头向下样式
+  .parent().next().slideDown('slow','easeOutQuad')  //下一个元素显示
+  .parent().siblings().children('a').removeClass('current')//父元素的兄弟元素的子元素去除"current"样式
+  .find('i').removeClass('down').parent().next().slideUp('slow','easeOutQuad');//隐藏
+   return false; //阻止默认时间
+});
+})
+</script>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript">
+    apiready = function(){
+      param= $api.html($api.byId('undo'));
+
+      $api.fixStatusBar( $api.dom('.aui-bar') );
+      api.setStatusBarStyle({
+          style: 'dark',
+          color: '#6ab494'
+      });
+      fnClosePlansetWin();
+      fnOpenPlanset0Win();
+
+    }
+    function fnClosePlansetWin(){
+      api.closeWin({
+          name: 'planset_win',
+          type:"push",                //动画类型（详见动画类型常量）
+          subType:"from_right",       //动画子类型（详见动画子类型常量）
+          duration:200                //动画过渡时间，默认300毫秒
+      });
+    }
+    function fnOpenPlanset0Win(){
+
+      api.openWin({
+          name: 'planset0',
+          url: './planset0_win.html',
+          pageParam: {
+              name: param
+          },
+          reload:true
+      });
+    }
+
+</script>
+</html>

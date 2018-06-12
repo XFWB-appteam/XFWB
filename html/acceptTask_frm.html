@@ -1,0 +1,124 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>接收任务</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/aui.2.0.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/aui.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/aui-skin.css"/>
+	<style>
+        .text-light {
+            color: #999 !important;
+        }
+        .aui-radio {
+            width: 1rem;
+            height: 1rem;
+        }
+        .login-form{
+            border: 1px solid #CCC;
+            border-radius: 5px;
+            background-color: #FFF;
+        }
+        .login-form-top{
+            position: relative;
+            height: 51px;
+            border-bottom: 1px solid #CCC;
+        }
+        .login-form-bottom{
+            position: relative;
+            height: 51px;
+        }
+	</style>
+</head>
+<body>
+    <section class="aui-content">
+      <div id="main" class="flex-con">
+        <ul id="project_list" class="aui-list aui-media-list">
+          <li class="aui-list-header">
+            </li>
+            <li class="aui-list-item aui-list-item-arrow">
+                <div class="aui-media-list-item-inner">
+                    <div class="aui-list-item-inner">
+                      <div class="aui-list-item-text">
+                          <div class="aui-list-item-title">任务名称</div>
+                          <div id="task_name">当你看到这行文字证明页面出错了</div>
+                      </div>
+                        <div class="aui-list-item-text">
+                            <div class="aui-list-item-title">项目名称</div>
+                            <div id="project_name">当你看到这行文字证明页面出错了</div>
+                        </div>
+                        <div class="aui-list-item-text">
+                            <div class="aui-list-item-title">任务类型</div>
+                            <div id="task_type">当你看到这行文字证明页面出错了</div>
+                        </div>
+                        <div class="aui-list-item-text">
+                            <div class="aui-list-item-title">下发人员</div>
+                            <div id="assign_person">当你看到这行文字证明页面出错了</div>
+                        </div>
+                        <div class="aui-list-item-text">
+                            <div class="aui-list-item-title">任务地址</div>
+                            <div id="task_addr">当你看到这行文字证明页面出错了</div>
+                        </div>
+                        <div class="aui-list-item-text">
+                            <div class="aui-list-item-title">下达时间</div>
+                            <div id="assign_time">当你看到这行文字证明页面出错了</div>
+                        </div>
+                        <div class="aui-list-item-text">
+                            <div class="aui-list-item-title">任务编号</div>
+                            <div id="task_number">当你看到这行文字证明页面出错了</div>
+                        </div>
+                        <div class="aui-list-item-text">
+                            <div class="aui-list-item-title">业主人员</div>
+                            <div id="owner">当你看到这行文字证明页面出错了</div>
+                        </div>
+                        <div class="aui-list-item-text">
+                            <div class="aui-list-item-title">联系电话</div>
+                            <div id="telephone">当你看到这行文字证明页面出错了</div>
+                        </div>
+                        <div class="aui-list-item-text">
+                            <div class="aui-list-item-title">任务描述</div>
+                            <div id="task_description">当你看到这行文字证明页面出错了</div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+
+          </ul>
+      </div>
+    </section>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/jquery-1.4.2.min.js"></script>
+<script type="text/javascript">
+    apiready = function(){
+        api.parseTapmode();
+        var project_info = api.pageParam.task_info;
+        fillData(project_info);
+        var jsfun = 'setTaskID('+project_info.task_num+');';
+        api.execScript({
+            name: 'acceptTask_win',
+            script: jsfun
+        });
+
+    };
+    function fillData(project_info){
+
+    $("#task_name").text(project_info.task_name) ;
+    $("#project_name").text(project_info.project_name) ;
+    $("#task_type").text(project_info.project_type) ;
+    $("#assign_person").text(project_info.assign_person) ;
+    $("#task_addr").text(project_info.task_place) ;
+    $("#assign_time").text(project_info.creat_date) ;
+    $("#owner").text(project_info.owner) ;
+    $("#telephone").text(project_info.telephone) ;
+    $("#task_description").text(project_info.task_description) ;
+    $("#task_number").text(project_info.task_num) ;
+
+
+    }
+</script>
+</html>

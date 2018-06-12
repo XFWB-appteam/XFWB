@@ -1,0 +1,195 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>底部导航</title>
+    <link rel="stylesheet" type="text/css" href="./css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="./css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="./css/aui.2.0.css"/>
+    <link rel="stylesheet" type="text/css" href="./css/aui.css"/>
+    <link rel="stylesheet" type="text/css" href="./css/aui-skin.css"/>
+
+    <style>
+        header{ background-color: #00b2b4; }
+        header ul li { height: 50px; line-height: 50px; text-align: center; display: none; color: #fff; position: relative;font-size: 18px;  }
+        header ul li.active{ display: block; }
+        header ul li div{
+          position: absolute;
+          bottom: 0;
+          right: 10px;
+          width: 40px;
+          font-size: 15px;
+          height: 50px;
+          float: right;
+        }
+        #footer{  background-color: #f2f2f2; }
+        #footer ul li{  padding-top: 36px; padding-bottom: 4px; background: url() no-repeat center 2px; background-size: auto 30px; text-align: center; }
+        #footer ul li.active{ color: #00b2b4; }
+        #footer ul li:nth-child(1){ background-image: url(./image/bottombtn0101.png); }
+        #footer ul li:nth-child(2){ background-image: url(./image/bottombtn0201.png); }
+        #footer ul li:nth-child(3){ background-image: url(./image/bottombtn0301.png); }
+        #footer ul li:nth-child(1).active{ background-image: url(./image/bottombtn0102.png); }
+        #footer ul li:nth-child(2).active{ background-image: url(./image/bottombtn0202.png); }
+        #footer ul li:nth-child(3).active{ background-image: url(./image/bottombtn0302.png); }
+    </style>
+</head>
+<body>
+<div id="wrap" class="flex-wrap flex-vertical">
+    <header>
+        <ul>
+            <li class="border-b active" >工作<div class="right" tapmode onclick="fnOpenRegisterWin();">签到</div></li>
+            <li class="border-b" >应用</li>
+            <li class="border-b" >我的</li>
+        </ul>
+    </header>
+    <div id="main" class="flex-con">
+    </div>
+    <div id="footer" class="border-t">
+        <ul class="flex-wrap" >
+            <li tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con active" >工作</li>
+            <li tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con" >应用</li>
+            <li tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con" >我的</li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>
+<script type="text/javascript" src="./script/api.js"></script>
+<script type="text/javascript">
+    apiready = function () {
+        $api.fixStatusBar($api.dom('header'));
+        api.setStatusBarStyle({
+            style: 'dark',
+            color: '#6ab494'
+        });
+        funIniGroup();
+    };
+
+    function funIniGroup(){
+        var eHeaderLis = $api.domAll('header li'),
+            frames = [];
+        for (var i = 0,len = eHeaderLis.length; i < len; i++) {
+                frames.push( {
+                    name: 'frame'+i,
+                    url: './html/frame'+i+'.html',
+                    bgColor : 'rgba(0,0,0,.2)',
+                    bounces:true
+                } )
+        }
+        api.openFrameGroup({
+            name: 'group',
+            scrollEnabled: false,
+            rect: {
+                x: 0,
+                y: $api.dom('header').offsetHeight,
+                w: api.winWidth,
+                h: $api.dom('#main').offsetHeight
+            },
+            index: 0,
+            frames: frames
+        }, function (ret, err) {
+          api.setFrameGroupAttr({
+          name: 'group1',
+          hidden: false
+          });
+          if (ret.index == '0') { // 是首页
+              api.bringFrameToFront({
+                from: 'frame0',
+                to: ret.frameName
+              });
+              api.setFrameGroupAttr({
+              name: 'group1',
+              hidden: false
+              });
+        } else if (ret.index == '1') { // 是首页
+                api.bringFrameToFront({ // 调整到前方
+                   from: 'frame1',
+                   to: ret.frameName
+                });
+                api.setFrameGroupAttr({
+                name: 'group1',
+                hidden: true
+                });
+              }else{
+                  api.bringFrameToFront({ // 调整到前方
+                     from: 'frame2',
+                     to: ret.frameName
+                  });
+                  api.setFrameGroupAttr({
+                  name: 'group1',
+                  hidden: true
+                  });
+            }
+        });
+        }
+              /*if (ret.index != '1') { // 不是首页
+                    api.sendFrameToBack({ // 调整到后方
+                       from: 'frame1',
+                       to: ret.frameName
+                   });
+                api.setFrameAttr({ // 隐藏内容层
+                    name: 'frame1',
+                    hidden:true,
+                });
+            } else { // 是首页
+                    api.bringFrameToFront({ // 调整到前方
+                       from: 'frame1',
+                       to: ret.frameName
+                  });
+
+                api.setFrameAttr({ // 显示内容层
+                    name: 'frame1',
+                    hidden:false,
+                  });
+                }
+                  if (ret.index != '2') { // 不是首页
+                        api.sendFrameToBack({ // 调整到后方
+                           from: 'frame2',
+                           to: ret.frameName
+                       });
+                    api.setFrameAttr({ // 隐藏内容层
+                        name: 'frame2',
+                        hidden:true,
+                    });
+                } else { // 是首页
+                        api.bringFrameToFront({ // 调整到前方
+                           from: 'frame2',
+                           to: ret.frameName
+                      });
+
+                    api.setFrameAttr({ // 显示内容层
+                        name: 'frame2',
+                        hidden:false,
+                      });
+                           }
+                       });
+                     }*/
+    // 随意切换按钮
+    function randomSwitchBtn( tag ) {
+        if( tag == $api.dom('#footer li.active') )return;
+        var eFootLis = $api.domAll('#footer li'),
+            eHeaderLis = $api.domAll('header li'),
+            index = 0;
+        for (var i = 0,len = eFootLis.length; i < len; i++) {
+            if( tag == eFootLis[i] ){
+                index = i;
+            }else{
+                $api.removeCls(eFootLis[i], 'active');
+                $api.removeCls(eHeaderLis[i], 'active');
+            }
+        }
+        $api.addCls( eFootLis[index], 'active');
+        $api.addCls( eHeaderLis[index], 'active');
+        api.setFrameGroupIndex({
+            name: 'group',
+            index: index
+        });
+    }
+    function fnOpenRegisterWin () {
+     api.openWin({
+         name: 'qiandao_win',
+         url: './html/qiandao_win.html',
+     });
+}
+</script>

@@ -1,0 +1,134 @@
+html,body {  font-size:14px; height:100%;  }
+.hover{ opacity: .8; }
+
+.flex-wrap{ display: -webkit-box;	display: -webkit-flex;	display: flex; }
+.flex-con{     -webkit-box-flex: 1;     -webkit-flex: 1;    flex: 1;}
+.flex-vertical{ -webkit-box-orient: vertical;-webkit-flex-flow: column;flex-flow: column;}
+
+.border-t,
+.border-b{ position:relative;  }
+.border-t:before,
+.border-b:after{     content: '';     position: absolute;     left: 0;  top:0;     background: #ddd;   right:0;    height: 1px;     -webkit-transform: scaleY(0.5);             transform: scaleY(0.5);     -webkit-transform-origin: 0 0;             transform-origin: 0 0; }
+.border-b:after{ top:auto; bottom:0;  }
+
+#wrap{ height: 100%; }
+.border{
+  border: solid #d3d3d3 1px;
+  margin: 10px auto;
+  width: 93%;
+}
+.total-color{
+  background: #00B2B4;
+}
+.define-color {
+    background-color: #00B2B4
+}
+
+.startData{
+  margin-top: 10px;
+  padding: 6px 5px;
+  display: inline-block;
+  margin-left: 5%;
+  width:30%;
+  font-size: 14px;
+  text-align:center;
+  border-radius: 10px;
+  background-color: #fff;
+  border:1px solid #00b2b4;
+  color:black
+}
+
+.endData{
+  margin-top: 10px;
+  padding: 6px 5px;
+  display: inline-block;
+  margin-left: 5%;
+  width:30%;
+  font-size: 14px;
+  text-align:center;
+  border-radius: 10px;
+  background-color: #fff;
+  border:1px solid #00b2b4
+}
+
+.searchAction{
+  margin-top: 10px;
+  padding: 6px 15px;
+  display: inline-block;
+  margin-left: 5%;
+  width:20%;
+  text-align:center;
+  border-radius: 10px;
+  color: white;
+  background-color: #00b2b4
+  }
+  .hover{ opacity: .4; }
+
+  span{
+
+}
+
+.preYear{
+  margin-top: 10px;
+  padding: 10px 15px;
+  display: inline-block;
+  background-color: #e8e8e8;
+  margin-left: 7%;
+  text-align:center;
+  width:15%
+}
+.preMonth{
+  margin-top: 10px;
+  padding: 10px 15px;
+  display: inline-block;
+  background-color: #e8e8e8;
+  margin-left: -5px;
+  text-align:center;
+  width:8%
+}
+.currentTime{
+  margin-top: 10px;
+  padding: 10px 15px;
+  display: inline-block;
+  background-color: #e8e8e8;
+  margin-left: -5px;
+  text-align:center;
+  width:40%
+}
+.nextMonth{
+  margin-top: 10px;
+  padding: 10px 15px;
+  display: inline-block;
+  background-color: #e8e8e8;
+  margin-left: -5px;
+  text-align:center;
+  width:8%
+}
+.nextYear{
+  margin-top: 10px;
+  padding: 10px 15px;
+  display: inline-block;
+  background-color: #e8e8e8;
+  margin-left: -5px;
+  text-align:center;
+  width:15%
+  /*margin-right: 30px;*/
+}
+.cancel{
+  padding: 10px 15px;
+  display: inline-block;
+  background-color: #e8e8e8;
+  margin-top: 235px;
+  text-align:center;
+  margin-left:7%;
+  width:43%
+}
+.confirm{
+  padding: 10px 15px;
+  display: inline-block;
+  background-color: #e8e8e8;
+  margin-top: 235px;
+  margin-left: -5px;
+  text-align:center;
+  width:43%
+}

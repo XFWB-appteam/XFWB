@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+      <title>title</title>
+      <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+      <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+      <link rel="stylesheet" type="text/css" href="../css/aui.2.0.css" />
+      <link rel="stylesheet" type="text/css" href="../css/aui.css" />
+      <style>
+      body {
+      }
+      li{
+        margin-left: 5%;
+        width:90%;
+        /*padding: 10px;*/
+        border:1px solid #00b2b4;
+      }
+
+        /*.hover{ opacity: .4; }*/
+            div {
+                font-size: 16px;
+            }
+
+            .left {
+                display: inline;
+                width: 20%;
+                text-align: center;
+                line-height: 30px ;
+                margin-left: 5%;
+            }
+
+            .fill {
+                width: 100%;
+            }
+            /*方框框*/
+            .right {
+                margin-left: 10px;
+                width: 50%;
+                display: inline;
+            }
+            .rightEdit {
+                margin-top: 8px;
+                margin-right: 10px;
+                display: inline;
+                color: #00b2b4;
+            }
+      </style>
+  </head>
+  <body>
+    <header class="aui-bar aui-bar-nav">
+            <div class="aui-pull-left aui-btn">
+                <span class="aui-iconfont aui-icon-left" onclick="closeWin()"></span>
+            </div>
+            <div class="aui-title">工作日志</div>
+            <div style="float:right;margin-right:15px;font-size:16px" onclick="newJobRecord()">新建</div>
+        </header>
+        <div class="startData" id="startID" tapmode="hover" onclick="btnStart(this)">开始日期</div>
+        <span class="endData" id="endID"  tapmode="hover" onclick="btnStart(this)" >结束日期</span>
+        <span class="searchAction"  tapmode="hover" onclick="btnSearch()">查询</span>
+        <div id="topControlID">
+        <span class="preYear" onclick="fnPrevYear()" >  <<  </span>
+        <span class="preMonth" onclick="fnPrevMonth()" >  <  </span>
+        <span class="currentTime" id="currentTimeID">  2018年6月  </span>
+        <span class="nextMonth" onclick="fnNextMonth()" >  >  </span>
+        <span class="nextYear" onclick="fnNextYear()" >  >>  </span>
+      </div>
+      <div id="bottomControlID">
+        <span class="cancel" onclick="cancel()" >取消</span>
+        <span class="confirm" onclick="confirm()" >确定</span>
+      </div>
+      <div >
+        <ul id="project_list" class="aui-list aui-media-list" style="margin-top:10px"></ul>
+      </div>
+  </body>
+  <script type="text/javascript" src="../script/api.js"></script>
+  <script type="text/javascript" src="../script/jquery-1.4.2.min.js"></script>
+  <script type="text/javascript">
+  var UICalendar;
+  var listView ;
+  var myDate = new Date();
+  var curYearStr = myDate.getFullYear(); //获取当前年份(4位)
+  var curMonthStr = myDate.getMonth()+1;
+  var topLayout = document.getElementById('topControlID');
+  var startDataSpan = document.getElementById('startID');
+  var endDataSpan = document.getElementById('endID');
+  var currentTimeSpan = document.getElementById('currentTimeID');
+  currentTimeSpan.innerText = curYearStr+"年"+curMonthStr+"月";
+  var currentRet;
+  var bottomLayout = document.getElementById('bottomControlID');
+  topLayout.style.display="none";//隐藏上一个月，下一个月那一行
+  bottomLayout.style.display="none";//隐藏取消和确定按钮那一行
+  var which="start";//看点击的是开始日期按钮还是结束日期按钮
+  var listShow = "hide";//0表示隐藏列表状态
+  var project_json =  getAllInfomation();
+  var key='connect';
+  var userKey = 'user';
+  apiready = function() {
+    UICalendar = api.require('UICalendar');
+  //  listView = api.require('UIListView');
+  var data = eval(project_json);
+  var data_status = data.status;
+  var data_info = data.work;
+  if (data_status=="true") {
+    var information = eval(data_info);
+    var obj ="";
+    $("#project_list").html("");
+    for (var i = 0;i<information.length;i++) {
+        //使用information[i]来获取一个个的json对象
+      var differentobj = "";
+      obj = '<li class="border" style="margin-top:20px"><div class="left" ><b>所属项目</b></div><div class="right" >'+information[i].project_name+'</div><div><div class="left"><b>提交时间</b></div><div class="right">'+information[i].create_date+'</div></div><div><div class="left"><b>工作内容</b></div><div class="right">'+information[i].work_description+'</div>';
+
+          differentobj =  '<div  id="editID" onclick="editTask('+i+')"><img src="../image/img.png" style="width:8%;margin-left:80%"></div>';
+          obj+=differentobj;
+      //  editButton.style.display="";
+
+       $("#project_list").append(obj);
+    //$api.byId('project_list').append(obj);
+    }
+  }
+  };
+
+  function getAllInfomation(){
+  //函数用来获取json数据，并返回
+    var project_json ={
+      "status": "true",
+      "work": [{
+        "project_name": "国际维保",
+        "project_type": "排查",
+        "task_name": "消防栓检查",
+        "create_date": "2018-03-42",
+        "check_status": "待审核",
+        "assign_person": "范明宇",
+        "work_place": "帝国大厦",
+        "work_num": "31454",
+        "owner": "数据1",
+        "telephone": "13883474876",
+        "work_description": "修下水道滴滴滴滴测试"
+
+      },
+      {
+        "project_name": "明顿道项目",
+        "project_type": "测试",
+        "task_name": "灭火器检查",
+        "create_date": "2018-03-22",
+        "check_status": "审核通过",
+        "assign_person": "范明宇",
+        "work_place": "帝国大厦",
+        "work_num": "31454",
+        "owner": "数据2",
+        "telephone": "13883474876",
+        "work_description": "修下水道"
+      },
+      {
+        "project_name": "国际维保啊",
+        "project_type": "排查",
+        "task_name": "水泵检查",
+        "create_date": "2018-11-22",
+        "check_status": "审核通过",
+        "assign_person": "范明宇",
+        "work_place": "帝国大厦",
+        "work_num": "31454",
+        "owner": "数据3",
+        "telephone": "13883474876",
+        "work_description": "修下水道"
+      }
+      ]
+      };
+      return project_json;
+  }
+  function btnSearch(){
+
+  }
+  function editTask(index){
+
+  }
+
+  function closeWin(){
+    api.closeWin({
+    });
+  }
+
+  function btnStart(data){
+    //alert( data.id );
+      topLayout.style.display="";//显示
+      bottomLayout.style.display="";//显示
+      UICalendar.open({
+          rect: {
+              x: api.frameWidth*0.07,
+              y: 165,
+              w: api.frameWidth*0.86,
+              h: 240
+          },
+          styles: {
+              bg: '#fff',
+              week: {
+                  weekdayColor: '#3b3b3b',
+                  weekendColor: '#a8d400',
+                  size: 12
+              },
+              date: {
+                  color: '#3b3b3b',
+                  selectedColor: '#fff',
+                  selectedBg: '#a8d500',
+                  size: 12
+              },
+              today: {
+                  color: 'rgb(230,46,37)',
+                  bg: ''
+              },
+              specialDate: {
+                  color: '#fff'
+              }
+          },
+          specialDate: [{
+              date: '2016-06-30'
+          }],
+          switchMode: 'vertical',
+          fixed: false
+      }, function(ret, err){
+          if( ret ){
+            currentRet = ret;
+            //var obj = JSON.parse(JSON.stringify( ret ));
+            if (data.id=="startID") {
+              which = "start";
+              startDataSpan.innerText=ret.year+"-"+ret.month+"-"+ret.day;
+            }else{
+                which = "end";
+              endDataSpan.innerText=ret.year+"-"+ret.month+"-"+ret.day;
+            }
+            //   alert( JSON.stringify( ret ) );
+          }else{
+               alert( JSON.stringify( err ) );
+          }
+      });
+  }
+
+  function fnNextMonth(){
+    UICalendar.nextMonth(function(ret, err){
+        if( ret ){
+          currentTimeSpan.innerText = ret.year+"年"+ret.month+"月";
+          if(!ret.day){
+            ret.day=1;
+          }
+          if (which=="start") {
+            startDataSpan.innerText=ret.year+"-"+ret.month+"-"+ret.day;
+          }else{
+            endDataSpan.innerText=ret.year+"-"+ret.month+"-"+ret.day;
+          }
+
+        }else{
+            alert( JSON.stringify( err ) );
+        }
+    });
+  }
+
+  function fnPrevMonth(){
+    UICalendar.prevMonth(function(ret, err){
+        if( ret ){
+          currentTimeSpan.innerText = ret.year+"年"+ret.month+"月";
+          if(!ret.day){
+            ret.day=1;
+          }
+          if (which=="start") {
+            startDataSpan.innerText=ret.year+"-"+ret.month+"-"+ret.day;
+          }else{
+            endDataSpan.innerText=ret.year+"-"+ret.month+"-"+ret.day;
+          }
+        }else{
+            alert( JSON.stringify( err ) );
+        }
+    });
+  }
+
+  function fnNextYear(){
+    UICalendar.nextYear(function(ret, err){
+        if( ret ){
+          currentTimeSpan.innerText = ret.year+"年"+ret.month+"月";
+          if(!ret.day){
+            ret.day=1;
+          }
+          if (which=="start") {
+            startDataSpan.innerText=ret.year+"-"+ret.month+"-"+ret.day;
+          }else{
+            endDataSpan.innerText=ret.year+"-"+ret.month+"-"+ret.day;
+          }
+        }else{
+            alert( JSON.stringify( err ) );
+        }
+    });
+  }
+
+  function fnPrevYear(){
+    UICalendar.prevYear(function(ret, err){
+        if( ret ){
+           currentTimeSpan.innerText = ret.year+"年"+ret.month+"月";
+           if(!ret.day){
+             ret.day=1;
+           }
+           if (which=="start") {
+             startDataSpan.innerText=ret.year+"-"+ret.month+"-"+ret.day;
+           }else{
+             endDataSpan.innerText=ret.year+"-"+ret.month+"-"+ret.day;
+           }
+        }else{
+            alert( JSON.stringify( err ) );
+        }
+    });
+  }
+
+  function cancel(){
+    topLayout.style.display="none";
+    bottomLayout.style.display="none";
+    UICalendar.close();
+      if (which=="start") {
+        startDataSpan.innerText="开始日期";
+      }else{
+        endDataSpan.innerText="结束日期";
+      }
+
+  }
+
+  function confirm(){
+    topLayout.style.display="none";
+    bottomLayout.style.display="none";
+    UICalendar.close();
+  }
+
+    function newJobRecord(){
+    //  alert("新建工作日志");
+    api.openWin({
+        name: 'newCreateRecord',
+        url: './newCreateRecord.html',
+        pageParam: {
+            name: 'test'
+        }
+    });
+
+    }
+
+  </script>
+  </html>

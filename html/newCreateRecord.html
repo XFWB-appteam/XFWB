@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+      <title>title</title>
+      <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+      <link rel="stylesheet" type="text/css" href="../css/aui.2.0.css"/>
+      <!-- <link rel="stylesheet" type="text/css" href="../css/aui.css"/> -->
+      <style>
+          body{
+            background-color: #fff;
+          }
+          .searchAction{
+            margin-top: 60px;
+            padding: 6px 15px;
+            display: inline-block;
+            margin-left: 5%;
+            width:20%;
+            text-align:center;
+            border-radius: 10px;
+            color: white;
+            background-color: #00b2b4
+            }
+
+      </style>
+  </head>
+  <body>
+        <!-- <header class="aui-bar aui-bar-nav">
+            <div class="aui-pull-left aui-btn">
+                <span class="aui-iconfont aui-icon-left" onclick="closeWin()"></span>
+            </div>
+            <div class="aui-title">新建日志</div>
+        </header> -->
+        <header class="aui-bar aui-bar-nav">
+            <div class="aui-pull-left aui-btn">
+                <span class="aui-iconfont aui-icon-left" onclick="closeWin()"></span>
+            </div>
+            <div class="aui-title">新建日志</div>
+        </header>
+
+        <div style="width:40%;line-height:60px;margin:0 10%;display:inline;font-size:16px">所属项目：</div>
+        <select style="width:40%;display:inline;font-size:16px" id="select">
+            <option  value="0">国际维保</option>
+            <option value="1">名敦道项目</option>
+            </select>
+        <img src="../image/down_img.png" style="width:15px;display:inline;" />
+        <HR width="90%" style="margin:0 auto" color=#d3d3d3 SIZE=3>
+
+          <div style="width:40%;line-height:60px;margin:0 10%;display:inline;font-size:16px">执行时间：</div>
+          <div  id="startID" style="width:40%;display:inline;text-align:center;font-size:16px"  tapmode="hover" onclick="btnStart(this)">选择日期</div>
+          <img src="../image/down_img.png" style="width:15px;display:inline;float:right;margin-right:40px;margin-top:23px" />
+          <HR width="90%" style="margin:0 auto" color=#d3d3d3 SIZE=3>
+
+          <textarea name="txt" clos="50" rows="6" placeholder="点击输入工作内容" style="margin:15px 8% 8%;padding:5px;width:84%; border: solid #e8e8e8 1px;border-radius: 10px;" warp="virtual"></textarea>
+          <div style="display:inline" id="editID" ><img src="../image/img.png" style="width:10%;margin-left:15%"  onclick="preview()"><img src="../image/arrows_circle_plus.png" style="width:10%;margin-left:5%" onclick="add()"></div>
+          <div style="margin:0 2%;display:inline;font-size:16px">添加照片</div>
+
+          <span class="searchAction"  style="color:white;width:80%;margin-left:10%" tapmode="hover" onclick="btnSubmit()">提交</span>
+
+
+          <div id="topControlID">
+          <span class="preYear" onclick="fnPrevYear()" >  <<  </span>
+          <span class="preMonth" onclick="fnPrevMonth()" >  <  </span>
+          <span class="currentTime" id="currentTimeID">  2018年6月  </span>
+          <span class="nextMonth" onclick="fnNextMonth()" >  >  </span>
+          <span class="nextYear" onclick="fnNextYear()" >  >>  </span>
+        </div>
+        <div id="bottomControlID">
+          <span class="cancel" onclick="cancel()" >取消</span>
+          <span class="confirm" onclick="confirm()" >确定</span>
+        </div>
+  </body>
+  <script type="text/javascript" src="../script/api.js"></script>
+  <script type="text/javascript" src="../script/jquery-1.4.2.min.js"></script>
+  <script type="text/javascript">
+      var UICalendar;
+      var myDate = new Date();
+      var curYearStr = myDate.getFullYear(); //获取当前年份(4位)
+      var curMonthStr = myDate.getMonth()+1;
+      var topLayout = document.getElementById('topControlID');
+      var startDataSpan = document.getElementById('startID');
+      var currentTimeSpan = document.getElementById('currentTimeID');
+      currentTimeSpan.innerText = curYearStr+"年"+curMonthStr+"月";
+      var currentRet;
+      var bottomLayout = document.getElementById('bottomControlID');
+      topLayout.style.display="none";//隐藏上一个月，下一个月
+      bottomLayout.style.display="none";//隐藏取消和确定按钮那一行
+
+      apiready = function(){
+          UICalendar = api.require('UICalendar');
+      };
+
+      function preview(){
+        alert("点击了图片预览");
+      }
+
+      function add(){
+        alert("点击了添加图片按钮");
+      }
+
+      function closeWin(){
+        api.closeWin({
+        });
+      }
+      function btnSubmit(){
+        alert("点击了提交按钮");
+      }
+
+      function btnStart(data){
+        //alert( data.id );
+          topLayout.style.display="";//显示
+          bottomLayout.style.display="";//显示
+          UICalendar.open({
+              rect: {
+                  x: api.frameWidth*0.07,
+                  y: 200,
+                  w: api.frameWidth*0.86,
+                  h: 240
+              },
+              styles: {
+                  bg: '#fff',
+                  week: {
+                      weekdayColor: '#3b3b3b',
+                      weekendColor: '#a8d400',
+                      size: 12
+                  },
+                  date: {
+                      color: '#3b3b3b',
+                      selectedColor: '#fff',
+                      selectedBg: '#a8d500',
+                      size: 12
+                  },
+                  today: {
+                      color: 'rgb(230,46,37)',
+                      bg: ''
+                  },
+                  specialDate: {
+                      color: '#fff'
+                  }
+              },
+              specialDate: [{
+                  date: '2016-06-30'
+              }],
+              switchMode: 'vertical',
+              fixed: false
+          }, function(ret, err){
+              if( ret ){
+                currentRet = ret;
+                //var obj = JSON.parse(JSON.stringify( ret ));
+                  startDataSpan.innerText=ret.year+"-"+ret.month+"-"+ret.day;
+                //   alert( JSON.stringify( ret ) );
+              }else{
+                   alert( JSON.stringify( err ) );
+              }
+          });
+      }
+
+      function fnNextMonth(){
+        UICalendar.nextMonth(function(ret, err){
+            if( ret ){
+              currentTimeSpan.innerText = ret.year+"年"+ret.month+"月";
+              if(!ret.day){
+                ret.day=1;
+              }
+                startDataSpan.innerText=ret.year+"-"+ret.month+"-"+ret.day;
+
+            }else{
+                alert( JSON.stringify( err ) );
+            }
+        });
+      }
+
+      function fnPrevMonth(){
+        UICalendar.prevMonth(function(ret, err){
+            if( ret ){
+              currentTimeSpan.innerText = ret.year+"年"+ret.month+"月";
+              if(!ret.day){
+                ret.day=1;
+              }
+                startDataSpan.innerText=ret.year+"-"+ret.month+"-"+ret.day;
+            }else{
+                alert( JSON.stringify( err ) );
+            }
+        });
+      }
+
+      function fnNextYear(){
+        UICalendar.nextYear(function(ret, err){
+            if( ret ){
+              currentTimeSpan.innerText = ret.year+"年"+ret.month+"月";
+              if(!ret.day){
+                ret.day=1;
+              }
+                startDataSpan.innerText=ret.year+"-"+ret.month+"-"+ret.day;
+            }else{
+                alert( JSON.stringify( err ) );
+            }
+        });
+      }
+
+      function fnPrevYear(){
+        UICalendar.prevYear(function(ret, err){
+            if( ret ){
+               currentTimeSpan.innerText = ret.year+"年"+ret.month+"月";
+               if(!ret.day){
+                 ret.day=1;
+               }
+               if (which=="start") {
+                 startDataSpan.innerText=ret.year+"-"+ret.month+"-"+ret.day;
+               }else{
+                 endDataSpan.innerText=ret.year+"-"+ret.month+"-"+ret.day;
+               }
+            }else{
+                alert( JSON.stringify( err ) );
+            }
+        });
+      }
+
+      function cancel(){
+        topLayout.style.display="none";
+        bottomLayout.style.display="none";
+        UICalendar.close();
+      //  startDataSpan.innerText="开始日期";
+      }
+
+      function confirm(){
+        topLayout.style.display="none";
+        bottomLayout.style.display="none";
+        UICalendar.close();
+      }
+
+  </script>
+  </html>

@@ -1,0 +1,193 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>Hello APP</title>
+    <link rel="stylesheet" type="text/css" href="../css/aui.css" />
+	<style>
+        .text-light {
+            color: #999 !important;
+        }
+        .aui-radio {
+            width: 1rem;
+            height: 1rem;
+        }
+        .floatleft{
+          float: left;
+        }
+        .text-input-form{
+            border: 1px solid #CCC;
+            border-radius: 5px;
+            background-color: #FFF;
+        }
+        .input-form-top{
+            position: relative;
+            height: 30px;
+            border-bottom: 1px solid #CCC;
+        }
+        .input-form-bottom{
+            position: relative;
+            height: 30px;
+        }
+        .tips-style{
+          font-size: 14px;
+          font-family: "微软雅黑";
+          color: "#F00";
+        }
+        .aligncenter {
+          clear: both;
+          display: block;
+          margin:auto;
+          }
+	</style>
+</head>
+<body>
+    <section class="aui-content">
+        <div class="aui-card-list">
+            <div class="aui-card-list-header aui-font-size-14">
+                <div>
+                  设施名称：
+                </div>
+                <div style="margin-right:40%;">
+                    报警控制器
+                </div>
+            </div>
+            <div class="aui-card-list-header aui-font-size-14">
+                <div>
+                  维保内容:
+                </div>
+                <div style="margin-right:30%;">
+                    b.试验电源主部分
+                </div>
+            </div>
+        </div>
+        <!--下面是列表，填东西-->
+        <ul class="aui-list aui-select-list">
+            <li class="aui-list-item">
+                <div class="aui-list-item-inner">
+                    <label><input id="testyes" class="aui-radio" type="radio" name="radio2" checked> 能测试</label>
+                    <label><input id="testno" class="aui-radio" type="radio" name="radio2"> 不能测试</label>
+                </div>
+            </li>
+            <li class="aui-list-item">
+                <div class="aui-list-item-inner">
+                    关闭主电源，备电源能否自动接入:
+                </div>
+            </li>
+            <li class="aui-list-item">
+                <div class="aui-list-item-inner">
+                    <label><input id="accessyes" class="aui-radio" type="radio" name="access" > 能</label>
+                    <label><input id="accessno" class="aui-radio" type="radio" name="access"> 不能</label>
+                </div>
+            </li>
+            <li class="aui-list-item">
+                <div class="aui-list-item-inner">
+                    正常点数分:
+                </div>
+            </li>
+            <li class="aui-list-item">
+                <div class="aui-list-item-inner">
+                  <div class="text-input-form">
+                      <div class="input-form-top clearfix">
+                          <input type="text" style="height:30px;">
+                      </div>
+                  </div>
+                </div>
+            </li>
+            <li class="aui-list-item">
+                <div class="aui-list-item-inner">
+                    异常百分比:
+                </div>
+            </li>
+            <li class="aui-list-item">
+                <div class="aui-list-item-inner">
+                  <div class="text-input-form">
+                      <div class="input-form-top clearfix">
+                          <input type="text" style="height:30px;">
+                      </div>
+                  </div>
+                </div>
+            </li>
+            <li class="aui-list-item">
+                <div class="aui-list-item-inner">
+                  <div style="color:#F00"> (拍照注册点位的页面、故障和屏蔽页面、拍照打印结果)</div>
+                </div>
+            </li>
+            <li class="aui-list-item">
+                <div class="aui-list-item-inner">
+                      <img class="aligncenter" src="../image/plus.jpg" height="40"  width="40" onclick="fnOpenChooseFrame()">
+                </div>
+            </li>
+            <li class="aui-list-item">
+                <div class="aui-list-item-inner">
+                      <img id="voice" style="float:left;margin-left:35px;" src="../image/plus.jpg" height="30"  width="30" >
+                      <img id="text"  style="float:left;margin-left:35px;" src="../image/plus.jpg" height="30"  width="30" >
+                      <img id="video" style="float:left;margin-left:35px;" src="../image/plus.jpg" height="30"  width="30">
+                      <img id="image" style="float:left;margin-left:35px;" src="../image/plus.jpg" height="30"  width="30">
+                </div>
+            </li>
+            <li class="aui-list-item">
+                <div class="aui-list-item-inner">
+                  测试结果
+                </div>
+            </li>
+            <li class="aui-list-item">
+                <div class="aui-list-item-inner">
+                  <label><input id="normal" class="aui-radio" type="radio" name="testresult" > 正常</label>
+                  <label><input id="repair" class="aui-radio" type="radio" name="testresult"> 需要维修报价</label>
+                  <label><input id="investigation" class="aui-radio" type="radio" name="testresult" > 需要进一步排查</label>
+                </div>
+            </li>
+            <li class="aui-list-item">
+                <div class="aui-list-item-inner">
+                  <img class="aligncenter" src="../image/delete.png" height="40"  width="40" onclick="deletecontent()">
+                </div>
+            </li>
+
+        </ul>
+
+
+
+
+
+        </div>
+    </section>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript">
+    var clickChoose = false;
+    apiready = function(){
+        api.parseTapmode();
+    };
+
+    function deletecontent(){
+      alert("点击了删除按钮");
+    }
+
+    function fnOpenChooseFrame() {
+        clickChoose = !clickChoose;
+        if (clickChoose) {
+            api.openFrame({
+                name: 'choosefunction_frm',
+                url: './choosefunction_frm.html',
+                bounces: false,
+                vScrollBarEnabled: false,
+                hScrollBarEnabled: false,
+                rect: {
+                    x: 0,
+                    y: 0,
+                    w: 'auto',
+                    h: 'auto'
+                }
+            });
+        } else {
+            api.closeFrame({
+                name: 'choosefunction_frm'
+            });
+        }
+    };
+
+</script>
+</html>
