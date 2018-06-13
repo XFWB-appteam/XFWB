@@ -44,17 +44,25 @@
     <script type="text/javascript" src="../script/jquery-1.4.2.min.js"></script>
     <script type="text/javascript">
     function closewin(){
-      window.opener=null;
-     window.open('','_self');
-     alert("asasda");
-      window.close();
+      api.closeWin({
+      });
+
+    }
+    function submit(){
+      api.openWin({
+          name: 'index',
+          url: '../index.html',
+          pageParam: {
+              name: 'test'
+          }
+      });
     }
     </script>
 
 </head>
 
 <body>
-    <header class="aui-bar aui-bar-nav">
+    <header class="aui-bar aui-bar-nav" style="background-color:#00b2b4">
         <div class="aui-pull-left aui-btn">
             <span class="aui-iconfont aui-icon-left" onclick="closewin()"></span>
         </div>
@@ -74,7 +82,7 @@
     <div id="project_list">
 
     </div>
-    <p class=" define-color" style="margin:50px 40px 40px 40px;border-radius:0.2rem;text-align:center;height:1.5rem;color:#000;padding: 0.3rem 0rem;color:white;font-size:16px">提交</p>
+    <p class=" define-color" style="margin:50px 40px 40px 40px;border-radius:0.2rem;text-align:center;height:1.5rem;color:#000;padding: 0.3rem 0rem;color:white;font-size:16px;"onclick="submit()">提交</p>
 </body>
 <script type="text/javascript" src="../script/api.js"></script>
 <script type="text/javascript" src="../script/jquery-1.4.2.min.js"></script>

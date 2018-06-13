@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
     <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
-    <title>按计划自建</title>
+    <title>第一个项目的具体计划完成情况</title>
 
     <link rel="stylesheet" type="text/css" href="../css/api.css"/>
     <link rel="stylesheet" type="text/css" href="../css/style.css"/>
@@ -63,13 +63,11 @@
       });
       var header = $api.html($api.byId('title'),api.pageParam.name);//获取上一个页面的名称
       funIniGroup1();
+      fnClosePlanset0Win();
     }
     function fnClosePlanset0Win(){
-      api.closeWin({
-          name: 'planset0_win',
-          type:"push",                //动画类型（详见动画类型常量）
-          subType:"from_right",       //动画子类型（详见动画子类型常量）
-          duration:200                //动画过渡时间，默认300毫秒
+      api.closeToWin({
+          name: 'planset_win'
       });
     }
     //计划完成情况、未完成维保项目设置为一个framegroup
@@ -77,14 +75,14 @@
           var eNavLis = $api.domAll('ul li'),
               frames = [];
                   frames.push( {
-                      name: 'zijian_frame',
-                      url: './zijian_frame.html',
+                      name: 'planset0.1_frm',
+                      url: './planset0.1_frm.html',
                       bgColor : 'rgba(0,0,0,.2)',
                       bounces:false
                   } )
                   frames.push( {
-                      name: 'jieshou_frame',
-                      url: './jieshou_frame.html',
+                      name: 'plaset0.2_frm',
+                      url: './planset0.2_frm.html',
                       bgColor : 'rgba(0,0,0,.2)',
                       bounces:false
                   } )
@@ -95,7 +93,7 @@
                           x: 0,
                           y:115,
                           w: 'auto',
-                          h: 300
+                          h: 'auto'
                       },
                       index: 0,
                       frames: frames

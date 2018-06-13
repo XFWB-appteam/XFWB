@@ -69,8 +69,8 @@
         //提交的点击事件
         function doclick() {
             api.openWin({
-                name: 'acceptTask_win',
-                url: '../html/frame1.html',
+                name: 'Test_Task',
+                url: '../html/Test_Task.html',
                 pageParam: {
                     "name": document.getElementById('task_name').value
                 }
@@ -80,9 +80,9 @@
 </head>
 
 <body style="background-color:#fff">
-    <header class="aui-bar aui-bar-nav">
+    <header class="aui-bar aui-bar-nav" style="background-color:#00b2b4">
         <div class="aui-pull-left aui-btn">
-            <span class="aui-iconfont aui-icon-left"></span>
+            <span class="aui-iconfont aui-icon-left" onclick="closewind()"></span>
         </div>
         <div class="aui-title total-color" style="font-size:16px">新建任务</div>
         <!--
@@ -172,7 +172,7 @@
     } else {
         select[0].selected = true;
         var va = select.options[0].value;
-        
+
     }
 //根据上个页面传的数据进行修改
 document.getElementById('task_name').value=name;
@@ -182,5 +182,10 @@ $("#get_task_name").append('<option value="2010">2012</option>');
 // document.getElementById('get_task_name').append('<<option value="1">属性一</option>>');
 
 change();
+
+function closewind(){
+  api.closeWin({
+  });
+}
 
 </script>

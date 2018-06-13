@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>未完成维保项目</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/aui.2.0.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/aui.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/aui-skin.css"/>
+    <style>
+    .aui-btn-info {
+        color: #ffffff !important;
+        background-color:  #00B2B4 !important;
+    }
+    </style>
+</head>
+<body>
+  <footer class="aui-bar aui-bar-tab">
+      <div class="aui-bar-tab-item">
+          <div class="aui-btn aui-btn-sm aui-btn-info" onclick="jump()"><i class="aui-iconfont aui-font-size-16"></i>新建测试任务</div>
+      </div>
+  </footer>
+
+</body>
+</html>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/jquery-1.4.2.min.js"></script>
+
+<script type="text/javascript">
+function jump(){
+  api.openWin({
+      name: 'new_Task',
+      url: './new_Task.html',
+  
+  });
+
+}
+    apiready = function () {
+    }
+
+</script>
