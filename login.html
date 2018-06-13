@@ -50,11 +50,55 @@
       var login = document.getElementsByClassName('login');
     var zhanghao = login[0].value;
     var password = login[1].value;
-    api.openWin({
-        name: 'index.html',
-        url: 'index.html'
+
+      api.ajax({
+          url: 'http://192.168.0.7:8080/firefighting/App/AppLogin',
+          method: 'post',
+          dataType: 'text', //该参数若不传，则默认为json<div class="aui-tips aui-margin-b-15">2
+
+          data: {
+          values:{userName: zhanghao, password: password} //键值对
+          }
+          },function(ret,err){
+                if (ret) {
+                      //alert(ret);
+                      var recode = $api.strToJson(ret);
+                      var status = recode.status;
+                      var role = recode.status;
+                      if (status=="true") {
+                         $api.setStorage('account',zhanghao);
+                         $api.setStorage('password',password);
+                         $api.setStorage('name',recode.name);
+                         $api.setStorage('gender',recode.gender);
+                         $api.setStorage('age',recode.age);
+                         $api.setStorage('phone_number',recode.phone_number);
+                         $api.setStorage('enterprise_id',recode.enterprise_id);
+                         $api.setStorage('roleId',recode.roleId);
+                         $api.setStorage('roleName',recode.roleName);
+                         $api.setStorage('enterprise_name',recode.enterprise_name);
+                         $api.setStorage('creation_time',recode.creation_time);
+
+                         api.openWin({
+                             name: 'index.html',
+                             url: 'index.html'
+                         });
+
+                      }else {
+                        alert(recode.message);
+                      }
+
+                } else {
+                  alert(err);
+                };
+          });
+
     });
-  });
+
+    // api.openWin({
+    //     name: 'index.html',
+    //     url: 'index.html'
+    // });
+  //});
       //alert(zhanghao);
     //   api.ajax({
     //       url: 'http://192.168.0.29/www/shop/index.php/Login/login1',
