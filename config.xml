@@ -7,7 +7,7 @@
         Developer
     </author>
     <content src="login.html" />
-    <access origin="*" />  <preference name="backgroundMode" value="location"/>
+    <access origin="*" />    <preference name="softInputMode" value="resize"/>  <preference name="backgroundMode" value="location"/>
 
   <preference name="pageBounce" value="false"/>
 	<preference name="appBackground" value="rgba(0,0,0,0.0)"/>

@@ -6,6 +6,7 @@
       <title>title</title>
       <link rel="stylesheet" type="text/css" href="../css/api.css"/>
       <link rel="stylesheet" type="text/css" href="../css/aui.2.0.css"/>
+      <link rel="stylesheet" type="text/css" href="../css/style.css"/>
       <!-- <link rel="stylesheet" type="text/css" href="../css/aui.css"/> -->
       <style>
           body{
@@ -32,6 +33,7 @@
             </div>
             <div class="aui-title">新建日志</div>
         </header> -->
+
         <header class="aui-bar aui-bar-nav">
             <div class="aui-pull-left aui-btn">
                 <span class="aui-iconfont aui-icon-left" onclick="closeWin()"></span>
@@ -52,6 +54,18 @@
           <img src="../image/down_img.png" style="width:15px;display:inline;float:right;margin-right:40px;margin-top:23px" />
           <HR width="90%" style="margin:0 auto" color=#d3d3d3 SIZE=3>
 
+            <div id="topControlID">
+            <span class="preYear" onclick="fnPrevYear()" >  <<  </span>
+            <span class="preMonth" onclick="fnPrevMonth()" >  <  </span>
+            <span class="currentTime" id="currentTimeID">  2018年6月  </span>
+            <span class="nextMonth" onclick="fnNextMonth()" >  >  </span>
+            <span class="nextYear" onclick="fnNextYear()" >  >>  </span>
+          </div>
+          <div id="bottomControlID">
+            <span class="cancel" onclick="cancel()" >取消</span>
+            <span class="confirm" onclick="confirm()" >确定</span>
+          </div>
+
           <textarea name="txt" clos="50" rows="6" placeholder="点击输入工作内容" style="margin:15px 8% 8%;padding:5px;width:84%; border: solid #e8e8e8 1px;border-radius: 10px;" warp="virtual"></textarea>
           <div style="display:inline" id="editID" ><img src="../image/img.png" style="width:10%;margin-left:15%"  onclick="preview()"><img src="../image/arrows_circle_plus.png" style="width:10%;margin-left:5%" onclick="add()"></div>
           <div style="margin:0 2%;display:inline;font-size:16px">添加照片</div>
@@ -59,17 +73,7 @@
           <span class="searchAction"  style="color:white;width:80%;margin-left:10%" tapmode="hover" onclick="btnSubmit()">提交</span>
 
 
-          <div id="topControlID">
-          <span class="preYear" onclick="fnPrevYear()" >  <<  </span>
-          <span class="preMonth" onclick="fnPrevMonth()" >  <  </span>
-          <span class="currentTime" id="currentTimeID">  2018年6月  </span>
-          <span class="nextMonth" onclick="fnNextMonth()" >  >  </span>
-          <span class="nextYear" onclick="fnNextYear()" >  >>  </span>
-        </div>
-        <div id="bottomControlID">
-          <span class="cancel" onclick="cancel()" >取消</span>
-          <span class="confirm" onclick="confirm()" >确定</span>
-        </div>
+
   </body>
   <script type="text/javascript" src="../script/api.js"></script>
   <script type="text/javascript" src="../script/jquery-1.4.2.min.js"></script>

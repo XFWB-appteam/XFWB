@@ -32,7 +32,7 @@
           </li>
           <li style="border-radius: 30px;background-color:#FFFFFF">
             <label for=""style="float:left;margin-left:4%;margin-top:3%;width:20%"><img src="img/mima.png" style="width:50%"></label>
-            <input class="login" type="text" style="width:70%"/></li>
+            <input class="login" type="password" style="width:70%"/></li>
         </ul>
       <button id="button" style="display:block;border-radius: 30px;width:96%;margin: 10% auto;background-color:#FFFFFF;height:40px;">登录</button>
       </div>
@@ -51,6 +51,18 @@
     var zhanghao = login[0].value;
     var password = login[1].value;
 
+    var UILoading = api.require('UILoading');
+      UILoading.flower({
+          center: {
+              x: 160,
+              y: 240
+          },
+          size: 30,
+          fixed: true
+      }, function(ret) {
+          //alert(JSON.stringify(ret));
+      });
+
       api.ajax({
           url: 'http://192.168.0.7:8080/firefighting/App/AppLogin',
           method: 'post',
@@ -60,6 +72,11 @@
           values:{userName: zhanghao, password: password} //键值对
           }
           },function(ret,err){
+
+            UILoading.closeFlower({
+                 id: 0                                  //关闭id 号对应加载提示框
+            });
+
                 if (ret) {
                       //alert(ret);
                       var recode = $api.strToJson(ret);
@@ -84,7 +101,13 @@
                          });
 
                       }else {
-                        alert(recode.message);
+                        //alert(recode.message);
+                        api.toast({
+                            msg: recode.message,
+                            duration: 2000,
+                            location: 'bottom'
+                        });
+
                       }
 
                 } else {
