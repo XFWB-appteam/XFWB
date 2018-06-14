@@ -75,9 +75,9 @@
                   userName: "ME0100002"
               },
           }
-      },function(ret, err){
-          if (ret) {
-            var data = eval(ret);
+      },function(ret1, err1){
+          if (ret1) {
+            var data = eval(ret1);
             var data_status = data.status;
             var data_info = data.task;
             var information = eval(data_info);
@@ -87,6 +87,7 @@
           };
               var temp1 = {
                  task_id: information[i].task_id,
+                 task_name:information[i].task_name,
                  building_latitude: information[i].building_latitude,
                  building_longitude: information[i].building_longitude,
                  enclosure_id: information[i].enclosure_id,
@@ -103,7 +104,6 @@
             },
             texts: {
                 title: '任务列表',
-                okBtnTitle: '确定'
             },
             styles: {
                 bg: '#fff',
@@ -128,44 +128,93 @@
                         corner: 2
                     }
                 },
-                ok: {
-                    h: 40,
-                    bg: '#89a',
-                    titleColor: '##00B2B4'
-                }
             },
             optionDatas
-        }, function(ret, err) {
-            if (ret.eventType == "ok") {
+        }, function(ret2, err2) {
+          if (ret2.eventType == "cell") {
               var dialogBox = api.require('dialogBox');
-              optionDatas.splice(0,optionDatas.length);
-              task1.splice(0,optionDatas.length);
-              dialogBox.close({
-              dialogName: 'scene'
-          });
-            }
-            else if (ret.eventType == "cell") {
-              //  var obj = JSON.stringify(task1[ret.index]);
-              //  alert(obj);
-            //  var obj=$api.jsonToStr(task1[ret.index]);
+              dialogBox.alert({
+                  texts: {
+                      title: '确认',
+                      content: "您选择的任务是："+task1[ret2.index].task_name,
+                      leftBtnTitle: '取消',
+                      rightBtnTitle: '确认'
+                  },
+                  styles: {
+                      bg: '#fff',
+                      w: 250,
+                      title: {
+                          marginT: 0,
+                          titleSize: 14,
+                          titleColor: '#000'
+                      },
+                      content: {
+                          color: '#000',
+                          size: 14
+                      },
+                      left: {
+                          marginB: 7,
+                          marginL: 20,
+                          w: 100,
+                          h: 35,
+                          corner: 2,
+                          bg: '#fff',
+                          size: 14
+                      },
+                      right: {
+                          marginB: 7,
+                          marginL: 10,
+                          w: 100,
+                          h: 35,
+                          corner: 2,
+                          bg: '#fff',
+                          size: 14
+                      }
+                  }
+              }, function(ret3) {
+                  if (ret3.eventType == 'left') {
+                      var dialogBox = api.require('dialogBox');
+                      dialogBox.close({
+                          dialogName: 'alert'
+                      });
+                  };
+                  if (ret3.eventType == 'right') {
+                    var obj = JSON.stringify(task1[ret2.index]);
+                    alert(obj);
+                    $api.setStorage('task1',task1[ret2.index]);
+                    task2 = $api.getStorage('task1');
+                    task = true;
+                    var dialogBox = api.require('dialogBox');
+                    optionDatas.splice(0,optionDatas.length);
+                    task1.splice(0,optionDatas.length);
+                    dialogBox.close({
+                    dialogName: 'scene'
+                });
+                dialogBox.close({
+                    dialogName: 'alert'
+                });
+                  }
+              });
+
+
+              //  var obj=$api.jsonToStr(task1[ret.index]);
               //alert(task1[ret.index].task_id);
-              $api.setStorage('task1',task1[ret.index]);
-              task2 = $api.getStorage('task1');
+
               //alert($api.getStorage('task1').building_latitude);
               // alert($api.strToJson(obj1));
             //  alert(JSON.prase(obj));
               //var obj1=JSON.parse(localStorage.getItem("task1"));
               //var obj1=JSON.parse($api.getStorage('task1'));
               //alert(obj1);
-              task = true;
+
             }else {
-                alert(JSON.stringify(err));
+                alert(JSON.stringify(err2));
             }
         });
 
-         }
+      }
          else {
-              alert( JSON.stringify( err ) );
+              alert( JSON.stringify( err1 ) );
           }
       });
 
