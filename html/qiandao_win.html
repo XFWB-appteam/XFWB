@@ -23,9 +23,9 @@
         <a class="aui-btn aui-pull-left" tapmode onclick="closeWin()">
             <span class="aui-iconfont aui-icon-left"></span>
         </a>
+        <div class="aui-btn aui-pull-right" tapmode onclick="tasklist()">任务</div>
         <div class="aui-title">签到</div>
     </header>
-
     <footer class="aui-bar aui-bar-tab" id="footer">
         <div class="aui-bar-tab-item aui-padded-l-15 aui-padded-r-15">
             <div class="aui-btn aui-btn-block aui-btn-sm aui-btn-info"><i class="aui-iconfont aui-font-size-16"></i>签到</div>
@@ -35,6 +35,10 @@
 </body>
 <script type="text/javascript" src="../script/api.js"></script>
 <script type="text/javascript">
+  var task=false;
+  var optionDatas=[];
+  var task1=[];
+  var task2;
     apiready = function(){
         api.parseTapmode();
         var header = $api.byId('aui-header');
@@ -61,10 +65,160 @@
     function closeWin(){
         api.closeWin({
         });
-    }
+    };
+    function tasklist(){
+      api.ajax({
+          url: 'http://192.168.0.7:8080/firefighting/Maintenancer/SignTask',
+          method: 'post',
+          data: {
+              values: {
+                  userName: "ME0100002"
+              },
+          }
+      },function(ret, err){
+          if (ret) {
+            var data = eval(ret);
+            var data_status = data.status;
+            var data_info = data.task;
+            var information = eval(data_info);
+            for(var i=0;i<information.length;i++){
+              var temp = {
+              text: information[i].task_name
+          };
+              var temp1 = {
+                 task_id: information[i].task_id,
+                 building_latitude: information[i].building_latitude,
+                 building_longitude: information[i].building_longitude,
+                 enclosure_id: information[i].enclosure_id,
+                 enclosure_length: information[i].enclosure_length
+              };
+            task1.push(temp1);
+            optionDatas.push(temp);
+          };
+          var dialogBox = api.require('dialogBox');
+        dialogBox.scene({
+            rect: {
+                w: 280,
+                h: 400
+            },
+            texts: {
+                title: '任务列表',
+                okBtnTitle: '确定'
+            },
+            styles: {
+                bg: '#fff',
+                title: {
+                    bg: '#89a',
+                    h: 44,
+                    size: 14,
+                    color: '#000'
+                },
+                cell: {
+                    bg: '#fff',
+                    h: 48,
+                    text: {
+                        color: '#636363',
+                        size: 13
+                    },
+                    icon: {
+                        marginL: 15,
+                        marginT: 9,
+                        w: 30,
+                        h: 30,
+                        corner: 2
+                    }
+                },
+                ok: {
+                    h: 40,
+                    bg: '#89a',
+                    titleColor: '##00B2B4'
+                }
+            },
+            optionDatas
+        }, function(ret, err) {
+            if (ret.eventType == "ok") {
+              var dialogBox = api.require('dialogBox');
+              optionDatas.splice(0,optionDatas.length);
+              task1.splice(0,optionDatas.length);
+              dialogBox.close({
+              dialogName: 'scene'
+          });
+            }
+            else if (ret.eventType == "cell") {
+              //  var obj = JSON.stringify(task1[ret.index]);
+              //  alert(obj);
+            //  var obj=$api.jsonToStr(task1[ret.index]);
+              //alert(task1[ret.index].task_id);
+              $api.setStorage('task1',task1[ret.index]);
+              task2 = $api.getStorage('task1');
+              //alert($api.getStorage('task1').building_latitude);
+              // alert($api.strToJson(obj1));
+            //  alert(JSON.prase(obj));
+              //var obj1=JSON.parse(localStorage.getItem("task1"));
+              //var obj1=JSON.parse($api.getStorage('task1'));
+              //alert(obj1);
+              task = true;
+            }else {
+                alert(JSON.stringify(err));
+            }
+        });
+
+         }
+         else {
+              alert( JSON.stringify( err ) );
+          }
+      });
+
+    };
   $api.addEvt($api.byId('footer'),'click',function(){
-    alert($api.getStorage('lon'));//经度
-    alert($api.getStorage('lat'));//纬度
+    var sign_status=false;
+    if(task==false) {
+      alert("您未选择任务");
+      return;
+    }
+    else{
+      var jsfun = 'get_distance();';
+      api.execScript({
+          frameName: 'qiandao_frm1',
+          script: jsfun
+      });
+      var distance = $api.getStorage('distance');
+      if(distance > task2.enclosure_length){
+        sign_status=false;
+        alert("未到达目的地！");
+      }
+      else{
+        sign_status=true;
+      }
+      alert(distance);
+      alert(task2.enclosure_length);
+      api.ajax({
+          url: 'http://192.168.0.7:8080/firefighting/Maintenancer/SignIn',
+          method: 'post',
+          data: {
+              values: {
+                  userId: 39,
+                  longitude:$api.getStorage('lon'),
+                  latitude:$api.getStorage('lat'),
+                  task_id:task2.task_id,
+                  sign_status:sign_status,
+                  distance:distance
+              },
+
+          }
+      },function(ret, err){
+          if (ret) {
+              alert( JSON.stringify( ret ) );
+          } else {
+              alert( JSON.stringify( err ) );
+          }
+      });
+
+       //alert($api.getStorage('lon'));//经度
+       //alert($api.getStorage('lat'));//纬度
+    }
+
   });
+
 </script>
 </html>
