@@ -57,15 +57,15 @@
                         </div>
                         <div class="aui-list-item-text">
                             <div class="aui-list-item-title">下发人员</div>
-                            <div id="assign_person">当你看到这行文字证明页面出错了</div>
+                            <div id="issue_person">当你看到这行文字证明页面出错了</div>
                         </div>
                         <div class="aui-list-item-text">
                             <div class="aui-list-item-title">任务地址</div>
-                            <div id="task_addr">当你看到这行文字证明页面出错了</div>
+                            <div id="task_location">当你看到这行文字证明页面出错了</div>
                         </div>
                         <div class="aui-list-item-text">
                             <div class="aui-list-item-title">下达时间</div>
-                            <div id="assign_time">当你看到这行文字证明页面出错了</div>
+                            <div id="creat_time">当你看到这行文字证明页面出错了</div>
                         </div>
                         <div class="aui-list-item-text">
                             <div class="aui-list-item-title">任务编号</div>
@@ -73,11 +73,11 @@
                         </div>
                         <div class="aui-list-item-text">
                             <div class="aui-list-item-title">业主人员</div>
-                            <div id="owner">当你看到这行文字证明页面出错了</div>
+                            <div id="proprietor_name">当你看到这行文字证明页面出错了</div>
                         </div>
                         <div class="aui-list-item-text">
                             <div class="aui-list-item-title">联系电话</div>
-                            <div id="telephone">当你看到这行文字证明页面出错了</div>
+                            <div id="proprietor_connector_mobile_phone">当你看到这行文字证明页面出错了</div>
                         </div>
                         <div class="aui-list-item-text">
                             <div class="aui-list-item-title">任务描述</div>
@@ -98,7 +98,7 @@
         api.parseTapmode();
         var project_info = api.pageParam.task_info;
         fillData(project_info);
-        var jsfun = 'setTaskID('+project_info.task_num+');';
+        var jsfun = 'setTaskID('+project_info.task_number+');';
         api.execScript({
             name: 'acceptTask_win',
             script: jsfun
@@ -109,14 +109,14 @@
 
     $("#task_name").text(project_info.task_name) ;
     $("#project_name").text(project_info.project_name) ;
-    $("#task_type").text(project_info.project_type) ;
-    $("#assign_person").text(project_info.assign_person) ;
-    $("#task_addr").text(project_info.task_place) ;
-    $("#assign_time").text(project_info.creat_date) ;
-    $("#owner").text(project_info.owner) ;
-    $("#telephone").text(project_info.telephone) ;
+    $("#task_type").text(project_info.task_type) ;
+    $("#issue_person").text(project_info.issue_person) ;
+    $("#task_location").text(project_info.task_location) ;
+    $("#creat_time").text(project_info.creat_time) ;
+    $("#proprietor_name").text(project_info.proprietor_name) ;
+    $("#proprietor_connector_mobile_phone").text(project_info.proprietor_connector_mobile_phone) ;
     $("#task_description").text(project_info.task_description) ;
-    $("#task_number").text(project_info.task_num) ;
+    $("#task_number").text(project_info.task_number) ;
 
 
     }

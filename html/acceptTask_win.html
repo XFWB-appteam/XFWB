@@ -80,11 +80,14 @@
       // });
 
       alert(taskID+'需要拍照片，照片等到水印问题解决后统一添加');
-      api.openFrame({
-          name: 'jieshou',
-          url: './jieshou_frame.html',
-          pageParam: {
-          }
+      // api.openFrame({
+      //     name: 'jieshou',
+      //     url: './jieshou_frame.html',
+      //     pageParam: {
+      //     }
+      // });
+      api.closeWin({
+          name: 'acceptTask_win'
       });
 
 
