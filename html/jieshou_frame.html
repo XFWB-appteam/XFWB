@@ -39,7 +39,7 @@
 
               //MMP
             var differentobj = "";
-            obj = '<li class="aui-list-header"></li><li class="aui-list-item aui-list-item-arrow"><div style="color:red;text-align:right">'+information[i].project_type+'</div><div class="aui-media-list-item-inner"><div class="aui-list-item-inner"><div class="aui-list-item-text"><div class="aui-list-item-title">项目名称</div><div>'+information[i].project_name+'</div></div><div class="aui-list-item-text"><div class="aui-list-item-title">任务名称</div><div >'+information[i].task_name+'</div></div><div class="aui-list-item-text"><div class="aui-list-item-title">创建日期</div><div >'+information[i].creat_date+'</div></div><div class="aui-list-item-text"><div class="aui-list-item-title">执行状态</div><div >'+information[i].task_status;
+            obj = '<li class="aui-list-header"></li><li class="aui-list-item aui-list-item-arrow"><div style="color:red;text-align:right">'+information[i].task_type+'</div><div class="aui-media-list-item-inner"><div class="aui-list-item-inner"><div class="aui-list-item-text"><div class="aui-list-item-title">项目名称</div><div>'+information[i].project_name+'</div></div><div class="aui-list-item-text"><div class="aui-list-item-title">任务名称</div><div >'+information[i].task_name+'</div></div><div class="aui-list-item-text"><div class="aui-list-item-title">创建日期</div><div >'+information[i].creat_time+'</div></div><div class="aui-list-item-text"><div class="aui-list-item-title">执行状态</div><div >'+information[i].task_status;
             if (information[i].task_status=="待接收") {
               differentobj =   '</div></div><div class="aui-btn aui-btn-info"  onclick="acceptTask('+i+')" style="float:right;"><span class="aui-iconfont aui-icon-edit" ></span>接收</div></div></div></li>';
             }
@@ -97,50 +97,53 @@ function executeTask(index)
       var project_json ={
   "status": "true",
   "task": [{
+      "id":"123",
       "project_name": "国际维保",
-      "project_type": "排查",
+      "task_type": "排查",
       "task_name": "消防栓检查",
-      "creat_date": "2018-03-42",
-      "task_status": "待接收",
-      "assign_person": "范明宇",
-      "task_place": "帝国大厦",
-      "task_num": "10000",
-      "owner": "数据1",
-      "telephone": "13883474876",
+      "creat_time": "2018-03-42",
+      "task_status": "待执行",
+      "proprietor_name": "范明宇",
+      "task_location": "帝国大厦",
+      "task_number": "10000",
+      "issue_person": "小叮当",
+      "proprietor_connector_mobile_phone": "13883474876",
       "task_description": "修下水道",
       "facility_name":"室外消火栓",
       "facility_location":"1楼西侧"
     },
     {
-      "project_name": "国际维保",
-      "project_type": "测试",
-      "task_name": "灭火器检查",
-      "creat_date": "2018-03-22",
-      "task_status": "已接收",
-      "assign_person": "范明宇",
-      "task_place": "帝国大厦",
-      "task_num": "10001",
-      "owner": "数据2",
-      "telephone": "13883474876",
-      "task_description": "修下水道",
-      "facility_name":"室内消火栓",
-      "facility_location":"2楼西侧"
-    },
-    {
-      "project_name": "国际维保啊",
-      "project_type": "排查",
-      "task_name": "水泵检查",
-      "creat_date": "2018-11-22",
-      "task_status": "已接收",
-      "assign_person": "范明宇",
-      "task_place": "帝国大厦",
-      "task_num": "10002",
-      "owner": "数据3",
-      "telephone": "13883474876",
-      "task_description": "修下水道",
-      "facility_name":"火栓",
-      "facility_location":"3楼西侧"
-    }
+        "id":"123",
+        "project_name": "国际维保",
+        "task_type": "维护",
+        "task_name": "消防栓检查",
+        "creat_time": "2018-03-42",
+        "task_status": "待接收",
+        "proprietor_name": "范明宇",
+        "task_location": "帝国大厦",
+        "task_number": "10000",
+        "issue_person": "小叮当",
+        "proprietor_connector_mobile_phone": "13883474876",
+        "task_description": "修下水道",
+        "facility_name":"室外消火栓",
+        "facility_location":"1楼西侧"
+      },
+      {
+          "id":"123",
+          "project_name": "国际维保",
+          "task_type": "排查",
+          "task_name": "消防栓检查",
+          "creat_time": "2018-03-42",
+          "task_status": "待接收",
+          "proprietor_name": "范明宇",
+          "task_location": "帝国大厦",
+          "task_number": "10000",
+          "issue_person": "小叮当",
+          "proprietor_connector_mobile_phone": "13883474876",
+          "task_description": "修下水道",
+          "facility_name":"室外消火栓",
+          "facility_location":"1楼西侧"
+        }
   ]
 };
 return project_json;
