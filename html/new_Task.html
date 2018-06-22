@@ -158,6 +158,12 @@
 </html>
 <script type="text/javascript">
     // var project_info1 = api.page.info;
+  apiready = function(){
+    var pageParam = api.pageParam;
+    var str = $api.jsonToStr(pageParam);
+
+    alert(str);
+  }
 
     var name = "我的项目名";
     var type = "test";

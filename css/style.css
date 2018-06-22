@@ -131,4 +131,11 @@ html,body {  font-size:14px; height:100%;  }
   margin-left: -5px;
   text-align:center;
   width:43%
+
+  .aui-checkbox.aui-checked {
+      background-color: #00B2B4;
+      border: solid 1px #00B2B4;
+      text-align: center;
+      background-clip: padding-box;
+  }
 }
