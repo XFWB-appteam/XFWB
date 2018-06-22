@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+      <title>title</title>
+      <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+      <style>
+          body{
+
+          }
+      </style>
+  </head>
+  <body>
+    <img id="img01" src="" alt="">
+  </body>
+  <script type="text/javascript" src="../script/api.js"></script>
+  <script type="text/javascript">
+      apiready = function(){
+      var pageParam = api.pageParam;
+       pictureurl=pageParam.pictureurl;
+       alert(pictureurl);
+      //  $api.attr($api.byId('img01'), 'src', pictureurl);
+      // document.getElementById('img01').src = pictureurl;
+      var photoBrowser = api.require('photoBrowser');
+      photoBrowser.open({
+          images: [
+              'fs://img/image1.png',
+              'fs://img/encryption.png'
+          ],
+          placeholderImg: 'widget://res/img/apicloud.png',
+          bgColor: '#000'
+      }, function(ret, err) {
+          if (ret) {
+              alert(JSON.stringify(ret));
+          } else {
+              alert(JSON.stringify(err));
+          }
+      });
+      };
+  </script>
+  </html>

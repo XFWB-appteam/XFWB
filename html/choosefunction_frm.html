@@ -95,7 +95,7 @@
                         <span>文字</span>
                     </div>
                     <div class="col" tapmode="btn-hov" onclick="fnOpenPhoto()">
-                        <img src="../image/plus.jpg" alt="">
+                        <img id="img1" src="" alt="">
                         <span>拍照</span>
                     </div>
                     <div class="col" tapmode="btn-hov" onclick="fnOpenVideo()">
@@ -117,7 +117,23 @@
           alert("暂不支持，敬请期待");
         };
         function fnOpenPhoto() {
-          alert("暂不支持，敬请期待");
+          api.getPicture({
+          sourceType: 'camera',
+          encodingType: 'jpg',
+          mediaValue: 'pic',
+          destinationType: 'url',
+          allowEdit: true,
+          quality: 50,
+          saveToPhotoAlbum: false
+      }, function(ret, err) {
+          if (ret) {
+             $api.setStorage('pictureurl',ret.data);
+             document.getElementById('img1').src = ret.data;
+              alert(ret.data);
+          } else {
+              alert(JSON.stringify(err));
+          }
+      });
         };
         function fnOpenVideo() {
           alert("暂不支持，敬请期待");
