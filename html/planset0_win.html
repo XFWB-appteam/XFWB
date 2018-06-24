@@ -46,15 +46,18 @@
           <div class="aui-pull-left aui-btn" >
               <span class="aui-iconfont aui-icon-left" tapmode onclick="fnClosePlanset0Win();"></span>
           </div>
+          <!-- <div style="float:right;margin-right:15px;font-size:16px;color:white" id="checkboxID" onclick="chooseAll('+data+')">全选</div> -->
           <div id="title" class="aui-title"></div>
   </header>
   <ul class="flex-list">
-      <li tapmode="hover" onclick="randomSwitchBtn1( this );" class="flex-con active" >计划完成情况</li>
-      <li tapmode="hover" onclick="randomSwitchBtn1( this );" class="flex-con" >未完成维保项目</li>
+      <li tapmode="hover" id="finished" onclick="randomSwitchBtn1( this );"  class="flex-con active" >计划完成情况</li>
+      <li tapmode="hover" id = "unfinished" onclick="randomSwitchBtn1( this );" class="flex-con" >未完成维保项目</li>
   </ul>
 </body>
 <script type="text/javascript" src="../script/api.js"></script>
 <script type="text/javascript">
+//var chooseBoxBtn = document.getElementById('checkboxID');
+var data='win';
     apiready = function(){
       $api.fixStatusBar( $api.dom('.aui-bar') );
       api.setStatusBarStyle({
@@ -84,7 +87,7 @@
       });
     }
     //计划完成情况、未完成维保项目设置为一个framegroup
-      function funIniGroup1(){
+    function funIniGroup1(){
           var eNavLis = $api.domAll('ul li'),
               frames = [];
                   frames.push( {
@@ -118,7 +121,12 @@
                   });
       }
       // 随意切换按钮
-      function randomSwitchBtn1( tag ) {
+    function randomSwitchBtn1( tag ) {
+        // if( tag.id == "finished" ){
+        //   chooseBoxBtn.hidden=true;
+        // }else if( tag.id == "unfinished" ){
+        //   chooseBoxBtn.hidden=false;
+        // }
           if( tag == $api.dom('ul li.active') )return;
           var eNavLis = $api.domAll('ul li'),
               index = 0;
@@ -135,5 +143,10 @@
               index: index
           });
       }
+
+    function chooseAll(data){
+      alert('win里执行的chooseAll');
+      alert(data);
+    }
 </script>
 </html>
