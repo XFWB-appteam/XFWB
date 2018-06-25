@@ -206,7 +206,7 @@
 
     function submitTask()
     {
-      //把视频图片数组的数据摘出来后，组装json，统一提交
+      //把所有数据组装json，统一提交
       var submit_json = {};
       var data = eval(allinformation);
       var control_content = eval(data.control_content);
@@ -332,9 +332,13 @@
             });
           }
       });
+      api.closeWin({
+          name: 'executeTestTask_win'
+      });
     }
 
 function findTextByName (name){
+  //一个用来从控件获取它说明性文字的函数
   var data = eval(allinformation);
   var control_content = eval(data.control_content);
   for (var i=0;i<control_content.length;i++) {
@@ -347,8 +351,8 @@ function findTextByName (name){
 
 
 function addTask(){
+    //添加下一项的响应函数
       count++;
-      //这个地方用num不够准确，可能会出现有人点击了第一项添加后，再点击第一项的添加。应该把这个地方的num换成以个临时变量，后面再改
       var num = count;
       textcontent[num]="";
       videocontent[num]="";
@@ -476,8 +480,9 @@ function addTask(){
 
 
 function creatPage(){
+      //这个函数是用来刚载入的时候，获取task的模板信息后，构建页面
       var num = count;
-      //var allinfo = eval(allinformation);
+
       var data = eval(allinformation);
       var facility_name = data.facility_name;
       var maintenance_content = data.maintenance_content;
@@ -603,8 +608,9 @@ function creatPage(){
 
     }
 
-//删除图标的响应函数
+
     function deletecontent(index){
+      //删除图标的响应函数,index表示这是第几个任务的序号
       if (index ==0) {
         alert("这是唯一的测试项目，无法删除");
       }
@@ -666,7 +672,7 @@ function creatPage(){
         }
 
     function fnOpenChooseFrame(temp_count) {
-  //点击加号后，打开文字、照片、视频、语音的函数
+  //点击加号后，四选一，打开文字、照片、视频、语音的函数
       dialogBox.share({
           rect: {
               w: 360,
@@ -729,7 +735,7 @@ function creatPage(){
 
 
     function addPhotoContent(temp_count)
-    {
+    {//四选一中图片的接口，temp_count表示这是第几个任务的序号
       api.getPicture({
       sourceType: 'camera',
       encodingType: 'jpg',
@@ -768,7 +774,7 @@ function creatPage(){
   });
 };
     function addTextContent(temp_count)
-    {//文字的接口，注意dialogBox的关闭在这里面关闭
+    {//四选一的文字的函数，用来添加文字,temp_count表示这是第几个任务的序号
       dialogBox.list({
           tapClose: true,
           texts: {
@@ -828,7 +834,7 @@ function creatPage(){
 
 
     function getALLinformation()
-    {
+    {//这个函数是用来从后台获取task的模板，获取调用creatPage()函数构建第一个页面
 
       api.ajax({
           url: 'http://192.168.0.7:8080/firefighting/Maintenancer/GetTaskTemplate',//接口地址
@@ -847,6 +853,9 @@ function creatPage(){
                }
                else {
                  alert("未能与服务器取得连接，请检查网络情况");
+                 api.closeWin({
+                     name: 'executeTestTask_win'
+                 });
                }
           } else {
 
@@ -860,7 +869,8 @@ function creatPage(){
 
     };
     function fnOpenpicture(temp_count){
-        var pictureid = $api.getStorage('pictureid');
+      //这个函数是用来点击中间的“加号”后弹出四个选项（图片、文字、视频、语音）的函数，其中temp_count是第几个任务的序号
+      var pictureid = $api.getStorage('pictureid');
       var photoBrowser = api.require('photoBrowser');
       photoBrowser.open({
           images: [
