@@ -27,11 +27,13 @@
       var project_json =  "";
       var userName = "";
     apiready = function () {
-        //下方是用来解析json的
-        userName = $api.getStorage('account');
-        getAllInfomation();
+        // userName = $api.getStorage('account');
+        // getAllInfomation();
+        alert("本模块待开发中......");
+        api.closeFrame({
+          name:"jieshou_frame"
+        });
 
-        //上方是解析json的
     }
 
 
@@ -107,12 +109,14 @@ function executeTask(index)
                }
                else {
                  alert("数据获取失败，请重试");
-                 api.closeframe({
+                 api.closeFrame({
+                   name:"jieshou_frame"
                  });
                }
           } else {
             alert("未能与服务器连接");
-            api.closeframe({
+            api.closeFrame({
+                 name:"jieshou_frame"
             });
             api.toast({
                 msg: ret.message,
