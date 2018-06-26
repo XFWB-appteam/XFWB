@@ -79,6 +79,7 @@
 </body>
 
 <script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/util.js"></script>
 <script type="text/javascript">
     apiready = function(){
 
@@ -105,8 +106,6 @@
                       var data_info = data.plan;
                       var information = eval(data_info);
                       var m = information.length;//总共有m个项目
-                      //var arr = [];//array里存所有计划的时间
-                      //alert(JSON.stringify(information));
                       for(var i=0;i<m;i++){
                         //alert('hao');
                         var plan_info = information[i].maintenanceplan;
@@ -114,8 +113,10 @@
                         //alert(JSON.stringify(information_plan));
                         var n = information_plan.length;//该项目有n条记录
                         var o = i+1;
+                        var s1 = i.toString();
                         var temp = {
-                        name: information[i].project_name//该项目名称，在后面需要填在a标签里
+                          id: information[i].project_id,
+                          name: information[i].project_name//该项目名称，在后面需要填在a标签里
                         };
                         ul_menu = document.getElementById('plan');
                         var li_level1 = document.createElement('li');//添加一条li相当于添加了一个项目
@@ -128,30 +129,48 @@
                         ul_menu.appendChild(li_level1);
                         //遍历该项目的完成情况，动态添加li的条数
                        for(var j=0;j<information_plan.length;j++){
+                           var s2 = j.toString();
                            var temp1 = {
                              maintenanceplan_id: information_plan[j].maintenanceplan_id,
                              maintenanceplan_name: information_plan[j].maintenanceplan_name,//某年某月的计划
                              maintenanceplan_status: information_plan[j].maintenanceplan_status//已完成或未完成
                           };
+                          var array_plan = JSON.stringify(temp); //
+                          var array_info = JSON.stringify(temp1);
+                          var array = array_plan + "   " + array_info;
                           var id=JSON.stringify(temp1.maintenanceplan_id);//将json对象转化成字符串
                           localStorage.setItem("id_info",id);//把选择的数据存储在localstorage中
-                          var id_delivery = JSON.parse(localStorage.getItem('id_info'));
+                          var id_delivery = JSON.parse(localStorage.getItem('id_info'));//向下个页面传递id参数
                           //alert(id_delivery);
                            //addElementLi
                            var ul = document.getElementById('number'+i);
-                           //添加 li
                            var li = document.createElement('li');
-                           //设置 li 属性，如 id
-                            if(temp1.maintenanceplan_status == "已完成"){
-                            li.innerHTML += '<a href="javascript:;" style="color:#bbb;" tapmode onclick="fnOpenPlanset0Win();">'+temp1.maintenanceplan_name + temp1.maintenanceplan_status+'</a>';
-                            //li.innerHTML += '<a href="javascript:;" style="color:#bbb;">'+temp1.maintenanceplan_name + temp1.maintenanceplan_status+'</a>';
+                           if(temp1.maintenanceplan_status == "已完成"){
+                            //li.innerHTML += '<a href="javascript:;" style="color:#bbb;" tapmode onclick="fnOpenPlanset0Win(id_delivery);">'+temp1.maintenanceplan_name + temp1.maintenanceplan_status+'</a>';
+                            li.innerHTML += '<a href="javascript:;" style="color:#bbb;">'+temp1.maintenanceplan_name + temp1.maintenanceplan_status+'</a>';
+
                           }else{
-                            li.setAttribute("id", "undo"+j);
-                            li.innerHTML += '<a href="javascript:;" tapmode onclick="fnOpenPlanset0Win();">'+temp1.maintenanceplan_name+'</a>';
-                            //li.innerHTML += '<a href="javascript:;">'+temp1.maintenanceplan_name+'</a>';
+                            //li.innerHTML += '<a href="javascript:;" tapmode onclick="fnOpenPlanset0Win(id_delivery);">'+temp1.maintenanceplan_name+'</a>';
+                            li.innerHTML += '<a href="javascript:;">'+temp1.maintenanceplan_name+'</a>';
                             }
+                            //设置 li 属性，如 id
+                            li.setAttribute("id", s1+s2);
                             //alert(li.innerHTML);
                             ul.append(li);
+                          //  alert(id_delivery);
+                            document.getElementById(s1+s2).addEventListener('click',function(id_delivery_arg){
+                                    //alert(array);
+                                    return function(){
+                                    api.openWin({
+                                      name: 'planset0',
+                                      url: './planset0_win.html',
+                                      pageParam: {
+                                        name: id_delivery_arg
+                                    }
+                                    //reload:true
+                                  });}
+                              }(array),false);
+
                             //alert(ul.innerHTML);
                             document.getElementById('num'+i).append(ul);
                             //arr.push(temp1.maintenanceplan_name);
@@ -161,19 +180,19 @@
                      document.getElementById('div').append(ul_menu);
                      //alert(document.getElementById('div').innerHTML);
                      liststyle();
-
                      //alert(arr);
                      //localStorage.setItem('arrinfo',JSON.stringify(arr));
                      //alert(arrinfo);
+
                 } else {
                 alert( JSON.stringify( err ) );
             }
         });
-      //alert(document.getElementById('div').innerHTML);
+       //alert(document.getElementById('div').innerHTML);
        //var read = JSON.parse(localStorage.getItem('arrinfo'));
         //alert(read);
        fnClosePlansetWin();
-       fnOpenPlanset0Win();
+       //fnOpenPlanset0Win();
 }
 //var read = JSON.parse(localStorage.getItem('arrinfo'));
 function liststyle(){
@@ -196,17 +215,17 @@ function liststyle(){
           duration:200                //动画过渡时间，默认300毫秒
       });
     }
-    function fnOpenPlanset0Win(){
-      //alert(id);
-      api.openWin({
-        name: 'planset0',
-        url: './planset0_win.html',
-        pageParam: {
-          name: 'test'
-      },
-      reload:true
-      });
-    }
+    // function fnOpenPlanset0Win(){
+    //   //alert(id);
+    //   api.openWin({
+    //     name: 'planset0',
+    //     url: './planset0_win.html',
+    //     pageParam: {
+    //       name: id_delivery
+    //   },
+    //   reload:true
+    //   });
+    // }
 
 </script>
 </html>

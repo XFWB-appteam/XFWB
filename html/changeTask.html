@@ -48,17 +48,17 @@
         <div class="aui-pull-left aui-btn">
             <span class="aui-iconfont aui-icon-left" onclick="closewin()"></span>
         </div>
-        <div class="aui-title" id = "titleID" >测试任务</div>
+        <div class="aui-title" >测试任务</div>
     </header>
     <div style="margin-top:20px">
         <div class="left"><b>任务名称</b></div>
-        <div style="display:inline;width:50%;" id="taskNameID">测试任务</div>
+        <div style="display:inline;width:50%;" id="getname"></div>
     </div>
     <hr style="margin:0 auto" color=#d3d3d3 width=90% size=3>
     <!-- <HR width="90%" style="margin:0 auto" color=#d3d3d3 SIZE=3> -->
     <div >
         <div style="display:inline"><b style="margin:-0px 10%;line-height:40px">业主确认照片</b></div>
-        <img style="margin-left:28%;margin-top:15px;display:inline;width:8%;" src="../image/img.png" onclick="lookPicture()"/>
+        <img style="margin-left:28%;margin-top:15px;display:inline;width:8%;" src="../image/img.png" />
     </div>
     <hr style="margin:0 auto;width:90%" color=#d3d3d3 size=3/>
     <div id="project_list">
@@ -67,103 +67,48 @@
 </body>
 <script type="text/javascript" src="../script/api.js"></script>
 <script type="text/javascript" src="../script/jquery-1.4.2.min.js"></script>
-<script type="text/javascript">;
+<script type="text/javascript">
+    var project_json = getAllInfomation();
 
-    var id = 0;
-    var first_project_info;
-    var number = 0;
-    var taskID='';
-    var taskName ='';
     apiready = function() {
-      var taskInfo = api.pageParam.taskInfo;
-      taskID = taskInfo.task_id;
-      taskName = taskInfo.task_name;
-      $("#taskNameID").html(taskName);
-      getAllDataFromServer();
+      var project_info = api.pageParam.name;
+        $("#getname").html(project_info);
         //为传入的DOM元素增加适当的上内边距，避免header与状态栏重叠
         //设置样式
-      api.setStatusBarStyle({
-          style: 'dark',
-          color: '#6ab494'
-      });
+        api.setStatusBarStyle({
+            style: 'dark',
+            color: '#6ab494'
+        });
+        funIniGroup();
 
+        //下方是用来解析json的
+        var data = eval(project_json);
+        var data_status = data.status;
+        var data_info = data.work;
 
-    }
+        if (data_status == "true") {
+            var information = eval(data_info);
+            var obj = "";
+            $("#project_list").html("");
+            for (var i = 0; i < information.length; i++) {
+                //使用information[i]来获取一个个的json对象
 
-    function getAllDataFromServer(){
-        var UILoading = api.require('UILoading');
-          UILoading.flower({
-              center: {
-                  x: 160,
-                  y: 240
-              },
-              size: 30,
-              fixed: true
-          }, function(ret) {
-            //  alert(JSON.stringify(ret));
-          });
+                obj = '<div class="border" style="margin-top:10px"> <div style = "margin-top:10px;" ><div class = "left" > <b> 系统名称 </b></div> <div class = "right" style = "red;display:inline"> ' + information[i].project_name +
+                    '</div></div><div><div class = "left"> <b> 系统分类 </b></div><div class = "right"style = "display:inline"> ' + information[i].project_type +
+                    ' </div></div><div><div class = "left" > <b> 设施名称 </b></div><div class = "right" style = "display:inline;"> ' + information[i].task_name +
+                    ' </div></div></div>';
 
-        alert('taskID:'+taskID);
-        api.ajax({
-            url: $api.getStorage('connectUrl')+'/Maintenancer/CheckPlanDetail',
-            method: 'post',
-            dataType: 'text', //该参数若不传，则默认为json<div class="aui-tips aui-margin-b-15">2
-            data: {
-              values:{userName: $api.getStorage('account'), maintenanceplan_id: taskID} //键值对
-            //  values:{userName: 'ME0100002', first_time: '2000-01-01',second_time:second_time} //键值对
+                $("#project_list").append(obj);
             }
-            },function(ret,err){
-              var UILoading = api.require('UILoading');
-              UILoading.closeFlower({
-                   id: id++                         //关闭id 号对应加载提示框
-              });
 
-                  if (ret) {
-                        //alert(ret);
-                        var recode = $api.strToJson(ret);
-                        var status = recode.status;
-                        if (status=="true") {
-                           //alert(ret);
-                           var data_info = recode.finished;
-                           first_project_info = eval(data_info);
-                           var obj ="";
-                           $("#project_list").html("");
-                           for (var i = 0;i<first_project_info.length;i++) {
-                             var second_project_info = eval(first_project_info[i].second_project);
-                             for (var j = 0; j < second_project_info.length; j++) {
-                               obj = '<div class="border" style="margin-top:10px"> <div style = "margin-top:10px;" ><div class = "left" > <b> 系统名称 </b></div> <div class = "right" style = "red;display:inline"> ' + first_project_info[i].first_project_name +
-                                   ' </div></div><div><div class = "left" > <b> 设施名称 </b></div><div class = "right" style = "display:inline;"> ' + second_project_info[j].second_project_name +
-                                   ' </div></div></div>';
-
-                               $("#project_list").append(obj);
-                             }
-                           }
-
-                        }else {
-                          api.toast({
-                              msg: recode.message,
-                              duration: 2000,
-                              location: 'bottom'
-                          });
-
-                        }
-
-                  } else {
-                    alert("服务器异常，请稍后重试");
-                  };
-            });
+        } else {
+            alert("数据请求出错，请刷新本页面重试");
+        }
+        //上方是解析json的
     }
 
     function changeclick(){
       alert("修改");
-      api.openWin({
-          name: 'Test_Task',
-          url: './Test_Task.html',
-          pageParam: {
-              name: taskName
-          }
-      });
-
     }
 
     function closewin(){
@@ -191,6 +136,42 @@
         });
     }
 
+
+
+    function getAllInfomation()
+    //函数用来获取json数据，并返回
+    {
+        var project_json = {
+            "status": "true",
+            "work": [{
+                "project_name": "国际维保",
+                "project_type": "排查",
+                "task_name": "消防栓检查",
+                "creat_date": "2018-03-42",
+                "work_status": "待接收",
+                "assign_person": "范明宇",
+                "work_place": "帝国大厦",
+                "work_num": "31454",
+                "owner": "王权",
+                "telephone": "13883474876",
+                "work_description": "修下水道"
+
+            }, {
+                "project_name": "国际维保",
+                "project_type": "测试",
+                "task_name": "灭火器检查",
+                "creat_date": "2018-03-22",
+                "work_status": "已接收",
+                "assign_person": "范明宇",
+                "work_place": "帝国大厦",
+                "work_num": "31454",
+                "owner": "王权",
+                "telephone": "13883474876",
+                "work_description": "修下水道"
+            }]
+        };
+        return project_json;
+    }
 </script>
 
 </html>

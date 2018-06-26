@@ -25,67 +25,26 @@ span{
 .content{
   color:#AEAEAE
 }
-#txt1 {
-    float: right;
-    width: 70%;
-    border-bottom: 1px solid #66afe9;
-    margin-top:-40px;
-    margin-right: 15px;
-}
-
-#div_items {
-    position: relative;
-    float: right;
-    height: 200px;
-    width: 70%;
-    border: 1px solid #66afe9;
-    overflow: auto;
-    display: none;
-      margin-right: 15px;
-}
-
-.div_item {
-    width: 100%;
-    height: 20px;
-    margin-top: 1px;
-    font-size: 13px;
-    line-height: 20px;
-}
 	</style>
 </head>
-<body id="body">
-<div class="" style="margin-top:20px;margin-left:12px;">
-      <label for="" style="width:20%;"><h3>设施名称</h3></label>
-          <form>
-                  <!--要模糊匹配的文本框-->
-                  <input type="text" id="txt1" placeholder="设施名称" onblur="a();"/>
-                  <!--模糊匹配窗口-->
-                  <div id="div_items">
-                      <!-- <div class="div_item">周杰伦</div>
-                      <div class="div_item">周杰</div>
-                      <div class="div_item">林俊杰</div>
-                      <div class="div_item">林宥嘉</div>
-                      <div class="div_item">林妙可</div>
-                      <div class="div_item">唐嫣</div>
-                      <div class="div_item">唐家三少</div>
-                      <div class="div_item">唐朝盛世</div>
-                      <div class="div_item">奥迪A4L</div>
-                      <div class="div_item">奥迪A6L</div>
-                      <div class="div_item">奥迪A8L</div>
-                      <div class="div_item">奥迪R8</div>
-                      <div class="div_item">宝马GT</div> -->
-                  </div>
-          </form>
+<body>
+<input type="text" name="" value="">
+<div class="" style="margin-top:12px;margin-left:12px">
+
+      <label for="" style="float:left;width:21%"><h3>设施名称</h3></label>
+
 </div>
-<div class="" style="margin-top:20px;margin-left:12px;">
+<div class="" style="margin-top:12px;margin-left:12px">
   <h3>已记录测试项</h3><span>&nbsp;&nbsp;a</span>
 </div>
-<div id="tab">
+<div class="">
 <ul class="aui-list aui-list-in">
             <li class="aui-list-item">
                 <div class="aui-list-item-inner">
                     <div class="aui-list-item-title">a.测试火灾报警和故障报警功能</div>
+
                 </div>
+
                 <div class="content">
                   每个回路各不少于2个，应正常报警显示（拍照打印结果）
                 </div>
@@ -103,131 +62,14 @@ span{
         </ul>
 </div>
 </body>
-<script type="text/javascript" src="../script/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="script/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="../script/api.js"></script>
-<script type="text/javascript" src="../script/jquery-editable-select.min.js"></script>
+<script type="text/javascript" src="script/jquery-editable-select.min.js"></script>
 </script>
 <script type="text/javascript">
-var project_json ={
-"status": "true",
-"work": [{
-"project_name": "国际维保",
-"project_type": "排查",
-"task_name": "消防栓检查",
-"creat_date": "2018-03-42",
-"work_status": "待接收",
-"assign_person": "范明宇",
-"work_place": "帝国大厦",
-"work_num": "31454",
-"owner": "数据1",
-"telephone": "13883474876",
-"work_description": "修下水道"
-
-},
-{
-"project_name": "国际维保",
-"project_type": "测试",
-"task_name": "灭火器检查",
-"creat_date": "2018-03-22",
-"work_status": "已接收",
-"assign_person": "范明宇",
-"work_place": "帝国大厦",
-"work_num": "31454",
-"owner": "数据2",
-"telephone": "13883474876",
-"work_description": "修下水道"
-},
-{
-"project_name": "国际维保啊",
-"project_type": "排查",
-"task_name": "水泵检查",
-"creat_date": "2018-11-22",
-"work_status": "已接收",
-"assign_person": "范明宇",
-"work_place": "帝国大厦",
-"work_num": "31454",
-"owner": "数据3",
-"telephone": "13883474876",
-"work_description": "修下水道"
-}
-]
-};
     apiready = function(){
         api.parseTapmode();
-      //   var data = eval(project_json);
-      //   var data_status = data.status;
-      //   var data_info = data.work;
-      //   if (data_status=="true") {
-      //     var information = eval(data_info);
-      //     for (var i = 0;i<information.length;i++) {
-      //     $("#div_items").append('<div class="div_item">'+information[i].task_name+'</div>');
-      //   }
-      //   click_event();
-      // }
-      api.ajax({
-          url: 'http://192.168.0.7:8080/firefighting/Maintenancer/GetMaintenancePlan',
-          method: 'post',
-          data: {
-              values: {
-                  userName: "ME0100002"
-              },
-          }
-      },function(ret, err){
-          if (ret) {
-              alert( JSON.stringify( ret ) );
-          } else {
-              //alert( JSON.stringify( err ) );
-          }
-      });
 
     };
-    //弹出列表框
-    $("#txt1").click(function () {
-      $("#div_items").css('display', 'block');
-    });
-    //隐藏列表框
-    function a(){
-      setTimeout(function(){
-              $("#div_items").css('display', 'none');
-            },350);
-    }
-
-    //移入移出效果
-    // $(".div_item").hover(function () {
-    //     $(this).css('background-color', '#1C86EE').css('color', 'white');
-    // }, function () {
-    //     $(this).css('background-color', 'white').css('color', 'black');
-    // });
-
-    //文本框输入
-      $("#txt1").bind('input propertychange', function() {
-        $("#div_items").css('display', 'block');//只要输入就显示列表框
-        $(".div_item").css('display', 'none');//如果填了，先将所有的选项隐藏
-        for (var i = 0; i < $(".div_item").length; i++) {
-            //模糊匹配，将所有匹配项显示
-            if ($(".div_item").eq(i).text().substr(0, $("#txt1").val().length) == $("#txt1").val()) {
-                $(".div_item").eq(i).css('display', 'block');
-            }
-
-        }
-
-    });
-    //项点击
-    function click_event(){
-      $(".div_item").click(function () {
-          $("#txt1").val($(this).text());
-      });
-    };
-    var list = document.getElementsByClassName('aui-list-item');
-    list[0].onclick = function(){
-      alert('a');
-    }
-    list[1].onclick = function(){
-      alert('b');
-    }
-    list[2].onclick = function(){
-      alert('c');
-    }
-
 </script>
 </html>

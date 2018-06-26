@@ -57,30 +57,20 @@
 <script type="text/javascript" src="../script/api.js"></script>
 <script type="text/javascript">
 //var chooseBoxBtn = document.getElementById('checkboxID');
-var data='win';
+    //var data='win';
     apiready = function(){
       $api.fixStatusBar( $api.dom('.aui-bar') );
       api.setStatusBarStyle({
           style: 'dark',
           color: '#6ab494'
       });
-      //var header = $api.html($api.byId('title'),api.pageParam.name);//获取上一个页面的名称
-      var read = api.pageParam.name;
-      //alert(read);
-
-
-
-
-
-
-
-
-
 
 
       funIniGroup1();
       fnClosePlanset0Win();
     }
+
+
     function fnClosePlanset0Win(){
       api.closeToWin({
           name: 'planset_win'
@@ -88,19 +78,43 @@ var data='win';
     }
     //计划完成情况、未完成维保项目设置为一个framegroup
     function funIniGroup1(){
+      var array = api.pageParam.name;
+      var index = array.indexOf('   ');
+      var string1 = array.substring(0, index);//项目id,名称
+      //alert(string1);
+      var string2 = array.substring(index + 3);//id，某年某月，已完成/未完成
+      //alert(string2);
+      //var obj_project = JSON.parse(string1);
+      var obj_plan = JSON.parse(string2);
+
+      var header = $api.html($api.byId('title'),obj_plan.maintenanceplan_name);//获取点击的项目名称
+
+      // var plan_name=JSON.stringify(obj_plan.maintenanceplan_name);
+      // var plan_id=JSON.stringify(obj_plan.maintenanceplan_id);
+      string_delivery = string1 + "," +string2; //给0.2_frm传的两个参数写在一个字符串里
+      //alert(string_delivery);
+      id=JSON.stringify(obj_plan.maintenanceplan_id);//给0.1_frm传id参数
+      //alert(id);
           var eNavLis = $api.domAll('ul li'),
               frames = [];
-                  frames.push( {
+                  frames.push(
+                    {
                       name: 'planset0.1_frm',
                       url: './planset0.1_frm.html',
                       bgColor : 'rgba(0,0,0,.2)',
-                      bounces:false
+                      bounces:false,
+                      pageParam:{
+                        'param1':id
+                      }
                   } )
                   frames.push( {
                       name: 'plaset0.2_frm',
                       url: './planset0.2_frm.html',
                       bgColor : 'rgba(0,0,0,.2)',
-                      bounces:false
+                      bounces:false,
+                      pageParam:{
+                      'param2':string_delivery
+                    }
                   } )
                   api.openFrameGroup({
                       name: 'group2',
@@ -144,9 +158,9 @@ var data='win';
           });
       }
 
-    function chooseAll(data){
-      alert('win里执行的chooseAll');
-      alert(data);
-    }
+    // function chooseAll(data){
+    //   //alert('win里执行的chooseAll');
+    //   //alert(data);
+    // }
 </script>
 </html>

@@ -125,7 +125,7 @@
                       <img id="voice" style="float:left;margin-left:35px;" src="../image/plus.jpg" height="30"  width="30" >
                       <img id="text"  style="float:left;margin-left:35px;" src="../image/plus.jpg" height="30"  width="30" >
                       <img id="video" style="float:left;margin-left:35px;" src="../image/plus.jpg" height="30"  width="30">
-                      <img id="image" onclick="openpicture()" style="float:left;margin-left:35px;" src="../image/plus.jpg" height="30"  width="30">
+                      <img id="image" style="float:left;margin-left:35px;" src="../image/plus.jpg" height="30"  width="30">
                 </div>
             </li>
             <li class="aui-list-item">
@@ -188,26 +188,6 @@
             });
         }
     };
-  function openpicture(){
-      var picture = $api.getStorage('pictureurl');
-      api.openFrame({
-          name: 'picture',
-          url: './picture.html',
-          rect: {
-              x: 0,
-              y: 0,
-              w: 320,
-              h: 480
-          },
-          pageParam: {
-              pictureurl: picture
-          },
-          bounces: true,
-          bgColor: 'rgba(0,0,0,0)',
-          vScrollBarEnabled: true,
-          hScrollBarEnabled: true
-      });
 
-    };
 </script>
 </html>
