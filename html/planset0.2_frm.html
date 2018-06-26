@@ -46,7 +46,8 @@ function jump(){
       name: 'new_Task',
       url: './new_Task.html',
       pageParam: {
-        data: array
+        data: array,
+        task_id:api.pageParam.task_id
     }
   });
 
@@ -101,7 +102,7 @@ function jump(){
                              var second_project_info = eval(information[i].second_project);
                              //alert(second_project_info.length);
                              for (var j = 0; j < second_project_info.length; j++) {
-                                var value = '{first_project_id:'+information[i].first_project_id+',first_project_name:'+information[i].first_project_name+',second_project_id:'+second_project_info[j].second_project_id+',second_project_name:'+second_project_info[j].second_project_name+'}';
+                                var value = '{"first_project_id":"'+information[i].first_project_id+'","first_project_name":"'+information[i].first_project_name+'","second_project_id":"'+second_project_info[j].second_project_id+'","second_project_name":"'+second_project_info[j].second_project_name+'"}';
 
                                 obj_in = '<li style="margin-top:10px;margin-left:30px"><tr><td><input class="aui-checkbox" type="checkbox"  name="each" value='+value+'></td><td>'+second_project_info[j].second_project_name+'</tr></li>';
                                 if (j==second_project_info.length-1) {
@@ -139,6 +140,9 @@ function jump(){
     }
 
     function chooseWhich(){
+
+      array=[];
+
       seach=document.getElementsByName("each");
       for(var i=0;i<seach.length;i++){
         if (seach[i].checked) {

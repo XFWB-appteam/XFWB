@@ -1,96 +1,83 @@
 <!DOCTYPE HTML>
 <html>
+
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
     <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
     <title>Hello APP</title>
     <link rel="stylesheet" type="text/css" href="../css/aui.css" />
     <link rel="stylesheet" href="css/jquery-editable-select.min.csss">
-	<style>
-  body{
-    background-color: #ffffff;
-  }
-  h3{
-    display:inline-block;
-    color:#009688;
+    <style>
+        body {
+            background-color: #ffffff;
+        }
 
-  }
-  .aui-list .aui-list-item {
-    display: block;
-}
-span{
-  color:#7B7B7B
-}
-.content{
-  color:#AEAEAE
-}
-#txt1 {
-    float: right;
-    width: 70%;
-    border-bottom: 1px solid #66afe9;
-    margin-top:-40px;
-    margin-right: 15px;
-}
+        h3 {
+            display: inline-block;
+            color: #009688;
+        }
 
-#div_items {
-    position: relative;
-    float: right;
-    height: 200px;
-    width: 70%;
-    border: 1px solid #66afe9;
-    overflow: auto;
-    display: none;
-      margin-right: 15px;
-}
+        .aui-list .aui-list-item {
+            display: block;
+        }
 
-.div_item {
-    width: 100%;
-    height: 20px;
-    margin-top: 1px;
-    font-size: 13px;
-    line-height: 20px;
-}
-	</style>
+        span {
+            color: #7B7B7B
+        }
+
+        .content {
+            color: #AEAEAE
+        }
+
+        #txt1 {
+            float: right;
+            width: 70%;
+            border-bottom: 1px solid #66afe9;
+            margin-top: -40px;
+            margin-right: 15px;
+        }
+
+        #div_items {
+            position: relative;
+            float: right;
+            height: 200px;
+            width: 70%;
+            border: 1px solid #66afe9;
+            overflow: auto;
+            display: none;
+            margin-right: 15px;
+        }
+
+        .div_item {
+            width: 100%;
+            height: 20px;
+            margin-top: 1px;
+            font-size: 13px;
+            line-height: 20px;
+        }
+    </style>
 </head>
+
 <body id="body">
-<div class="" style="margin-top:20px;margin-left:12px;">
-      <label for="" style="width:20%;"><h3>设施名称</h3></label>
-          <form>
-                  <!--要模糊匹配的文本框-->
-                  <input type="text" id="txt1" placeholder="设施名称" onblur="a();"/>
-                  <!--模糊匹配窗口-->
-                  <div id="div_items">
-                      <!-- <div class="div_item">周杰伦</div>
-                      <div class="div_item">周杰</div>
-                      <div class="div_item">林俊杰</div>
-                      <div class="div_item">林宥嘉</div>
-                      <div class="div_item">林妙可</div>
-                      <div class="div_item">唐嫣</div>
-                      <div class="div_item">唐家三少</div>
-                      <div class="div_item">唐朝盛世</div>
-                      <div class="div_item">奥迪A4L</div>
-                      <div class="div_item">奥迪A6L</div>
-                      <div class="div_item">奥迪A8L</div>
-                      <div class="div_item">奥迪R8</div>
-                      <div class="div_item">宝马GT</div> -->
-                  </div>
-          </form>
-</div>
-<div class="" style="margin-top:20px;margin-left:12px;">
-  <h3>已记录测试项</h3><span>&nbsp;&nbsp;a</span>
-</div>
-<div id="tab">
-<ul class="aui-list aui-list-in">
-            <li class="aui-list-item">
-                <div class="aui-list-item-inner">
-                    <div class="aui-list-item-title">a.测试火灾报警和故障报警功能</div>
-                </div>
-                <div class="content">
-                  每个回路各不少于2个，应正常报警显示（拍照打印结果）
-                </div>
-            </li>
-            <li class="aui-list-item">
+  <header class="aui-bar aui-bar-nav" style="background-color:#00b2b4">
+      <div class="aui-pull-left aui-btn">
+          <span class="aui-iconfont aui-icon-left" onclick="closewin()"></span>
+      </div>
+      <div class="aui-title">测试任务</div>
+  </header>
+
+    <div class="" style="margin-top:20px;margin-left:12px;">
+        <label for="" style="width:20%;"><h3>设施名称</h3><p style="display:inline;margin-left:20px" id="facility_name"></p></label>
+
+    </div>
+    <div class="" style="margin-top:20px;margin-left:12px;">
+        <h3>已记录测试项</h3><span id="storage" style="margin-left:20px"></span>
+    </div>
+    <div id="tab">
+        <ul class="aui-list aui-list-in" id="add">
+
+            <!-- <li class="aui-list-item">
                 <div class="aui-list-item-inner">
                     <div class="aui-list-item-title">b.测试火灾报警和故障报警功能</div>
                 </div>
@@ -99,110 +86,91 @@ span{
                 <div class="aui-list-item-inner">
                     <div class="aui-list-item-title">c.测试火灾报警和故障报警功能</div>
                 </div>
-            </li>
+            </li> -->
         </ul>
-</div>
+    </div>
 </body>
 <script type="text/javascript" src="../script/jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="../script/api.js"></script>
 <script type="text/javascript" src="../script/jquery-editable-select.min.js"></script>
 </script>
 <script type="text/javascript">
-var project_json ={
-"status": "true",
-"work": [{
-"project_name": "国际维保",
-"project_type": "排查",
-"task_name": "消防栓检查",
-"creat_date": "2018-03-42",
-"work_status": "待接收",
-"assign_person": "范明宇",
-"work_place": "帝国大厦",
-"work_num": "31454",
-"owner": "数据1",
-"telephone": "13883474876",
-"work_description": "修下水道"
 
-},
-{
-"project_name": "国际维保",
-"project_type": "测试",
-"task_name": "灭火器检查",
-"creat_date": "2018-03-22",
-"work_status": "已接收",
-"assign_person": "范明宇",
-"work_place": "帝国大厦",
-"work_num": "31454",
-"owner": "数据2",
-"telephone": "13883474876",
-"work_description": "修下水道"
-},
-{
-"project_name": "国际维保啊",
-"project_type": "排查",
-"task_name": "水泵检查",
-"creat_date": "2018-11-22",
-"work_status": "已接收",
-"assign_person": "范明宇",
-"work_place": "帝国大厦",
-"work_num": "31454",
-"owner": "数据3",
-"telephone": "13883474876",
-"work_description": "修下水道"
-}
-]
-};
-    apiready = function(){
-        api.parseTapmode();
-      //   var data = eval(project_json);
-      //   var data_status = data.status;
-      //   var data_info = data.work;
-      //   if (data_status=="true") {
-      //     var information = eval(data_info);
-      //     for (var i = 0;i<information.length;i++) {
-      //     $("#div_items").append('<div class="div_item">'+information[i].task_name+'</div>');
-      //   }
-      //   click_event();
-      // }
-      api.ajax({
-          url: 'http://192.168.0.7:8080/firefighting/Maintenancer/GetMaintenancePlan',
-          method: 'post',
-          data: {
-              values: {
-                  userName: "ME0100002"
-              },
-          }
-      },function(ret, err){
-          if (ret) {
-              alert( JSON.stringify( ret ) );
-          } else {
-              //alert( JSON.stringify( err ) );
-          }
-      });
 
+
+
+
+    apiready = function() {
+
+        var UILoading = api.require('UILoading');
+        var id = 0;
+        document.getElementById('facility_name').innerHTML=api.pageParam.second_project_name;
+        // alert(api.pageParam.second_project_name);
+        UILoading.flower({
+            center: {
+                x: 160,
+                y: 240
+            },
+            size: 30,
+            fixed: true
+        }, function(ret) {
+            //alert(JSON.stringify(ret));
+        });
+
+        api.ajax({
+            url: 'http://192.168.0.7:8080/firefighting/Maintenancer/PlanCreateTask',
+            method: 'post',
+            data: {
+                values: {
+                    userId: 39,
+                    task_type: api.pageParam.task_type,
+                    project_name: api.pageParam.project_name,
+                    task_name: api.pageParam.task_name,
+                    //=========================这里需要修改
+                    maintenanceplan_id: 1,
+                    second_project_id:7,
+                    task_character:api.pageParam.task_character
+                }
+            }
+        }, function(ret, err) {
+            UILoading.closeFlower({
+                id: id++ //关闭id 号对应加载提示框
+            });
+            if (ret) {
+                var project_json = eval(ret);
+                var status = project_json.status;
+                //  alert($api.getStorage('account')+"=="+ api.pageParam.task_type+api.pageParam.project_name+api.pageParam.task_name +api.pageParam.task_character);
+                //  alert(status);
+                if (status == "true") {
+                    var information = eval(project_json.message);
+                    var obj = "";
+                    $("#add").html("");
+                    for (var i = 0; i < information.length; i++) {
+                        obj = '  <li class="aui-list-item" onclick="click_item('+project_json.task_id+','+information[i].maintenance_test_content_id+')"><div class="aui-list-item-inner"><div class="aui-list-item-title" >' + information[i].maintenance_test_content_serial + '.' + information[i].maintenance_test_content_name +
+                            '</div></div><div class="content">' + information[i].maintenance_test_content_all + '</div></li>';
+
+                        $("#add").append(obj);
+                    }
+
+                } else {}
+            }
+        });
     };
-    //弹出列表框
-    $("#txt1").click(function () {
-      $("#div_items").css('display', 'block');
+    // 弹出列表框
+    $("#txt1").click(function() {
+        $("#div_items").css('display', 'block');
     });
     //隐藏列表框
-    function a(){
-      setTimeout(function(){
-              $("#div_items").css('display', 'none');
-            },350);
+    function a() {
+        setTimeout(function() {
+            $("#div_items").css('display', 'none');
+        }, 350);
     }
 
-    //移入移出效果
-    // $(".div_item").hover(function () {
-    //     $(this).css('background-color', '#1C86EE').css('color', 'white');
-    // }, function () {
-    //     $(this).css('background-color', 'white').css('color', 'black');
-    // });
-
-    //文本框输入
-      $("#txt1").bind('input propertychange', function() {
-        $("#div_items").css('display', 'block');//只要输入就显示列表框
-        $(".div_item").css('display', 'none');//如果填了，先将所有的选项隐藏
+    // 文本框输入
+    $("#txt1").bind('input propertychange', function() {
+        $("#div_items").css('display', 'block'); //只要输入就显示列表框
+        $(".div_item").css('display', 'none'); //如果填了，先将所有的选项隐藏
         for (var i = 0; i < $(".div_item").length; i++) {
             //模糊匹配，将所有匹配项显示
             if ($(".div_item").eq(i).text().substr(0, $("#txt1").val().length) == $("#txt1").val()) {
@@ -212,22 +180,27 @@ var project_json ={
         }
 
     });
-    //项点击
-    function click_event(){
-      $(".div_item").click(function () {
-          $("#txt1").val($(this).text());
-      });
+    // 项点击
+    function click_event() {
+        $(".div_item").click(function() {
+            $("#txt1").val($(this).text());
+        });
     };
     var list = document.getElementsByClassName('aui-list-item');
-    list[0].onclick = function(){
-      alert('a');
-    }
-    list[1].onclick = function(){
-      alert('b');
-    }
-    list[2].onclick = function(){
-      alert('c');
+
+    function click_item(task_id,maintenance_test_content_id){
+      api.openWin({
+          name: 'executeTestTask_win',
+          url: './executeTestTask_win.html',
+          pageParam: {
+              maintenance_test_content_id: 137,
+              task_id:1
+          }
+      });
+
     }
 
+
 </script>
+
 </html>

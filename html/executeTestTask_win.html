@@ -182,6 +182,7 @@
     var cannottest = new Array();
     var task_id="";
     var maintenance_test_content_id="";
+    var maintenanceplan_id = "";
     var userName="";
     var clickChoose = false;
     var allinformation="";
@@ -191,6 +192,8 @@
        dialogBox= api.require('dialogBox');
        task_id  = api.pageParam.task_id;
        maintenance_test_content_id = api.pageParam.maintenance_test_content_id;
+       maintenanceplan_id = api.pageParam.maintenanceplan_id;
+
        userName = $api.getStorage('name');
        getALLinformation();
     };
@@ -308,6 +311,7 @@
           data: {
               values: {
                   maintenance_test_content_id:maintenance_test_content_id,
+                  maintenanceplan_id:maintenanceplan_id,
                   task_id:task_id,
                   task_item_json:task_item_json
               }
@@ -315,12 +319,22 @@
       },function(ret, err){
           if (ret) {
             var status = ret.status;
-
                if (status =="true") {
                  alert("提交成功");
+                 
+                 api.closeFrame({
+                     name: 'executeTestTask_win'
+                 });
+
+
                }
                else {
                  alert("提交失败");
+                 api.toast({
+                     msg: ret.message,
+                     duration: 2000,
+                     location: 'bottom'
+                 });
                }
           } else {
             console.log(JSON.stringify(err));
