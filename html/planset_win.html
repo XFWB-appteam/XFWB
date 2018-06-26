@@ -124,6 +124,7 @@
                         li_level1.setAttribute("id", "num"+i);
                         li_level1.setAttribute("class", "level1");
                         li_level1.innerHTML += '<a href="#none"><em class="ico ico'+o+'"></em>'+temp.name+'<i></i></a>';
+
                         li_level1.innerHTML += '<ul class="level2" id="number'+i+'"></ul>';
 
                         ul_menu.appendChild(li_level1);
@@ -203,6 +204,7 @@ function liststyle(){
     .parent().next().slideDown('slow','easeOutQuad')  //下一个元素显示
     .parent().siblings().children('a').removeClass('current')//父元素的兄弟元素的子元素去除"current"样式
     .find('i').removeClass('down').parent().next().slideUp('slow','easeOutQuad');//隐藏
+
      return false; //阻止默认时间
   });
   })
@@ -215,6 +217,7 @@ function liststyle(){
           duration:200                //动画过渡时间，默认300毫秒
       });
     }
+
     // function fnOpenPlanset0Win(){
     //   //alert(id);
     //   api.openWin({
@@ -226,6 +229,7 @@ function liststyle(){
     //   reload:true
     //   });
     // }
+
 
 </script>
 </html>

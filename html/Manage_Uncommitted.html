@@ -53,45 +53,125 @@
 <script type="text/javascript" src="../script/jquery-1.4.2.min.js"></script>
 
 <script type="text/javascript">
+    function cclose() {
+        api.closeWin({});
+    }
+    var id = 0;
+    var information="";
+    apiready = function() {
+        var UILoading = api.require('UILoading');
+        UILoading.flower({
+            center: {
+                x: 160,
+                y: 240
+            },
+            size: 30,
+            fixed: true
+        }, function(ret) {
+            //alert(JSON.stringify(ret));
+        });
+        api.ajax({
+            // url: 'http://192.168.0.7:8080/firefighting/App/AppLogin',
+            url: $api.getStorage('connectUrl') + '/Maintenancer/CheckOnExecuteTask',
+            method: 'post',
+            dataType: 'text', //该参数若不传，则默认为json<div class="aui-tips aui-margin-b-15">2
 
-function cclose(){
-  api.closeWin({
+            data: {
+                values: {
+                    userName: $api.getStorage('account')
+                } //键值对
+            }
+        }, function(ret, err) {
+
+            UILoading.closeFlower({
+                id: id++ //关闭id 号对应加载提示框
+            });
+
+            if (ret) {
+                //alert(ret);
+                var recode = $api.strToJson(ret);
+                var status = recode.status;
+                var role = recode.status;
+
+                // var json_str={"status": "true","task":[{"id":123,"project_name":"中建国际中心","create_time":"2017-06-10 15:21","maintenanceplan_name":"2017年1月份计划","task_type":"测试"},{"id":123,"project_name":"名敦道项目","create_time":"2017-06-10 15:21","maintenanceplan_name":"2017年8月份计划","task_type":"排查"},{"id":123,"project_name":"0916项目测试","create_time":"2017-06-10 15:21","maintenanceplan_name":"2017年11月份计划","task_type":"维修"}]};
+                var json_str = $api.strToJson(ret);
+                var data = eval(json_str);
+                var data_status = data.status;
+                var obj = "";
+                if (data_status == "true") {
+
+                    var task = data.task;
+
+
+                     information = eval(task);
+
+                    for (var i = 0; i < information.length; i++) {
+                        var object = eval(information[i]);
+
+
+
+  obj = '<div class="border"><div style="margin-top:10px;width:100%;"><div class="left"><b>系统名称</b></div><div class="right" style="red;display:inline">' + object.project_name +
+      '</div><div style="display:inline;color:#00b2b4;float:right;margin-right:12%"><b>' + object.task_type + '</b></div></div><div><div class="left"><b>任务名称</b></div><div class="right" id="name" style="display:inline">' +
+      object.task_name + '</div></div><div><div class="left"><b>创建时间</b></div><div class="right" style="display:inline;">' + object.create_time +
+      '</div></div><div style="margin-bottom:5px;margin-left:52%;margin-top:-2px"><img src = "../image/edit.png"style = "width:28px;margin-bottom:-8px;display:inline" onclick="edit('+i+')"/><div style="display:inline;margin-left:4px"  onclick="edit('+i+')">编辑</div><img src = "../image/delete.png"  style = "width:20px;display:inline;margin-bottom:-6px;margin-left:20px"  onclick="delette('+object.task_id+')" /><div style="display:inline;margin-left:5px"  onclick="delette('+object.task_id+')">删除</div></div></div>';
+
+  $("#add_place").append(obj);
+
+
+                    }
+                }else{
+                  api.toast({
+                      msg: recode.message,
+                      duration: 2000,
+                      location: 'bottom'
+                  });
+                }
+                var project_info = api.pageParam.info;
+                $("#name").text(project_info);
+
+
+
+            } else {
+                alert("服务器异常，请稍后重试");
+            };
+        });
+    }
+
+function edit(n){
+var object = eval(information[n]);
+
+  api.openWin({
+      name: 'Test_Task',
+      url: './Test_Task.html',
+      pageParam: {
+        task_name:object.task_name,
+          task_id:object.task_id,
+          task_type:object.task_type
+      }
   });
+}
 
+function delette(v){
+  if(window.confirm('您确定要删除该任务吗？')){
+                 //alert("确定");
+                 return true;
+              }else{
+                 //alert("取消");
+                 return false;
+             }
 }
 
 
-    apiready = function() {
 
-      var json_str={"status": "true","task":[{"id":123,"project_name":"中建国际中心","create_time":"2017-06-10 15:21","maintenanceplan_name":"2017年1月份计划","task_type":"测试"},{"id":123,"project_name":"名敦道项目","create_time":"2017-06-10 15:21","maintenanceplan_name":"2017年8月份计划","task_type":"排查"},{"id":123,"project_name":"0916项目测试","create_time":"2017-06-10 15:21","maintenanceplan_name":"2017年11月份计划","task_type":"维修"}]};
-
-       var data = eval(json_str);
-      var data_status = data.status;
-          var obj = "";
-    if(data_status=="true"){
-
-var task=data.task;
-
-
-      var information = eval(task);
-
-      for (var i = 0; i < information.length; i++) {
-        var object=eval(information[i]);
-   obj ='<div class="border"><div style="margin-top:10px;"><div class="left"><b>系统名称</b></div><div class="right" style="red;display:inline">'+object.project_name+'</div><div style="display:inline;color:#00b2b4;margin-left:15%"><b>'+object.task_type+'</b></div></div><div><div class="left"><b>任务名称</b></div><div class="right" id="name" style="display:inline">'+object.maintenanceplan_name+'</div></div><div><div class="left"><b>创建时间</b></div><div class="right" style="display:inline;">'+object.create_time+'</div></div><div style="margin-bottom:5px;margin-left:55%;margin-top:-5px;"><img src = "../image/edit.png"style = "width:28px;margin-bottom:-8px;display:inline"  /><div style="display:inline">编辑</div><img src = "../image/delete.png"  style = "width:20px;display:inline;margin-bottom:-6px;margin-left:20px"  /><div style="display:inline">删除</div></div></div>';
-
-          $("#add_place").append(obj);
-      }
-
-
-
-
-
-
-    }
-
-
-        var project_info = api.pageParam.info;
-        $("#name").text(project_info);
-
-    }
+    // var UILoading = api.require('UILoading');
+    //   UILoading.flower({
+    //       center: {
+    //           x: 160,
+    //           y: 240
+    //       },
+    //       size: 30,
+    //       fixed: true
+    //   }, function(ret) {
+    //       //alert(JSON.stringify(ret));
+    //   });
 </script>

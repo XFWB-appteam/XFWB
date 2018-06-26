@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -24,46 +24,45 @@
 
 <script type="text/javascript">
     //json的获取需要设置为全局变量
-      var project_json =  getAllInfomation();
+      var project_json =  "";
+      var userName = "";
     apiready = function () {
-        //下方是用来解析json的
-        var data = eval(project_json);
-        var data_status = data.status;
-        var data_info = data.task;
-        if (data_status=="true") {
-          var information = eval(data_info);
-          var obj ="";
-          $("#project_list").html("");
-          for (var i = 0;i<information.length;i++) {
-              //使用information[i]来获取一个个的json对象
+        // userName = $api.getStorage('account');
+        // getAllInfomation();
+        alert("本模块待开发中......");
+        api.closeFrame({
+          name:"jieshou_frame"
+        });
 
-              //MMP
-            var differentobj = "";
-            obj = '<li class="aui-list-header"></li><li class="aui-list-item aui-list-item-arrow"><div style="color:red;text-align:right">'+information[i].task_type+'</div><div class="aui-media-list-item-inner"><div class="aui-list-item-inner"><div class="aui-list-item-text"><div class="aui-list-item-title">项目名称</div><div>'+information[i].project_name+'</div></div><div class="aui-list-item-text"><div class="aui-list-item-title">任务名称</div><div >'+information[i].task_name+'</div></div><div class="aui-list-item-text"><div class="aui-list-item-title">创建日期</div><div >'+information[i].creat_time+'</div></div><div class="aui-list-item-text"><div class="aui-list-item-title">执行状态</div><div >'+information[i].task_status;
-            if (information[i].task_status=="待接收") {
-              differentobj =   '</div></div><div class="aui-btn aui-btn-info"  onclick="acceptTask('+i+')" style="float:right;"><span class="aui-iconfont aui-icon-edit" ></span>接收</div></div></div></li>';
-            }
-            else {
-              differentobj =   '</div></div><div class="aui-btn aui-btn-info"  onclick="executeTask('+i+')" style="float:right;"><span class="aui-iconfont aui-icon-edit" ></span>执行</div></div></div></li>';
-            }
-            obj+=differentobj;
-             $("#project_list").append(obj);
-            //$api.byId('project_list').append(obj);
-          }
-
-        }
-        else {
-          alert("数据请求出错，请刷新本页面重试");
-        }
-        //上方是解析json的
     }
 
+
+function creatPage()
+{
+  var data = eval(project_json);
+  var data_info = data.task;
+  var information = eval(data_info);
+  var obj ="";
+  $("#project_list").html("");
+  for (var i = 0;i<information.length;i++) {
+        //使用information[i]来获取一个个的json对象
+      var differentobj = "";
+      obj = '<li class="aui-list-header"></li><li class="aui-list-item aui-list-item-arrow"><div style="color:red;text-align:right">'+information[i].task_type+'</div><div class="aui-media-list-item-inner"><div class="aui-list-item-inner"><div class="aui-list-item-text"><div class="aui-list-item-title">项目名称</div><div>'+information[i].project_name+'</div></div><div class="aui-list-item-text"><div class="aui-list-item-title">任务名称</div><div >'+information[i].task_name+'</div></div><div class="aui-list-item-text"><div class="aui-list-item-title">创建日期</div><div >'+information[i].creat_time+'</div></div><div class="aui-list-item-text"><div class="aui-list-item-title">执行状态</div><div >'+information[i].task_status;
+      if (information[i].task_status=="待接收") {
+        differentobj =   '</div></div><div class="aui-btn aui-btn-info"  onclick="acceptTask('+i+')" style="float:right;"><span class="aui-iconfont aui-icon-edit" ></span>接收</div></div></div></li>';
+      }
+      else {
+        differentobj =   '</div></div><div class="aui-btn aui-btn-info"  onclick="executeTask('+i+')" style="float:right;"><span class="aui-iconfont aui-icon-edit" ></span>执行</div></div></div></li>';
+      }
+      obj+=differentobj;
+       $("#project_list").append(obj);
+    }
+}
 
 function executeTask(index)
 {
   //执行任务的代码还没写，感觉跟接收任务差不多。
   var data = eval(project_json);
-  var data_status = data.status;
   var data_info = data.task;
   var information = eval(data_info);
   api.openWin({
@@ -78,7 +77,6 @@ function executeTask(index)
   {
     //下方是用来解析json的
     var data = eval(project_json);
-    var data_status = data.status;
     var data_info = data.task;
     var information = eval(data_info);
     api.openWin({
@@ -94,58 +92,39 @@ function executeTask(index)
     function getAllInfomation()
     //函数用来获取json数据，并返回
     {
-      var project_json ={
-  "status": "true",
-  "task": [{
-      "id":"123",
-      "project_name": "国际维保",
-      "task_type": "排查",
-      "task_name": "消防栓检查",
-      "creat_time": "2018-03-42",
-      "task_status": "待执行",
-      "proprietor_name": "范明宇",
-      "task_location": "帝国大厦",
-      "task_number": "10000",
-      "issue_person": "小叮当",
-      "proprietor_connector_mobile_phone": "13883474876",
-      "task_description": "修下水道",
-      "facility_name":"室外消火栓",
-      "facility_location":"1楼西侧"
-    },
-    {
-        "id":"123",
-        "project_name": "国际维保",
-        "task_type": "维护",
-        "task_name": "消防栓检查",
-        "creat_time": "2018-03-42",
-        "task_status": "待接收",
-        "proprietor_name": "范明宇",
-        "task_location": "帝国大厦",
-        "task_number": "10000",
-        "issue_person": "小叮当",
-        "proprietor_connector_mobile_phone": "13883474876",
-        "task_description": "修下水道",
-        "facility_name":"室外消火栓",
-        "facility_location":"1楼西侧"
-      },
-      {
-          "id":"123",
-          "project_name": "国际维保",
-          "task_type": "排查",
-          "task_name": "消防栓检查",
-          "creat_time": "2018-03-42",
-          "task_status": "待接收",
-          "proprietor_name": "范明宇",
-          "task_location": "帝国大厦",
-          "task_number": "10000",
-          "issue_person": "小叮当",
-          "proprietor_connector_mobile_phone": "13883474876",
-          "task_description": "修下水道",
-          "facility_name":"室外消火栓",
-          "facility_location":"1楼西侧"
-        }
-  ]
-};
-return project_json;
+      api.ajax({
+          url: 'http://192.168.0.7:8080/XX',//接口地址，这个接口还没写好
+          method: 'post',
+          data: {
+              values: {
+                 userName:userName
+              }
+          }
+      },function(ret, err){
+          if (ret) {
+            var status = ret.status;
+               if (status =="true") {
+                 project_json = ret.task;
+                 creatPage();
+               }
+               else {
+                 alert("数据获取失败，请重试");
+                 api.closeFrame({
+                   name:"jieshou_frame"
+                 });
+               }
+          } else {
+            alert("未能与服务器连接");
+            api.closeFrame({
+                 name:"jieshou_frame"
+            });
+            api.toast({
+                msg: ret.message,
+                duration: 2000,
+                location: 'bottom'
+            });
+          }
+      });
+
     }
-</script>
+</script> -->
