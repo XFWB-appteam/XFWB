@@ -79,7 +79,7 @@ function jump(){
             method: 'post',
             dataType: 'text', //该参数若不传，则默认为json<div class="aui-tips aui-margin-b-15">2
             data: {
-              values:{userName: $api.getStorage('account'), maintenanceplan_id: '1'} //maintenanceplan_id需要从上个界面传过来
+              values:{userName: $api.getStorage('account'), maintenanceplan_id: JSON.parse(api.pageParam.param3).maintenanceplan_id} //maintenanceplan_id需要从上个界面传过来
             //  values:{userName: 'ME0100002', first_time: '2000-01-01',second_time:second_time} //键值对
             }
             },function(ret,err){

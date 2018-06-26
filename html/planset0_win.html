@@ -86,15 +86,11 @@
       //alert(string2);
       //var obj_project = JSON.parse(string1);
       var obj_plan = JSON.parse(string2);
-
       var header = $api.html($api.byId('title'),obj_plan.maintenanceplan_name);//获取点击的项目名称
 
       // var plan_name=JSON.stringify(obj_plan.maintenanceplan_name);
       // var plan_id=JSON.stringify(obj_plan.maintenanceplan_id);
       string_delivery = string1 + "," +string2; //给0.2_frm传的两个参数写在一个字符串里
-      //alert(string_delivery);
-      id=JSON.stringify(obj_plan.maintenanceplan_id);//给0.1_frm传id参数
-      //alert(id);
           var eNavLis = $api.domAll('ul li'),
               frames = [];
                   frames.push(
@@ -104,7 +100,7 @@
                       bgColor : 'rgba(0,0,0,.2)',
                       bounces:false,
                       pageParam:{
-                        'param1':id
+                        'param1':string2
                       }
                   } )
                   frames.push( {
@@ -113,7 +109,9 @@
                       bgColor : 'rgba(0,0,0,.2)',
                       bounces:false,
                       pageParam:{
-                      'param2':string_delivery
+                      'param2':string_delivery,
+                      'param3':string2
+
                     }
                   } )
                   api.openFrameGroup({
