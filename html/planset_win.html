@@ -65,78 +65,150 @@
       <script src="./gg_bd_ad_720x90.js" type="text/javascript"></script>
       <script src="./follow.js" type="text/javascript"></script>
 </div>
-<div class="treebox">
-      <ul class="menu">
-          <li class="level1">
-            <a href="#none"><em class="ico ico1"></em>中建国际中心<i class="right"></i></a>
-            <ul class="level2">
-              <li><a href="javascript:;" style="color:#bbb;">2018年1月计划:已完成</a></li>
-              <li><a href="javascript:;" style="color:#bbb;">2018年2月计划:已完成</a></li>
-              <li><a href="javascript:;" style="color:#bbb;">2018年3月计划:已完成</a></li>
-              <li id="undo" tapmode onclick="fnOpenPlanset0Win();"><a href="javascript:;">2018年4月计划</a></li>
-            </ul>
-          </li>
-          <li class="level1">
-            <a href="#none"><em class="ico ico2"></em>导航一<i></i></a>
-            <ul class="level2">
-              <li><a href="javascript:;">导航选项</a></li>
-              <li><a href="javascript:;">导航选项</a></li>
-              <li><a href="javascript:;">导航选项</a></li>
-              <li><a href="javascript:;">导航选项</a></li>
-            </ul>
-          </li>
-        <li class="level1">
-          <a href="#none"><em class="ico ico3"></em>导航一<i></i></a>
-            <ul class="level2">
-      <li><a href="javascript:;">导航选项</a></li>
-      <li><a href="javascript:;">导航选项</a></li>
-      <li><a href="javascript:;">导航选项</a></li>
-      <li><a href="javascript:;">导航选项</a></li>
-    </ul>
-  </li>
-  <li class="level1">
-    <a href="#none"><em class="ico ico4"></em>导航一<i></i></a>
-    <ul class="level2">
-      <li><a href="javascript:;">导航选项</a></li>
-      <li><a href="javascript:;">导航选项</a></li>
-      <li><a href="javascript:;">导航选项</a></li>
-      <li><a href="javascript:;">导航选项</a></li>
-    </ul>
-  </li>
-</ul>
+<div class="treebox" id="div">
+      <ul class="menu"  id="plan">
+      </ul>
 </div>
-
 <!-- 引入 jQuery -->
 <script src="../script/jquery1.8.3.min.js"></script>
 <script src="../script/easing.js"></script>
 <script>
 //等待dom元素加载完毕.
-$(function(){
-$(".treebox .level1>a").click(function(){
-  $(this).addClass('current')   //给当前元素添加"current"样式
-  .find('i').addClass('down')   //小箭头向下样式
-  .parent().next().slideDown('slow','easeOutQuad')  //下一个元素显示
-  .parent().siblings().children('a').removeClass('current')//父元素的兄弟元素的子元素去除"current"样式
-  .find('i').removeClass('down').parent().next().slideUp('slow','easeOutQuad');//隐藏
-   return false; //阻止默认时间
-});
-})
+
 </script>
 </body>
+
 <script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/util.js"></script>
 <script type="text/javascript">
     apiready = function(){
-      param= $api.html($api.byId('undo'));
 
       $api.fixStatusBar( $api.dom('.aui-bar') );
       api.setStatusBarStyle({
           style: 'dark',
           color: '#6ab494'
       });
-      fnClosePlansetWin();
-      fnOpenPlanset0Win();
 
-    }
+      //api.showProgress();//显示加载进度框
+        api.ajax({
+            url: 'http://192.168.0.7:8080/firefighting/Maintenancer/GetMaintenancePlan',
+            method: 'post',
+            data: {
+                values: {
+                     userName: "ME0100002"
+                },
+            }
+        },function(ret, err){
+            if (ret) {
+                //alert( JSON.stringify( ret ) );
+                      var data = eval(ret);
+                      var data_status = data.status;
+                      var data_info = data.plan;
+                      var information = eval(data_info);
+                      var m = information.length;//总共有m个项目
+                      for(var i=0;i<m;i++){
+                        //alert('hao');
+                        var plan_info = information[i].maintenanceplan;
+                        var information_plan = eval(plan_info);
+                        //alert(JSON.stringify(information_plan));
+                        var n = information_plan.length;//该项目有n条记录
+                        var o = i+1;
+                        var s1 = i.toString();
+                        var temp = {
+                          id: information[i].project_id,
+                          name: information[i].project_name//该项目名称，在后面需要填在a标签里
+                        };
+                        ul_menu = document.getElementById('plan');
+                        var li_level1 = document.createElement('li');//添加一条li相当于添加了一个项目
+
+                        li_level1.setAttribute("id", "num"+i);
+                        li_level1.setAttribute("class", "level1");
+                        li_level1.innerHTML += '<a href="#none"><em class="ico ico'+o+'"></em>'+temp.name+'<i></i></a>';
+
+                        li_level1.innerHTML += '<ul class="level2" id="number'+i+'"></ul>';
+
+                        ul_menu.appendChild(li_level1);
+                        //遍历该项目的完成情况，动态添加li的条数
+                       for(var j=0;j<information_plan.length;j++){
+                           var s2 = j.toString();
+                           var temp1 = {
+                             maintenanceplan_id: information_plan[j].maintenanceplan_id,
+                             maintenanceplan_name: information_plan[j].maintenanceplan_name,//某年某月的计划
+                             maintenanceplan_status: information_plan[j].maintenanceplan_status//已完成或未完成
+                          };
+                          var array_plan = JSON.stringify(temp); //
+                          var array_info = JSON.stringify(temp1);
+                          var array = array_plan + "   " + array_info;
+                          var id=JSON.stringify(temp1.maintenanceplan_id);//将json对象转化成字符串
+                          localStorage.setItem("id_info",id);//把选择的数据存储在localstorage中
+                          var id_delivery = JSON.parse(localStorage.getItem('id_info'));//向下个页面传递id参数
+                          //alert(id_delivery);
+                           //addElementLi
+                           var ul = document.getElementById('number'+i);
+                           var li = document.createElement('li');
+                           if(temp1.maintenanceplan_status == "已完成"){
+                            //li.innerHTML += '<a href="javascript:;" style="color:#bbb;" tapmode onclick="fnOpenPlanset0Win(id_delivery);">'+temp1.maintenanceplan_name + temp1.maintenanceplan_status+'</a>';
+                            li.innerHTML += '<a href="javascript:;" style="color:#bbb;">'+temp1.maintenanceplan_name + temp1.maintenanceplan_status+'</a>';
+
+                          }else{
+                            //li.innerHTML += '<a href="javascript:;" tapmode onclick="fnOpenPlanset0Win(id_delivery);">'+temp1.maintenanceplan_name+'</a>';
+                            li.innerHTML += '<a href="javascript:;">'+temp1.maintenanceplan_name+'</a>';
+                            }
+                            //设置 li 属性，如 id
+                            li.setAttribute("id", s1+s2);
+                            //alert(li.innerHTML);
+                            ul.append(li);
+                          //  alert(id_delivery);
+                            document.getElementById(s1+s2).addEventListener('click',function(id_delivery_arg){
+                                    //alert(array);
+                                    return function(){
+                                    api.openWin({
+                                      name: 'planset0',
+                                      url: './planset0_win.html',
+                                      pageParam: {
+                                        name: id_delivery_arg
+                                    }
+                                    //reload:true
+                                  });}
+                              }(array),false);
+
+                            //alert(ul.innerHTML);
+                            document.getElementById('num'+i).append(ul);
+                            //arr.push(temp1.maintenanceplan_name);
+                         }
+                         document.getElementById('num'+i).append(ul);
+                    }
+                     document.getElementById('div').append(ul_menu);
+                     //alert(document.getElementById('div').innerHTML);
+                     liststyle();
+                     //alert(arr);
+                     //localStorage.setItem('arrinfo',JSON.stringify(arr));
+                     //alert(arrinfo);
+
+                } else {
+                alert( JSON.stringify( err ) );
+            }
+        });
+       //alert(document.getElementById('div').innerHTML);
+       //var read = JSON.parse(localStorage.getItem('arrinfo'));
+        //alert(read);
+       fnClosePlansetWin();
+       //fnOpenPlanset0Win();
+}
+//var read = JSON.parse(localStorage.getItem('arrinfo'));
+function liststyle(){
+  $(function(){
+  $(".treebox .level1>a").click(function(){
+    $(this).addClass('current')   //给当前元素添加"current"样式
+    .find('i').addClass('down')   //小箭头向下样式
+    .parent().next().slideDown('slow','easeOutQuad')  //下一个元素显示
+    .parent().siblings().children('a').removeClass('current')//父元素的兄弟元素的子元素去除"current"样式
+    .find('i').removeClass('down').parent().next().slideUp('slow','easeOutQuad');//隐藏
+
+     return false; //阻止默认时间
+  });
+  })
+}
     function fnClosePlansetWin(){
       api.closeWin({
           name: 'planset_win',
@@ -145,17 +217,19 @@ $(".treebox .level1>a").click(function(){
           duration:200                //动画过渡时间，默认300毫秒
       });
     }
-    function fnOpenPlanset0Win(){
 
-      api.openWin({
-          name: 'planset0',
-          url: './planset0_win.html',
-          pageParam: {
-              name: param
-          },
-          reload:true
-      });
-    }
+    // function fnOpenPlanset0Win(){
+    //   //alert(id);
+    //   api.openWin({
+    //     name: 'planset0',
+    //     url: './planset0_win.html',
+    //     pageParam: {
+    //       name: id_delivery
+    //   },
+    //   reload:true
+    //   });
+    // }
+
 
 </script>
 </html>

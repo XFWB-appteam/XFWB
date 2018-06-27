@@ -43,20 +43,82 @@
     <script type="text/javascript" src="../script/api.js"></script>
     <script type="text/javascript" src="../script/jquery-1.4.2.min.js"></script>
     <script type="text/javascript">
-    function closewin(){
-      api.closeWin({
-      });
+        function closewin() {
+            api.closeWin({});
 
-    }
-    function submit(){
-      api.openWin({
-          name: 'index',
-          url: '../index.html',
-          pageParam: {
-              name: 'test'
-          }
-      });
-    }
+        }
+
+        function submit() {
+            var UILoading = api.require('UILoading');
+            // var id = 0;
+
+            UILoading.flower({
+                center: {
+                    x: 160,
+                    y: 240
+                },
+                size: 30,
+                fixed: true
+            }, function(ret) {
+                //alert(JSON.stringify(ret));
+            });
+
+            api.ajax({
+                url: $api.getStorage('connectUrl') + '/Maintenancer/SubmitPlanCreateTask',
+                method: 'post',
+                data: {
+                    values: {
+                        userId: $api.getStorage('userId'),
+                        task_id: api.pageParam.task_id
+
+                    }
+                }
+            }, function(ret, err) {
+                var UILoading = api.require('UILoading');
+                UILoading.closeFlower({
+                    id: 1 //关闭id 号对应加载提示框
+                });
+
+                if (ret) {
+                    var UILoading = api.require('UILoading');
+                    UILoading.closeFlower({
+                        id: id++ //关闭id 号对应加载提示框
+                    });
+
+                    var project_json = eval(ret);
+                    var status = project_json.status;
+                    //  alert($api.getStorage('account')+"=="+ api.pageParam.task_type+api.pageParam.project_name+api.pageParam.task_name +api.pageParam.task_character);
+                    //  alert(status);
+                    if (status == "true") {
+                        api.toast({
+                            msg: project_json.message,
+                            duration: 2000,
+                            location: 'bottom'
+                        });
+
+
+                        api.openWin({
+                            name: 'index',
+                            url: '../index.html',
+                            pageParam: {
+                                name: 'test'
+                            }
+                        });
+
+                    } else {
+                        // $(this).background=#e0e0e0;
+                        api.toast({
+                            msg: project_json.message,
+                            duration: 2000,
+                            location: 'bottom'
+                        });
+                    }
+                }
+            });
+
+
+
+        }
     </script>
 
 </head>
@@ -66,7 +128,7 @@
         <div class="aui-pull-left aui-btn">
             <span class="aui-iconfont aui-icon-left" onclick="closewin()"></span>
         </div>
-        <div class="aui-title" >测试任务</div>
+        <div class="aui-title">测试任务</div>
     </header>
     <div style="margin-top:20px">
         <div class="left"><b>任务名称</b></div>
@@ -76,187 +138,312 @@
     <!-- <HR width="90%" style="margin:0 auto" color=#d3d3d3 SIZE=3> -->
     <div>
         <b style="margin:-0 10%;line-height:60px">业主确认照片</b>
-        <img style="margin-left:28%;padding:5px 15px;margin-top:20px;display:inline;width:50px;" src="../image/photo.png" />
+        <img style="margin-left:20%;padding:5px 15px;margin-top:20px;display:inline;width:50px;" src="../image/photo.png" onclick="opencamera();" />
+        <img style="margin-left:-5px;padding:5px 15px;margin-top:20px;display:inline;width:50px;" src="../image/Photo.ico" onclick="openpicture();" />
     </div>
     <hr style="margin:0 auto;width:90%" color=#d3d3d3 size=3/>
     <div id="project_list">
 
     </div>
-    <p class=" define-color" style="margin:50px 40px 40px 40px;border-radius:0.2rem;text-align:center;height:1.5rem;color:#000;padding: 0.3rem 0rem;color:white;font-size:16px;"onclick="submit()">提交</p>
+    <p id="submit" class=" define-color" style="margin:50px 40px 40px 40px;border-radius:0.2rem;text-align:center;height:1.5rem;color:#000;padding: 0.3rem 0rem;color:white;font-size:16px;" onclick="submit()">提交</p>
+<canvas id="mycanvas"style="display:none"></canvas>
 </body>
 <script type="text/javascript" src="../script/api.js"></script>
 <script type="text/javascript" src="../script/jquery-1.4.2.min.js"></script>
 <script type="text/javascript">
-    var project_json = getAllInfomation();
-
-
+    var project_json = "";
+    var id = 0;
+    var final_information = "";
+    var information = "";
+    // var value = '{first_project_id:'+information[i].first_project_id+',first_project_name:'+information[i].first_project_name+',second_project_id:'+second_project_info[j].second_project_id+',second_project_name:'+second_project_info[j].second_project_name+'}';
     apiready = function() {
+        //==1代表新建任务页面传过
+        information = "";
+        information = eval('[' + api.pageParam.array + ']');
+        final_information = information;
+        // var info = eval(information);
+        if (api.pageParam.flag == 1) {
+            for (var i = 0; i < information.length; i++) {
+                var obj = '<div class="border"> <div style = "margin-top:10px;" ><div class = "left" > <b> 系统名称 </b></div> <div class = "right" style = "red;display:inline"> ' + information[i].first_project_name +
+                    '</div></div><div><div class = "left"> <b> 系统分类 </b></div><div class = "right"style = "display:inline"> ' + api.pageParam.task_type +
+                    ' </div></div><div><div class = "left" > <b> 设施名称 </b></div><div class = "right" style = "display:inline;"> ' + information[i].second_project_name +
+                    ' </div></div><div class = "fill"                    style = "margin-bottom:5px;padding-right:8%;margin-top:-5px;text-align:right;" > <img src = "../image/edit.png"style = "width:28px;margin-bottom:-8px;display:inline" onclick="doclick(' +
+                    +i + ',' + i + ')" /> <div style = "display:inline" onclick="doclick(' + i + ',' + i +
+                    ')"> 编辑 </div>  <img src = "../image/delete.png"  style = "width:20px;display:inline;margin-bottom:-6px;margin-left:20px" onclick="ddelete()"/> <div style = "display:inline"  onclick="ddelete()"> 删除 </div></div></div>';
+                $("#project_list").append(obj);
+            }
+
+        } else {
+            var UILoading = api.require('UILoading');
+            UILoading.flower({
+                center: {
+                    x: 160,
+                    y: 240
+                },
+                size: 30,
+                fixed: true
+            }, function(ret) {
+                //alert(JSON.stringify(ret));
+            });
+            api.ajax({
+                // url: 'http://192.168.0.7:8080/firefighting/App/AppLogin',
+                url: $api.getStorage('connectUrl') + '/Maintenancer/CheckPlanDetail',
+                method: 'post',
+                dataType: 'text', //该参数若不传，则默认为json<div class="aui-tips aui-margin-b-15">2
+                data: {
+                    values: {
+                        userName: $api.getStorage('account'),
+                        maintenanceplan_id: 1
+                    } //键值对
+                }
+            }, function(ret, err) {
+                UILoading.closeFlower({
+                    id: id++ //关闭id 号对应加载提示框
+                });
+                if (ret) {
+                    //alert(ret);
+                    var project_json = $api.strToJson(ret);
+                    var status = project_json.status;
+                    var role = project_json.status;
+                    // var json_str={"status": "true","task":[{"id":123,"project_name":"中建国际中心","create_time":"2017-06-10 15:21","maintenanceplan_name":"2017年1月份计划","task_type":"测试"},{"id":123,"project_name":"名敦道项目","create_time":"2017-06-10 15:21","maintenanceplan_name":"2017年8月份计划","task_type":"排查"},{"id":123,"project_name":"0916项目测试","create_time":"2017-06-10 15:21","maintenanceplan_name":"2017年11月份计划","task_type":"维修"}]};
+                    var json_str = $api.strToJson(ret);
+                    var data = eval(json_str);
+                    var data_status = data.status;
+                    var obj = "";
+                    if (data_status == "true") {
+                        var information = eval(data.unfinished);
+                        final_information = eval(data.unfinished);
+                        var obj = "";
+                        $("#project_list").html("");
+                        for (var i = 0; i < information.length; i++) {
+                            //使用information[i]来获取一个个的json对象
+                            var temp = eval(information[i].second_project);
+                            for (var ii = 0; ii < temp.length; ii++) {
+                                // obj = '<div class="border"> <div style = "margin-top:10px;" ><div class = "left" > <b> 系统名称 </b></div> <div class = "right" style = "red;display:inline"> ' + information[i].first_project_name +
+                                //     '</div></div><div><div class = "left"> <b> 系统分类 </b></div><div class = "right"style = "display:inline"> ' + api.pageParam.task_type +
+                                //     ' </div></div><div><div class = "left" > <b> 设施名称 </b></div><div class = "right" style = "display:inline;"> ' + temp[ii].second_project_name +
+                                //     ' </div></div><div class = "fill"  style = "margin-bottom:5px;padding-right:8%;margin-top:-5px;text-align:right;"> <img src = "../image/edit.png"style = "width:28px;margin-bottom:-8px;display:inline;"  click="doclick(' +
+                                //     information[i].second_project_id + ')/> <div style = "display:inline" click="doclick(' + information[i].second_project_id +
+                                //     ')"> 编辑 </div>  <img src = "../image/delete.png" style = "width:20px;display:inline;margin-bottom:-6px;margin-left:20px" /> <div style = "display:inline"> 删除 </div></div></div>';
 
 
+                                obj = '<div class="border"> <div style = "margin-top:10px;" ><div class = "left" > <b> 系统名称 </b></div> <div class = "right" style = "red;display:inline"> ' + information[i].first_project_name +
+                                    '</div></div><div><div class = "left"> <b> 系统分类 </b></div><div class = "right"style = "display:inline"> ' + api.pageParam.task_type +
+                                    ' </div></div><div><div class = "left" > <b> 设施名称 </b></div><div class = "right" style = "display:inline;"> ' + temp[ii].second_project_name +
+                                    ' </div></div><div class = "fill"                    style = "margin-bottom:5px;padding-right:8%;margin-top:-5px;text-align:right;" > <img src = "../image/edit.png"style = "width:28px;margin-bottom:-8px;display:inline" onclick="doclick(' +
+                                    +i + ',' + ii + ')" /> <div style = "display:inline" onclick="doclick(' + i + ',' + ii +
+                                    ')"> 编辑 </div>  <img src = "../image/delete.png"  style = "width:20px;display:inline;margin-bottom:-6px;margin-left:20px" /> <div style = "display:inline"> 删除 </div></div></div>';
 
-      var project_info = api.pageParam.name;
+                                $("#project_list").append(obj);
+                            }
 
-              $("#getname").html(project_info);
+
+                        }
+                        information = eval(data.finished);
+                        for (var i = 0; i < information.length; i++) {
+                            //使用information[i]来获取一个个的json对象
+                            temp = eval(information[i].second_project);
+
+                            for (var ii = 0; ii < temp.length; ii++) {
+                                obj = '<div class="border"> <div style = "margin-top:10px;" ><div class = "left" > <b> 系统名称 </b></div> <div class = "right" style = "red;display:inline"> ' + information[i].first_project_name +
+                                    '</div></div><div><div class = "left"> <b> 系统分类 </b></div><div class = "right"style = "display:inline"> ' + api.pageParam.task_type +
+                                    ' </div></div><div><div class = "left" > <b> 设施名称 </b></div><div class = "right" style = "display:inline;"> ' + temp[ii].second_project_name +
+                                    ' </div></div></div>';
+                                $("#project_list").append(obj);
+                            }
+                        }
+                    } else {
+                        api.toast({
+                            msg: project_json.message,
+                            duration: 2000,
+                            location: 'bottom'
+                        });
+                    }
+                    var project_info = api.pageParam.info;
+                    $("#name").text(project_info);
+                } else {
+                    alert("服务器异常，请稍后重试");
+                };
+            });
+
+        }
+
+        var info = api.pageParam.task_name;
+
+        $("#getname").html(info);
         //为传入的DOM元素增加适当的上内边距，避免header与状态栏重叠
         //设置样式
         api.setStatusBarStyle({
             style: 'dark',
             color: '#6ab494'
         });
-        funIniGroup();
+    }
 
+    function ddelete() {
+        if (window.confirm('您确定要删除该任务吗？')) {
+            //alert("确定");
+            return true;
+        } else {
+            //alert("取消");
+            return false;
+        }
+    }
+
+
+    function doclick(v, vv) {
         //下方是用来解析json的
-        var data = eval(project_json);
-        var data_status = data.status;
-        var data_info = data.work;
-
-
-
-        if (data_status == "true") {
-            var information = eval(data_info);
-            var obj = "";
-            $("#project_list").html("");
-            for (var i = 0; i < information.length; i++) {
-                //使用information[i]来获取一个个的json对象
-
-                obj = '<div class="border"> <div style = "margin-top:10px;" ><div class = "left" > <b> 系统名称 </b></div> <div class = "right" style = "red;display:inline"> ' + information[i].project_name +
-                    '</div></div><div><div class = "left"> <b> 系统分类 </b></div><div class = "right"style = "display:inline"> ' + information[i].project_type +
-                    ' </div></div><div><div class = "left" > <b> 设施名称 </b></div><div class = "right" style = "display:inline;"> ' + information[i].task_name +
-                    ' </div></div><div class = "fill"                    style = "margin-bottom:5px;padding-right:8%;margin-top:-5px;text-align:right;" onclick="doclick()"> <img src = "../image/edit.png"style = "width:28px;margin-bottom:-8px;display:inline" /> <div style = "display:inline"> 编辑 </div>  <img src = "../image/delete.png"  style = "width:20px;display:inline;margin-bottom:-6px;margin-left:20px" /> <div style = "display:inline"> 删除 </div></div></div>';
-
-
-
-                //   //MMP
-                // var differentobj = "";
-                // obj = '<li class="aui-list-header"></li><li class="aui-list-item aui-list-item-arrow"><div style="color:red;text-align:right">'+information[i].project_type+'</div><div class="aui-media-list-item-inner"><div class="aui-list-item-inner"><div class="aui-list-item-text"><div class="aui-list-item-title">项目名称</div><div>'+information[i].project_name+'</div></div><div class="aui-list-item-text"><div class="aui-list-item-title">任务名称</div><div >'+information[i].task_name+'</div></div><div class="aui-list-item-text"><div class="aui-list-item-title">创建日期</div><div >'+information[i].creat_date+'</div></div><div class="aui-list-item-text"><div class="aui-list-item-title">执行状态</div><div >'+information[i].work_status;
-                // if (information[i].work_status=="待接收") {
-                //   differentobj =   '</div></div><div class="aui-btn aui-btn-info"  onclick="acceptTask('+i+')" style="float:right;"><span class="aui-iconfont aui-icon-edit" ></span>接收</div></div></div></li>';
-                // }
-                // else {
-                //   differentobj =   '</div></div><div class="aui-btn aui-btn-info"  onclick="executeTask('+i+')" style="float:right;"><span class="aui-iconfont aui-icon-edit" ></span>执行</div></div></div></li>';
-                // }
-                // obj+=differentobj;
-                $("#project_list").append(obj);
-                //$api.byId('project_list').append(obj);
-            }
+        var second_project_id;
+        var second_project_name;
+        if (api.pageParam.flag == 1) {
+            second_project_id = final_information[v].second_project_id;
+            second_project_name = final_information[v].second_project_name;
 
         } else {
-            alert("数据请求出错，请刷新本页面重试");
+            second_project_id = eval(final_information[v].second_project)[vv].second_project_id;
+            second_project_name = eval(final_information[v].second_project)[vv].second_project_name;
         }
-        //上方是解析json的
-    }
-
-
-    function executeTask(index) {
-        var data = eval(project_json);
-        var data_status = data.status;
-        var data_info = data.work;
-        var information = eval(data_info);
-    }
-
-    function doclick() {
-        //下方是用来解析json的
 
         api.openWin({
-            name: 'frame2',
-            url: '../html/frame2.html',
+            name: 'testwork10_frm',
+            url: './testwork10_frm.html',
             pageParam: {
-                "info": "我新建的任务名称"
+                name: 'test',
+                task_type: api.pageParam.task_type,
+                project_name: api.pageParam.project_name,
+                task_name: api.pageParam.task_name,
+                second_project_id: second_project_id,
+                task_character: api.pageParam.task_character,
+                second_project_name: second_project_name
             }
         });
 
+        // var temp = eval(information[i].second_project);
     }
+    var pictureurl;
+    var pictureid;
+    var picturetime;
+    function opencamera(){
+      api.getPicture({
+      sourceType: 'camera',
+      encodingType: 'jpg',
+      mediaValue: 'pic',
+      destinationType: 'url',
+      allowEdit: true,
+      quality: 10,
+      saveToPhotoAlbum:false
+  }, function(ret, err) {
+      if (ret) {
+        //  $api.setStorage('pictureurl',ret.data);
+         //alert(document.getElementById('img1').src);
+        //alert(ret.data);
+        pictureurl = ret.data;
+        var now=new Date();
+        var year=now.getFullYear();
+        var month=now.getMonth()+1;
+        var day=now.getDate();
+        var hours=now.getHours();
+        var minutes=now.getMinutes();
+        var seconds=now.getSeconds();
+        var tmp1 = now.toLocaleString( );
+        var tmp = year+"/"+month+"/"+day+"/"+hours+"/"+minutes+"/"+seconds;
+        var timestamp = Date.parse(new Date());
+        // $api.setStorage('picturetime',tmp1);
+        picturetime= tmp1;
+        // var jsfun = 'picture();';
+        // api.execScript({
+        //     frameName: 'testpicture',
+        //     script: jsfun
+        // });
+        pictureid = timestamp;
+        // $api.setStorage('pictureid',timestamp);
+        api.showProgress({
+        title: '图片存储中...',
+        text: '先喝杯茶...',
+        modal: false
+    });
+        picture(timestamp);
+      } else {
+          //alert(JSON.stringify(err));
+      }
+  });
+    };
+    function picture(count){
+      // var pictureurl = $api.getStorage('pictureurl');
+      var imageFilter = api.require('imageFilter');
+      imageFilter.getAttr({
+          path: pictureurl
+      },function( ret, err ){
+          if( ret.status ){
+              //alert( JSON.stringify( ret ) );
+              // var UILoading = api.require('UILoading');
+              // UILoading.flower({
+              //     center: {
+              //         x: 160,
+              //         y: 240
+              //     },
+              //     size: 30,
+              //     fixed: true
+              // }, function(ret) {
+              //     //alert(JSON.stringify(ret));
+              // });
+              var cav = document.getElementById('mycanvas');
+              cav.width = ret.width;  //设置画布宽度
+              cav.height = ret.height;
+              ctx = cav.getContext('2d');
+              var img = new Image();
+              img.src = pictureurl;
+            // var tmp = $api.getStorage('picturetime');
+              img.onload = function(){
+                ctx.drawImage(img,0,0);//将新new出的img对象放入；                          // 绘制水印
+             ctx.font="oblique small-caps bold 55px Arial";//设置水印字体大小；字体格式；
+             ctx.textAlign = "left";//对其方式；还有其他对其方式；
+             ctx.fillStyle = "#ffffff";//颜色
+             ctx.fillText(picturetime,60,100);//第一个参数为内容；后两个为x,y坐标；以图片右上角为起点0，0；偏移多少而已；下面相同
+            var base64code = cav.toDataURL(pictureurl).replace("data:image/png;base64,", "");;
+            var trans = api.require('trans');
+            //console.log(base64code);
+            var imageFilter = api.require('imageFilter');
+            trans.saveImage({
+                base64Str: base64code,
+                album: true,
+                imgPath:"fs://img/",
+                imgName: count+".png"
+            }, function(ret, err) {
+                if (ret.status) {
+                  // UILoading.closeFlower({
+                  //      id: id++                                  //关闭id 号对应加载提示框
+                  // });
+                  alert("图片存储成功，可以点击查看了！");
+                  api.hideProgress();
+                } else {
+                    alert(JSON.stringify(err));
+                }
+            });
+           };
+          }else{
+              alert( JSON.stringify( err ) );
+          }
+      });
+    };
+    function openpicture(){
+      var photoBrowser = api.require('photoBrowser');
+      photoBrowser.open({
+          images: [
+              "fs://img/"+pictureid+".png"
+          ],
+          bgColor: '#000'
+      }, function(ret, err) {
+          if (ret) {
+              //alert(JSON.stringify(ret));
+              if(ret.eventType == "click"){
+                photoBrowser.close();
+              }
+          } else {
+              //alert(JSON.stringify(err));
+          }
+      });
 
-
-    function funIniGroup() {
-
-        var eHeaderLis = $api.domAll('li'),
-            frames = [];
-        api.openFrameGroup({
-            name: 'group',
-            scrollEnabled: false,
-            rect: {
-                x: 0,
-                y: 0,
-                w: api.winWidth,
-                // h: $api.dom('#main').offsetHeight
-            },
-            index: 0,
-            frames: frames
-        }, function(ret, err) {
-
-        });
-    }
-
-    // 随意切换按钮
-    function randomSwitchBtn(tag) {
-        if (tag == $api.dom('#footer li.active')) return;
-        var eFootLis = $api.domAll('#footer li'),
-            eHeaderLis = $api.domAll('header li'),
-            index = 0;
-        for (var i = 0, len = eFootLis.length; i < len; i++) {
-            if (tag == eFootLis[i]) {
-                index = i;
-            } else {
-                $api.removeCls(eFootLis[i], 'active');
-                $api.removeCls(eHeaderLis[i], 'active');
-            }
-        }
-        $api.addCls(eFootLis[index], 'active');
-        $api.addCls(eHeaderLis[index], 'active');
-        api.setFrameGroupIndex({
-            name: 'group',
-            index: index
-        });
-    }
-
-
-    function getAllInfomation()
-    //函数用来获取json数据，并返回
-    {
-        var project_json = {
-            "status": "true",
-            "work": [{
-                "project_name": "国际维保",
-                "project_type": "排查",
-                "task_name": "消防栓检查",
-                "creat_date": "2018-03-42",
-                "work_status": "待接收",
-                "assign_person": "范明宇",
-                "work_place": "帝国大厦",
-                "work_num": "31454",
-                "owner": "王权",
-                "telephone": "13883474876",
-                "work_description": "修下水道"
-
-            }, {
-                "project_name": "国际维保",
-                "project_type": "测试",
-                "task_name": "灭火器检查",
-                "creat_date": "2018-03-22",
-                "work_status": "已接收",
-                "assign_person": "范明宇",
-                "work_place": "帝国大厦",
-                "work_num": "31454",
-                "owner": "王权",
-                "telephone": "13883474876",
-                "work_description": "修下水道"
-            }, {
-                "project_name": "国际维保啊",
-                "project_type": "排查",
-                "task_name": "水泵检查",
-                "creat_date": "2018-11-22",
-                "work_status": "已接收",
-                "assign_person": "范明宇",
-                "work_place": "帝国大厦",
-                "work_num": "31454",
-                "owner": "王权",
-                "telephone": "13883474876",
-                "work_description": "修下水道"
-            }]
-        };
-        return project_json;
-    }
+    };
 </script>
 
 </html>

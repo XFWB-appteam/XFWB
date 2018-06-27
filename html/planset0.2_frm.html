@@ -40,18 +40,24 @@ var id = 0;
 var seach = [];
 var array = new Array();//存储勾选的项，传递给下一个界面
 function jump(){
-
+  //alert(api.pageParam.param2);
   chooseWhich();
   api.openWin({
+
       name: 'new_Task',
       url: './new_Task.html',
       pageParam: {
-        data: array
+        data: array,
+
+        //task_id:api.pageParam.task_id
+        plan: api.pageParam.param2
+
     }
   });
 
 }
     apiready = function () {
+      //alert(api.pageParam.param2);
       getAllDataFromServer();
     }
 
@@ -73,7 +79,7 @@ function jump(){
             method: 'post',
             dataType: 'text', //该参数若不传，则默认为json<div class="aui-tips aui-margin-b-15">2
             data: {
-              values:{userName: $api.getStorage('account'), maintenanceplan_id: '1'} //maintenanceplan_id需要从上个界面传过来
+              values:{userName: $api.getStorage('account'), maintenanceplan_id: JSON.parse(api.pageParam.param3).maintenanceplan_id} //maintenanceplan_id需要从上个界面传过来
             //  values:{userName: 'ME0100002', first_time: '2000-01-01',second_time:second_time} //键值对
             }
             },function(ret,err){
@@ -101,7 +107,7 @@ function jump(){
                              var second_project_info = eval(information[i].second_project);
                              //alert(second_project_info.length);
                              for (var j = 0; j < second_project_info.length; j++) {
-                                var value = '{first_project_id:'+information[i].first_project_id+',first_project_name:'+information[i].first_project_name+',second_project_id:'+second_project_info[j].second_project_id+',second_project_name:'+second_project_info[j].second_project_name+'}';
+                                var value = '{"first_project_id":"'+information[i].first_project_id+'","first_project_name":"'+information[i].first_project_name+'","second_project_id":"'+second_project_info[j].second_project_id+'","second_project_name":"'+second_project_info[j].second_project_name+'"}';
 
                                 obj_in = '<li style="margin-top:10px;margin-left:30px"><tr><td><input class="aui-checkbox" type="checkbox"  name="each" value='+value+'></td><td>'+second_project_info[j].second_project_name+'</tr></li>';
                                 if (j==second_project_info.length-1) {
@@ -139,6 +145,9 @@ function jump(){
     }
 
     function chooseWhich(){
+
+      array=[];
+
       seach=document.getElementsByName("each");
       for(var i=0;i<seach.length;i++){
         if (seach[i].checked) {

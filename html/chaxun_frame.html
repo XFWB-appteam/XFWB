@@ -73,6 +73,26 @@
 <script type="text/javascript" src="../script/jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="../script/connect.js"></script>
 <script type="text/javascript">
+// apiready = function() {
+//  api.openFrame({
+//      name: 'chaxunNewFrame',
+//      url: './chaxunNewFrame.html',
+//      rect: {
+//          x: 0,
+//          y: 115,
+//          w: 'auto',
+//          h: 480
+//      },
+//      pageParam: {
+//          name: 'chaxunNewFrame'
+//      },
+//      bounces: true,
+//      bgColor: 'rgba(0,0,0,0)',
+//      vScrollBarEnabled: true,
+//      hScrollBarEnabled: true
+//  });
+//
+//  };
 var UICalendar;
 var listView ;
 var myDate = new Date();
@@ -114,13 +134,60 @@ function editTask(index){
  alert(information[index].project_name);
   api.openWin({
       name: 'changeTask',
-      url: './changeTask.html',
+      url: 'changeTask.html',
       pageParam: {
-          "taskInfo":information[index]
+          "work_info":information[index]
       }
   });
 }
 
+function getAllInfomation(){
+  var project_json ={
+    "status": "true",
+    "work": [{
+      "project_name": "国际维保",
+      "project_type": "排查",
+      "task_name": "消防栓检查",
+      "submit_date": "2018-03-12",
+      "check_status": "待审核",
+      "assign_person": "范明宇",
+      "work_place": "帝国大厦",
+      "work_num": "31454",
+      "owner": "数据1",
+      "telephone": "13883474876",
+      "work_description": "修下水道"
+
+    },
+    {
+      "project_name": "明顿道项目",
+      "project_type": "测试",
+      "task_name": "灭火器检查",
+      "submit_date": "2018-03-22",
+      "check_status": "审核通过",
+      "assign_person": "范明宇",
+      "work_place": "帝国大厦",
+      "work_num": "31454",
+      "owner": "数据2",
+      "telephone": "13883474876",
+      "work_description": "修下水道"
+    },
+    {
+      "project_name": "国际维保啊",
+      "project_type": "排查",
+      "task_name": "水泵检查",
+      "submit_date": "2018-11-22",
+      "check_status": "审核通过",
+      "assign_person": "范明宇",
+      "work_place": "帝国大厦",
+      "work_num": "31454",
+      "owner": "数据3",
+      "telephone": "13883474876",
+      "work_description": "修下水道"
+    }
+    ]
+    };
+    return project_json;
+}
 
 function getDataFromServerByDate(){
   if(startDataSpan.innerText=="开始日期"||endDataSpan.innerText=="结束日期"){
