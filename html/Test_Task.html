@@ -138,13 +138,15 @@
     <!-- <HR width="90%" style="margin:0 auto" color=#d3d3d3 SIZE=3> -->
     <div>
         <b style="margin:-0 10%;line-height:60px">业主确认照片</b>
-        <img style="margin-left:28%;padding:5px 15px;margin-top:20px;display:inline;width:50px;" src="../image/photo.png" />
+        <img style="margin-left:20%;padding:5px 15px;margin-top:20px;display:inline;width:50px;" src="../image/photo.png" onclick="opencamera();" />
+        <img style="margin-left:-5px;padding:5px 15px;margin-top:20px;display:inline;width:50px;" src="../image/Photo.ico" onclick="openpicture();" />
     </div>
     <hr style="margin:0 auto;width:90%" color=#d3d3d3 size=3/>
     <div id="project_list">
 
     </div>
     <p id="submit" class=" define-color" style="margin:50px 40px 40px 40px;border-radius:0.2rem;text-align:center;height:1.5rem;color:#000;padding: 0.3rem 0rem;color:white;font-size:16px;" onclick="submit()">提交</p>
+<canvas id="mycanvas"style="display:none"></canvas>
 </body>
 <script type="text/javascript" src="../script/api.js"></script>
 <script type="text/javascript" src="../script/jquery-1.4.2.min.js"></script>
@@ -162,7 +164,6 @@
         // var info = eval(information);
         if (api.pageParam.flag == 1) {
             for (var i = 0; i < information.length; i++) {
-
                 var obj = '<div class="border"> <div style = "margin-top:10px;" ><div class = "left" > <b> 系统名称 </b></div> <div class = "right" style = "red;display:inline"> ' + information[i].first_project_name +
                     '</div></div><div><div class = "left"> <b> 系统分类 </b></div><div class = "right"style = "display:inline"> ' + api.pageParam.task_type +
                     ' </div></div><div><div class = "left" > <b> 设施名称 </b></div><div class = "right" style = "display:inline;"> ' + information[i].second_project_name +
@@ -173,7 +174,6 @@
             }
 
         } else {
-
             var UILoading = api.require('UILoading');
             UILoading.flower({
                 center: {
@@ -190,35 +190,26 @@
                 url: $api.getStorage('connectUrl') + '/Maintenancer/CheckPlanDetail',
                 method: 'post',
                 dataType: 'text', //该参数若不传，则默认为json<div class="aui-tips aui-margin-b-15">2
-
                 data: {
                     values: {
                         userName: $api.getStorage('account'),
-
-
-                        //====================这里需要修改
                         maintenanceplan_id: 1
                     } //键值对
                 }
             }, function(ret, err) {
-
                 UILoading.closeFlower({
                     id: id++ //关闭id 号对应加载提示框
                 });
-
                 if (ret) {
                     //alert(ret);
                     var project_json = $api.strToJson(ret);
                     var status = project_json.status;
                     var role = project_json.status;
-
                     // var json_str={"status": "true","task":[{"id":123,"project_name":"中建国际中心","create_time":"2017-06-10 15:21","maintenanceplan_name":"2017年1月份计划","task_type":"测试"},{"id":123,"project_name":"名敦道项目","create_time":"2017-06-10 15:21","maintenanceplan_name":"2017年8月份计划","task_type":"排查"},{"id":123,"project_name":"0916项目测试","create_time":"2017-06-10 15:21","maintenanceplan_name":"2017年11月份计划","task_type":"维修"}]};
                     var json_str = $api.strToJson(ret);
                     var data = eval(json_str);
                     var data_status = data.status;
                     var obj = "";
-
-
                     if (data_status == "true") {
                         var information = eval(data.unfinished);
                         final_information = eval(data.unfinished);
@@ -226,11 +217,7 @@
                         $("#project_list").html("");
                         for (var i = 0; i < information.length; i++) {
                             //使用information[i]来获取一个个的json对象
-
-
-
                             var temp = eval(information[i].second_project);
-
                             for (var ii = 0; ii < temp.length; ii++) {
                                 // obj = '<div class="border"> <div style = "margin-top:10px;" ><div class = "left" > <b> 系统名称 </b></div> <div class = "right" style = "red;display:inline"> ' + information[i].first_project_name +
                                 //     '</div></div><div><div class = "left"> <b> 系统分类 </b></div><div class = "right"style = "display:inline"> ' + api.pageParam.task_type +
@@ -253,9 +240,6 @@
 
                         }
                         information = eval(data.finished);
-
-
-
                         for (var i = 0; i < information.length; i++) {
                             //使用information[i]来获取一个个的json对象
                             temp = eval(information[i].second_project);
@@ -265,12 +249,9 @@
                                     '</div></div><div><div class = "left"> <b> 系统分类 </b></div><div class = "right"style = "display:inline"> ' + api.pageParam.task_type +
                                     ' </div></div><div><div class = "left" > <b> 设施名称 </b></div><div class = "right" style = "display:inline;"> ' + temp[ii].second_project_name +
                                     ' </div></div></div>';
-
-
                                 $("#project_list").append(obj);
                             }
                         }
-
                     } else {
                         api.toast({
                             msg: project_json.message,
@@ -280,9 +261,6 @@
                     }
                     var project_info = api.pageParam.info;
                     $("#name").text(project_info);
-
-
-
                 } else {
                     alert("服务器异常，请稍后重试");
                 };
@@ -299,16 +277,6 @@
             style: 'dark',
             color: '#6ab494'
         });
-        funIniGroup();
-
-        //下方是用来解析json的
-
-
-
-
-
-
-        //上方是解析json的
     }
 
     function ddelete() {
@@ -351,49 +319,131 @@
 
         // var temp = eval(information[i].second_project);
     }
+    var pictureurl;
+    var pictureid;
+    var picturetime;
+    function opencamera(){
+      api.getPicture({
+      sourceType: 'camera',
+      encodingType: 'jpg',
+      mediaValue: 'pic',
+      destinationType: 'url',
+      allowEdit: true,
+      quality: 10,
+      saveToPhotoAlbum:false
+  }, function(ret, err) {
+      if (ret) {
+        //  $api.setStorage('pictureurl',ret.data);
+         //alert(document.getElementById('img1').src);
+        //alert(ret.data);
+        pictureurl = ret.data;
+        var now=new Date();
+        var year=now.getFullYear();
+        var month=now.getMonth()+1;
+        var day=now.getDate();
+        var hours=now.getHours();
+        var minutes=now.getMinutes();
+        var seconds=now.getSeconds();
+        var tmp1 = now.toLocaleString( );
+        var tmp = year+"/"+month+"/"+day+"/"+hours+"/"+minutes+"/"+seconds;
+        var timestamp = Date.parse(new Date());
+        // $api.setStorage('picturetime',tmp1);
+        picturetime= tmp1;
+        // var jsfun = 'picture();';
+        // api.execScript({
+        //     frameName: 'testpicture',
+        //     script: jsfun
+        // });
+        pictureid = timestamp;
+        // $api.setStorage('pictureid',timestamp);
+        api.showProgress({
+        title: '图片存储中...',
+        text: '先喝杯茶...',
+        modal: false
+    });
+        picture(timestamp);
+      } else {
+          //alert(JSON.stringify(err));
+      }
+  });
+    };
+    function picture(count){
+      // var pictureurl = $api.getStorage('pictureurl');
+      var imageFilter = api.require('imageFilter');
+      imageFilter.getAttr({
+          path: pictureurl
+      },function( ret, err ){
+          if( ret.status ){
+              //alert( JSON.stringify( ret ) );
+              // var UILoading = api.require('UILoading');
+              // UILoading.flower({
+              //     center: {
+              //         x: 160,
+              //         y: 240
+              //     },
+              //     size: 30,
+              //     fixed: true
+              // }, function(ret) {
+              //     //alert(JSON.stringify(ret));
+              // });
+              var cav = document.getElementById('mycanvas');
+              cav.width = ret.width;  //设置画布宽度
+              cav.height = ret.height;
+              ctx = cav.getContext('2d');
+              var img = new Image();
+              img.src = pictureurl;
+            // var tmp = $api.getStorage('picturetime');
+              img.onload = function(){
+                ctx.drawImage(img,0,0);//将新new出的img对象放入；                          // 绘制水印
+             ctx.font="oblique small-caps bold 55px Arial";//设置水印字体大小；字体格式；
+             ctx.textAlign = "left";//对其方式；还有其他对其方式；
+             ctx.fillStyle = "#ffffff";//颜色
+             ctx.fillText(picturetime,60,100);//第一个参数为内容；后两个为x,y坐标；以图片右上角为起点0，0；偏移多少而已；下面相同
+            var base64code = cav.toDataURL(pictureurl).replace("data:image/png;base64,", "");;
+            var trans = api.require('trans');
+            //console.log(base64code);
+            var imageFilter = api.require('imageFilter');
+            trans.saveImage({
+                base64Str: base64code,
+                album: true,
+                imgPath:"fs://img/",
+                imgName: count+".png"
+            }, function(ret, err) {
+                if (ret.status) {
+                  // UILoading.closeFlower({
+                  //      id: id++                                  //关闭id 号对应加载提示框
+                  // });
+                  alert("图片存储成功，可以点击查看了！");
+                  api.hideProgress();
+                } else {
+                    alert(JSON.stringify(err));
+                }
+            });
+           };
+          }else{
+              alert( JSON.stringify( err ) );
+          }
+      });
+    };
+    function openpicture(){
+      var photoBrowser = api.require('photoBrowser');
+      photoBrowser.open({
+          images: [
+              "fs://img/"+pictureid+".png"
+          ],
+          bgColor: '#000'
+      }, function(ret, err) {
+          if (ret) {
+              //alert(JSON.stringify(ret));
+              if(ret.eventType == "click"){
+                photoBrowser.close();
+              }
+          } else {
+              //alert(JSON.stringify(err));
+          }
+      });
 
-
-    function funIniGroup() {
-
-        var eHeaderLis = $api.domAll('li'),
-            frames = [];
-        api.openFrameGroup({
-            name: 'group',
-            scrollEnabled: false,
-            rect: {
-                x: 0,
-                y: 0,
-                w: api.winWidth,
-                // h: $api.dom('#main').offsetHeight
-            },
-            index: 0,
-            frames: frames
-        }, function(ret, err) {
-
-        });
-    }
-
-    // 随意切换按钮
-    function randomSwitchBtn(tag) {
-        if (tag == $api.dom('#footer li.active')) return;
-        var eFootLis = $api.domAll('#footer li'),
-            eHeaderLis = $api.domAll('header li'),
-            index = 0;
-        for (var i = 0, len = eFootLis.length; i < len; i++) {
-            if (tag == eFootLis[i]) {
-                index = i;
-            } else {
-                $api.removeCls(eFootLis[i], 'active');
-                $api.removeCls(eHeaderLis[i], 'active');
-            }
-        }
-        $api.addCls(eFootLis[index], 'active');
-        $api.addCls(eHeaderLis[index], 'active');
-        api.setFrameGroupIndex({
-            name: 'group',
-            index: index
-        });
-    }
+    };
 </script>
 
 </html>

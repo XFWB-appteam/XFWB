@@ -305,14 +305,19 @@
       var task_item_json = JSON.stringify(submit_json);
 
       //后面调用接口，把传到后台
+      api.showProgress({
+      title: '提交中...',
+      text: '先喝杯茶...',
+      modal: false
+      });
       api.ajax({
           url: 'http://192.168.0.7:8080/firefighting/Maintenancer/SubmitTaskItem',//接口地址
           method: 'post',
           data: {
               values: {
-                  maintenance_test_content_id:maintenance_test_content_id,
-                  maintenanceplan_id:maintenanceplan_id,
-                  task_id:task_id,
+                  maintenance_test_content_id:137,
+                  maintenanceplan_id:1,
+                  task_id:1,
                   task_item_json:task_item_json
               }
           }
@@ -321,12 +326,11 @@
             var status = ret.status;
                if (status =="true") {
                  alert("提交成功");
-                 
+
                  api.closeFrame({
                      name: 'executeTestTask_win'
                  });
-
-
+                 api.hideProgress();
                }
                else {
                  alert("提交失败");
@@ -553,7 +557,7 @@ function creatPage(){
       }
         var  tempalert_content = '<li class="aui-list-item"><div class="aui-list-item-inner" style="color:#F00;">'+alert_content+':</div></li>';
         $("#control_ul"+num).append(tempalert_content);
-        var  tempother = '<li class="aui-list-item"><div class="aui-list-item-inner" align="center"><img class="aligncenter" src="../image/plus.jpg" height="40"  width="40" onclick="fnOpenChooseFrame('+num+')"></div></li><li class="aui-list-item"><div class="aui-list-item-inner"><img id="voice'+num+'" style="float:left;margin-left:35px;" src="../image/plus.jpg" height="30"  width="30" ><img id="text'+num+'"  style="float:left;margin-left:35px;" src="../image/plus.jpg" height="30"  width="30" ><img id="video'+num+'" style="float:left;margin-left:35px;" src="../image/plus.jpg" height="30"  width="30"><img id="image'+num+'" style="float:left;margin-left:35px;" src="../image/plus.jpg" height="30"  width="30" onclick="fnOpenpicture('+num+')"></div></li><li class="aui-list-item"><div class="aui-list-item-inner">测试结果</div></li><li class="aui-list-item"><div class="aui-list-item-inner"><label><input id="normal'+num+'" class="aui-radio" type="radio" name="testresult'+num+'" value="正常" > 正常</label><label><input id="repair'+num+'" class="aui-radio" type="radio" name="testresult'+num+'" value="需要报价维修"> 需要维修报价</label><label><input id="investigation'+num+'" class="aui-radio" type="radio" name="testresult'+num+'" value="需要进一步排查" > 需要进一步排查</label></div></li><li class="aui-list-item"><div class="aui-list-item-inner"><img class="aligncenter" src="../image/delete.png" height="40"  width="40" onclick="deletecontent('+num+')"></div></li><li class="aui-list-item"><div class="aui-list-item-inner"></div></li>';
+        var  tempother = '<li class="aui-list-item"><div class="aui-list-item-inner" align="center"><img class="aligncenter" src="../image/arrows_circle_plus.png" height="40"  width="40" onclick="fnOpenChooseFrame('+num+')"></div></li><li class="aui-list-item"><div class="aui-list-item-inner"><img id="voice'+num+'" style="float:left;margin-left:35px;" src="../image/voice.ico" height="30"  width="30" ><img id="text'+num+'"  style="float:left;margin-left:35px;" src="../image/word.ico" height="30"  width="30" ><img id="video'+num+'" style="float:left;margin-left:35px;" src="../image/video.ico" height="30"  width="30"><img id="image'+num+'" style="float:left;margin-left:35px;" src="../image/Photo.ico" height="30"  width="30" onclick="fnOpenpicture('+num+')"></div></li><li class="aui-list-item"><div class="aui-list-item-inner">测试结果</div></li><li class="aui-list-item"><div class="aui-list-item-inner"><label><input id="normal'+num+'" class="aui-radio" type="radio" name="testresult'+num+'" value="正常" > 正常</label><label><input id="repair'+num+'" class="aui-radio" type="radio" name="testresult'+num+'" value="需要报价维修"> 需要维修报价</label><label><input id="investigation'+num+'" class="aui-radio" type="radio" name="testresult'+num+'" value="需要进一步排查" > 需要进一步排查</label></div></li><li class="aui-list-item"><div class="aui-list-item-inner"><img class="aligncenter" src="../image/delete.png" height="40"  width="40" onclick="deletecontent('+num+')"></div></li><li class="aui-list-item"><div class="aui-list-item-inner"></div></li>';
         $("#control_ul"+num).append(tempother);
         //给“不能测试”这个radio添加点击事件
         $("#testno"+num).click(function(){
@@ -694,16 +698,16 @@ function creatPage(){
           },
           items: [{
               text: '照片',
-              icon: 'widget://image/delete.png'
+              icon: 'widget://image/Photo.ico'
           }, {
               text: '文字',
-              icon: 'widget://image/delete.png'
+              icon: 'widget://image/word.ico'
           }, {
               text: '视频',
-              icon: 'widget://image/delete.png'
+              icon: 'widget://image/video.ico'
           }, {
               text: '语音',
-              icon: 'widget://image/delete.png'
+              icon: 'widget://image/voice.ico'
           }],
           styles: {
               bg: '#FFF',
@@ -746,46 +750,53 @@ function creatPage(){
           }
       });
     }
-
-
-    function addPhotoContent(temp_count)
-    {//四选一中图片的接口，temp_count表示这是第几个任务的序号
-      api.getPicture({
-      sourceType: 'camera',
-      encodingType: 'jpg',
-      mediaValue: 'pic',
-      destinationType: 'url',
-      allowEdit: true,
-      quality: 60,
-      saveToPhotoAlbum:false
-  }, function(ret, err) {
-      if (ret) {
-         $api.setStorage('pictureurl',ret.data);
-         //alert(document.getElementById('img1').src);
-        //alert(ret.data);
-        var now=new Date();
-        var year=now.getFullYear();
-        var month=now.getMonth()+1;
-        var day=now.getDate();
-        var hours=now.getHours();
-        var minutes=now.getMinutes();
-        var seconds=now.getSeconds();
-        var tmp1 = now.toLocaleString( );
-        var tmp = year+"/"+month+"/"+day+"/"+hours+"/"+minutes+"/"+seconds;
-        var timestamp = Date.parse(new Date());
-        $api.setStorage('picturetime',tmp1);
-        // var jsfun = 'picture();';
-        // api.execScript({
-        //     frameName: 'testpicture',
-        //     script: jsfun
-        // });
-        alert("图片正在存储中...");
-        $api.setStorage('pictureid',timestamp);
-        picture(timestamp);
-      } else {
-          //alert(JSON.stringify(err));
-      }
+    var pictureurl;
+    var pictureid;
+    var picturetime;
+    function addPhotoContent(temp_count){
+    api.getPicture({
+    sourceType: 'camera',
+    encodingType: 'jpg',
+    mediaValue: 'pic',
+    destinationType: 'url',
+    allowEdit: true,
+    quality: 10,
+    saveToPhotoAlbum:false
+}, function(ret, err) {
+    if (ret) {
+      //  $api.setStorage('pictureurl',ret.data);
+       //alert(document.getElementById('img1').src);
+      //alert(ret.data);
+      pictureurl = ret.data;
+      var now=new Date();
+      var year=now.getFullYear();
+      var month=now.getMonth()+1;
+      var day=now.getDate();
+      var hours=now.getHours();
+      var minutes=now.getMinutes();
+      var seconds=now.getSeconds();
+      var tmp1 = now.toLocaleString( );
+      var tmp = year+"/"+month+"/"+day+"/"+hours+"/"+minutes+"/"+seconds;
+      var timestamp = Date.parse(new Date());
+      // $api.setStorage('picturetime',tmp1);
+      picturetime= tmp1;
+      // var jsfun = 'picture();';
+      // api.execScript({
+      //     frameName: 'testpicture',
+      //     script: jsfun
+      // });
+      pictureid = timestamp;
+      // $api.setStorage('pictureid',timestamp);
+      api.showProgress({
+      title: '图片存储中...',
+      text: '先喝杯茶...',
+      modal: false
   });
+      picture(timestamp,temp_count);
+    } else {
+        //alert(JSON.stringify(err));
+    }
+});
 };
     function addTextContent(temp_count)
     {//四选一的文字的函数，用来添加文字,temp_count表示这是第几个任务的序号
@@ -855,7 +866,7 @@ function creatPage(){
           method: 'post',
           data: {
               values: {
-                  maintenance_test_content_id:maintenance_test_content_id//参数在正式版替换成maintenance_test_content_id
+                  maintenance_test_content_id:137//参数在正式版替换成maintenance_test_content_id
               }
           }
       },function(ret, err){
@@ -883,8 +894,7 @@ function creatPage(){
 
     };
     function fnOpenpicture(temp_count){
-      //这个函数是用来点击中间的“加号”后弹出四个选项（图片、文字、视频、语音）的函数，其中temp_count是第几个任务的序号
-      var pictureid = $api.getStorage('pictureid');
+      // var pictureid = $api.getStorage('pictureid');
       var photoBrowser = api.require('photoBrowser');
       photoBrowser.open({
           images: [
@@ -902,41 +912,42 @@ function creatPage(){
           }
       });
     };
-    var id=0;
-    function picture(count){
-      var pictureurl = $api.getStorage('pictureurl');
+    function picture(count,temp_count){
+      // var pictureurl = $api.getStorage('pictureurl');
       var imageFilter = api.require('imageFilter');
       imageFilter.getAttr({
           path: pictureurl
       },function( ret, err ){
           if( ret.status ){
               //alert( JSON.stringify( ret ) );
-              var UILoading = api.require('UILoading');
-              UILoading.flower({
-                  center: {
-                      x: 160,
-                      y: 240
-                  },
-                  size: 30,
-                  fixed: true
-              }, function(ret) {
-                  //alert(JSON.stringify(ret));
-              });
+              // var UILoading = api.require('UILoading');
+              // UILoading.flower({
+              //     center: {
+              //         x: 160,
+              //         y: 240
+              //     },
+              //     size: 30,
+              //     fixed: true
+              // }, function(ret) {
+              //     //alert(JSON.stringify(ret));
+              // });
               var cav = document.getElementById('mycanvas');
               cav.width = ret.width;  //设置画布宽度
               cav.height = ret.height;
               ctx = cav.getContext('2d');
               var img = new Image();
               img.src = pictureurl;
-            var tmp = $api.getStorage('picturetime');
+            // var tmp = $api.getStorage('picturetime');
               img.onload = function(){
                 ctx.drawImage(img,0,0);//将新new出的img对象放入；                          // 绘制水印
              ctx.font="oblique small-caps bold 55px Arial";//设置水印字体大小；字体格式；
              ctx.textAlign = "left";//对其方式；还有其他对其方式；
              ctx.fillStyle = "#ffffff";//颜色
-             ctx.fillText(tmp,60,100);//第一个参数为内容；后两个为x,y坐标；以图片右上角为起点0，0；偏移多少而已；下面相同
+             ctx.fillText(picturetime,60,100);//第一个参数为内容；后两个为x,y坐标；以图片右上角为起点0，0；偏移多少而已；下面相同
             var base64code = cav.toDataURL(pictureurl).replace("data:image/png;base64,", "");;
             var trans = api.require('trans');
+            //console.log(base64code);
+            photocontent[temp_count] = base64code;
             trans.saveImage({
                 base64Str: base64code,
                 album: true,
@@ -944,9 +955,11 @@ function creatPage(){
                 imgName: count+".png"
             }, function(ret, err) {
                 if (ret.status) {
-                  UILoading.closeFlower({
-                       id: id++                                  //关闭id 号对应加载提示框
-                  });
+                  // UILoading.closeFlower({
+                  //      id: id++                                  //关闭id 号对应加载提示框
+                  // });
+                  alert("图片存储成功，可以点击查看了！");
+                  api.hideProgress();
                 } else {
                     alert(JSON.stringify(err));
                 }
@@ -956,7 +969,6 @@ function creatPage(){
               alert( JSON.stringify( err ) );
           }
       });
-
     };
 </script>
 </html>
