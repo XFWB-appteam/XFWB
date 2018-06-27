@@ -91,11 +91,11 @@
 
       //api.showProgress();//显示加载进度框
         api.ajax({
-            url: 'http://192.168.0.7:8080/firefighting/Maintenancer/GetMaintenancePlan',
+            url: $api.getStorage('connectUrl')+'/Maintenancer/GetMaintenancePlan',
             method: 'post',
             data: {
                 values: {
-                     userName: "ME0100002"
+                     userName: $api.getStorage('account')
                 },
             }
         },function(ret, err){
@@ -157,7 +157,7 @@
                             //设置 li 属性，如 id
                             li.setAttribute("id", s1+s2);
                             //alert(li.innerHTML);
-                            ul.append(li);
+                            ul.appendChild(li);
                           //  alert(id_delivery);
                             document.getElementById(s1+s2).addEventListener('click',function(id_delivery_arg){
                                     //alert(array);
@@ -173,12 +173,12 @@
                               }(array),false);
 
                             //alert(ul.innerHTML);
-                            document.getElementById('num'+i).append(ul);
+                            document.getElementById('num'+i).appendChild(ul);
                             //arr.push(temp1.maintenanceplan_name);
                          }
-                         document.getElementById('num'+i).append(ul);
+                         document.getElementById('num'+i).appendChild(ul);
                     }
-                     document.getElementById('div').append(ul_menu);
+                     document.getElementById('div').appendChild(ul_menu);
                      //alert(document.getElementById('div').innerHTML);
                      liststyle();
                      //alert(arr);
