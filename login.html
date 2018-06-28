@@ -88,7 +88,7 @@
                       //alert(ret);
                       var recode = $api.strToJson(ret);
                       var status = recode.status;
-                      var role = recode.status;
+                      var roleName = recode.roleName;
                       if (status=="true") {
                          $api.setStorage('account',zhanghao);
                          $api.setStorage('password',password);
@@ -101,11 +101,19 @@
                          $api.setStorage('roleName',recode.roleName);
                          $api.setStorage('enterprise_name',recode.enterprise_name);
                          $api.setStorage('creation_time',recode.creation_time);
+                         $api.setStorage('userId',recode.userId);
+                         if (roleName=='维保工程师') {
+                           api.openWin({
+                               name: 'index.html',
+                               url: 'index.html'
+                           });
+                         }else if (roleName=='消防总队'||roleName=='消防支队') {
+                           api.openWin({
+                               name: 'index_management.html',
+                               url: 'index_management.html'
+                           });
+                         }
 
-                         api.openWin({
-                             name: 'index.html',
-                             url: 'index.html'
-                         });
 
                       }else {
                         //alert(recode.message);
