@@ -118,7 +118,7 @@
                           id: information[i].project_id,
                           name: information[i].project_name//该项目名称，在后面需要填在a标签里
                         };
-                        ul_menu = document.getElementById('plan');
+                        //ul_menu = document.getElementById('plan');
                         var li_level1 = document.createElement('li');//添加一条li相当于添加了一个项目
 
                         li_level1.setAttribute("id", "num"+i);
@@ -127,7 +127,7 @@
 
                         li_level1.innerHTML += '<ul class="level2" id="number'+i+'"></ul>';
 
-                        ul_menu.appendChild(li_level1);
+                        document.getElementById('plan').appendChild(li_level1);
                         //遍历该项目的完成情况，动态添加li的条数
                        for(var j=0;j<information_plan.length;j++){
                            var s2 = j.toString();
@@ -178,7 +178,7 @@
                          }
                          document.getElementById('num'+i).appendChild(ul);
                     }
-                     document.getElementById('div').appendChild(ul_menu);
+                     document.getElementById('div').appendChild(document.getElementById('plan'));
                      //alert(document.getElementById('div').innerHTML);
                      liststyle();
                      //alert(arr);
