@@ -315,9 +315,9 @@
           method: 'post',
           data: {
               values: {
-                  maintenance_test_content_id:137,
-                  maintenanceplan_id:1,
-                  task_id:1,
+                  maintenance_test_content_id:maintenance_test_content_id,
+                  maintenanceplan_id:maintenanceplan_id,
+                  task_id:task_id,
                   task_item_json:task_item_json
               }
           }
@@ -377,7 +377,6 @@ function addTask(){
       voicecontent[num]="";
       photocontent[num]="";
       cannottest[num]="";
-      alert("您点击了添加下一项");
       var new_ul = '<ul id="control_ul'+num+'" class="aui-list aui-select-list"></ul>';
       $("#section").append(new_ul);
       num_int = parseInt(num)+1;
@@ -415,7 +414,7 @@ function addTask(){
                      $("#control_ul"+num).append(tempinputhtml);
                   }
                   else {
-                    alert("数据好像有问题，这个数据没法解析");
+                    alert("数据解析出现问题，请重试");
                   }
               }
         }
@@ -423,7 +422,7 @@ function addTask(){
       }//for
       var  tempalert_content = '<li class="aui-list-item"><div class="aui-list-item-inner" style="color:#F00;">'+alert_content+':</div></li>';
       $("#control_ul"+num).append(tempalert_content);
-      var  tempother = '<li class="aui-list-item"><div class="aui-list-item-inner" align="center"><img class="aligncenter" src="../image/plus.jpg" height="40"  width="40" onclick="fnOpenChooseFrame('+num+')"></div></li><li class="aui-list-item"><div class="aui-list-item-inner"><img id="voice'+num+'" style="float:left;margin-left:35px;" src="../image/plus.jpg" height="30"  width="30" ><img id="text'+num+'"  style="float:left;margin-left:35px;" src="../image/plus.jpg" height="30"  width="30" ><img id="video'+num+'" style="float:left;margin-left:35px;" src="../image/plus.jpg" height="30"  width="30"><img id="image'+num+'" style="float:left;margin-left:35px;" src="../image/plus.jpg" height="30"  width="30"></div></li><li class="aui-list-item"><div class="aui-list-item-inner">测试结果</div></li><li class="aui-list-item"><div class="aui-list-item-inner"><label><input id="normal'+num+'" class="aui-radio" type="radio" name="testresult'+num+'" value="正常" > 正常</label><label><input id="repair'+num+'" class="aui-radio" type="radio" name="testresult'+num+'" value ="需要报价维修"> 需要维修报价</label><label><input id="investigation'+num+'" class="aui-radio" type="radio" name="testresult'+num+'" value="需要进一步排查" > 需要进一步排查</label></div></li><li class="aui-list-item"><div class="aui-list-item-inner"><img class="aligncenter" src="../image/delete.png" height="40"  width="40" onclick="deletecontent('+num+')"></div></li><li class="aui-list-item"><div class="aui-list-item-inner"></div></li>';
+      var  tempother = '<li class="aui-list-item"><div class="aui-list-item-inner" align="center"><img class="aligncenter" src="../image/arrows_circle_plus.png" height="40"  width="40" onclick="fnOpenChooseFrame('+num+')"></div></li><li class="aui-list-item"><div class="aui-list-item-inner"><img id="voice'+num+'" style="float:left;margin-left:35px;" src="../image/voice.ico" height="30"  width="30" ><img id="text'+num+'"  style="float:left;margin-left:35px;" src="../image/word.ico" height="30"  width="30" ><img id="video'+num+'" style="float:left;margin-left:35px;" src="../image/video.ico" height="30"  width="30"><img id="image'+num+'" style="float:left;margin-left:35px;" src="../image/Photo.ico" height="30"  width="30"></div></li><li class="aui-list-item"><div class="aui-list-item-inner">测试结果</div></li><li class="aui-list-item"><div class="aui-list-item-inner"><label><input id="normal'+num+'" class="aui-radio" type="radio" name="testresult'+num+'" value="正常" > 正常</label><label><input id="repair'+num+'" class="aui-radio" type="radio" name="testresult'+num+'" value ="需要报价维修"> 需要维修报价</label><label><input id="investigation'+num+'" class="aui-radio" type="radio" name="testresult'+num+'" value="需要进一步排查" > 需要进一步排查</label></div></li><li class="aui-list-item"><div class="aui-list-item-inner"><img class="aligncenter" src="../image/delete.png" height="40"  width="40" onclick="deletecontent('+num+')"></div></li><li class="aui-list-item"><div class="aui-list-item-inner"></div></li>';
       $("#control_ul"+num).append(tempother);
       $("#testno"+num).click(function(){
 
@@ -477,7 +476,7 @@ function addTask(){
                       dialogName: 'list'
                   });
                   //本项不能测试，把除了不能测试以外的控件全部清零，然后
-                  alert("本项不能测试，请继续测试工作，在完成所有测试项后点击提交按钮");
+                  alert("本项不能测试，请继续其他项的测试工作，并在完成所有测试项后点击提交按钮");
 
                 //
                 $("#control_ul"+num).html("");
@@ -866,7 +865,7 @@ function creatPage(){
           method: 'post',
           data: {
               values: {
-                  maintenance_test_content_id:137//参数在正式版替换成maintenance_test_content_id
+                  maintenance_test_content_id:maintenance_test_content_id//参数在正式版替换成maintenance_test_content_id
               }
           }
       },function(ret, err){

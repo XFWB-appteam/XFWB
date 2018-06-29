@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+      <title>任务内容</title>
+      <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+      <link rel="stylesheet" type="text/css" href="../css/style.css" />
+      <link rel="stylesheet" type="text/css" href="../css/aui.2.0.css" />
+      <style>
+          body{
+
+          }
+      </style>
+  </head>
+  <body>
+    <header class="aui-bar aui-bar-nav">
+            <div class="aui-pull-left aui-btn">
+                <span class="aui-iconfont aui-icon-left"></span>
+            </div>
+            <div class="aui-title">任务内容</div>
+        </header>
+
+        <div >
+          <ul id="project_list" class="aui-list aui-media-list" style="margin-top:10px"></ul>
+        </div>
+
+  </body>
+  <script type="text/javascript" src="../script/api.js"></script>
+  <script type="text/javascript" src="../script/jquery-1.4.2.min.js"></script>
+  <script type="text/javascript" src="../script/api.js"></script>
+  <script type="text/javascript" src="script/util.js"></script>
+  <script type="text/javascript">
+      var id = 0;
+      var taskItemID = '2';
+      apiready = function(){
+        getDataFromServe();
+      };
+
+      function getDataFromServe(){
+        var UILoading = api.require('UILoading');
+          UILoading.flower({
+              center: {
+                  x: 160,
+                  y: 240
+              },
+              size: 30,
+              fixed: true
+          }, function(ret) {
+            //  alert(JSON.stringify(ret));
+          });
+
+        api.ajax({
+            url: $api.getStorage('connectUrl')+'/Maintenancer/CheckAuditedTask',
+          //url:'http://192.168.0.7:8080/firefighting/Maintenancer/CheckAuditedTask',
+            method: 'post',
+            dataType: 'text',
+            data: {
+                values: {
+                     userId:$api.getStorage('userId'),
+                    // task_item_id:taskItemID
+                    userId:'39',
+                    task_item_id:taskItemID
+                },
+            }
+        },function(ret, err){
+          var UILoading = api.require('UILoading');
+          UILoading.closeFlower({
+               id: id++                         //关闭id 号对应加载提示框
+          });
+            if (ret) {
+                //alert( JSON.stringify( ret ) );
+                alert(到ret了);
+                var recode = $api.strToJson(ret);
+                var status = recode.status;
+                if (status=="true") {
+                   //alert(ret);
+                   var task_item_content = recode.task_item_content;
+                   alert($api.jsonToStr(task_item_content));
+                   var data_info = task_item_content.detail_content;
+                   alert($api.jsonToStr(data_info));
+                   var information = eval(data_info);
+                   alert('1111111');
+                  //alert('detail_content---information:'+$api.jsonToStr(information));
+                   var obj ="";
+                   $("#project_list").html("");
+                   for (var i = 0;i<information.length;i++) {
+                       //使用information[i]来获取一个个的json对象
+                       alert(information[i]);
+                        var index= i + 1;
+                        var itemIndex = 'item_'+index;
+                        alert(itemIndex);
+                        var itemContent = information[i].itemIndex;
+                        alert(itemContent);
+                        for (var j = 0; j < itemContent.length; j++) {
+                          obj = '<li class="border" style="margin-top:20px"><div class="left" ><b>'+itemContent[j].name+'</b></div><div class="right" >'+itemContent[j].value+'</div><div style="float:right;margin-right:10px;margin-top:5px;color:#00b2b4">'+information[i].task_type+'</div><div><div class="left"><b>提交时间</b></div><div class="right">'+information[i].submit_time+'</div>';
+                        }
+
+                        //var differentobj = "";
+                        //obj = '<li class="border" style="margin-top:20px"><div class="left" ><b>项目名称</b></div><div class="right" >'+information[i].project_name+'</div><div style="float:right;margin-right:10px;margin-top:5px;color:#00b2b4">'+information[i].task_type+'</div><div><div class="left"><b>提交时间</b></div><div class="right">'+information[i].submit_time+'</div></div><div><div class="left"><b>审核状态</b></div><div class="right">'+information[i].task_status+'</div>';
+
+
+                      $("#project_list").append(obj);
+                   }
+
+                }else {
+                  api.toast({
+                      msg: recode.message,
+                      duration: 2000,
+                      location: 'bottom'
+                  });
+
+                }
+
+            } else {
+                alert( JSON.stringify( err ) );
+            }
+        });
+
+
+      }
+
+  </script>
+  </html>

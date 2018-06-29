@@ -131,12 +131,12 @@ function editTask(index){
 //  var data_status = data.status;
 //  var data_info = data.work;
 //  var information = eval(data_info);
- alert(information[index].project_name);
+ //alert(information[index].project_name);
   api.openWin({
       name: 'changeTask',
-      url: 'changeTask.html',
+      url: './changeTask.html',
       pageParam: {
-          "work_info":information[index]
+          "taskInfo":information[index]
       }
   });
 }
@@ -233,17 +233,26 @@ function getDataFromServerByDate(){
                        var information = eval(data_info);
                        var obj ="";
                        $("#project_list").html("");
-                       for (var i = 0;i<information.length;i++) {
-                           //使用information[i]来获取一个个的json对象
-                         var differentobj = "";
-                         obj = '<li class="border" style="margin-top:20px"><div class="left" ><b>项目名称</b></div><div class="right" >'+information[i].project_name+'</div><div style="float:right;margin-right:10px;margin-top:5px;color:#00b2b4">'+information[i].task_type+'</div><div><div class="left"><b>提交时间</b></div><div class="right">'+information[i].submit_time+'</div></div><div><div class="left"><b>审核状态</b></div><div class="right">'+information[i].task_status+'</div>';
-                         if (information[i].task_status=="待审核") {
-                             differentobj =  '<div style="display: inline" id="editID" onclick="editTask('+i+')"><div class="rightEdit" style="float:right;display: inline" >修改</div><img src="../image/edit.png" style="width:8%;float:right;margin-right:5px"></div>';
-                             obj+=differentobj;
+                       if (information.length==0) {
+                         api.toast({
+                             msg: '当前时间段没有任务',
+                             duration: 2000,
+                             location: 'bottom'
+                         });
+                       }else{
+                         for (var i = 0;i<information.length;i++) {
+                             //使用information[i]来获取一个个的json对象
+                           var differentobj = "";
+                           obj = '<li class="border" style="margin-top:20px"><div class="left" ><b>项目名称</b></div><div class="right" >'+information[i].project_name+'</div><div style="float:right;margin-right:10px;margin-top:5px;color:#00b2b4">'+information[i].task_type+'</div><div><div class="left"><b>提交时间</b></div><div class="right">'+information[i].submit_time+'</div></div><div><div class="left"><b>审核状态</b></div><div class="right">'+information[i].task_status+'</div>';
+                           if (information[i].task_status=="待审核") {
+                               differentobj =  '<div style="display: inline" id="editID" onclick="editTask('+i+')"><div class="rightEdit" style="float:right;display: inline" >修改</div><img src="../image/edit.png" style="width:8%;float:right;margin-right:5px"></div>';
+                               obj+=differentobj;
+                           }
+                            $("#project_list").append(obj);
+                         //$api.byId('project_list').append(obj);
                          }
-                          $("#project_list").append(obj);
-                       //$api.byId('project_list').append(obj);
                        }
+
 
                     }else {
                       //alert(recode.message);
@@ -305,17 +314,26 @@ function getAllDataFromServer(){
                        information = eval(data_info);
                        var obj ="";
                        $("#project_list").html("");
-                       for (var i = 0;i<information.length;i++) {
-                           //使用information[i]来获取一个个的json对象
-                         var differentobj = "";
-                         obj = '<li class="border" style="margin-top:20px"><div class="left" ><b>项目名称</b></div><div class="right" >'+information[i].project_name+'</div><div style="float:right;margin-right:10px;margin-top:5px;color:#00b2b4">'+information[i].task_type+'</div><div><div class="left"><b>提交时间</b></div><div class="right">'+information[i].submit_time+'</div></div><div><div class="left"><b>审核状态</b></div><div class="right">'+information[i].task_status+'</div>';
-                         if (information[i].task_status=="待审核") {
-                             differentobj =  '<div style="display: inline" id="editID" onclick="editTask('+i+')"><div class="rightEdit" style="float:right;display: inline" >修改</div><img src="../image/edit.png" style="width:8%;float:right;margin-right:5px"></div>';
-                             obj+=differentobj;
-                         }
+                       if (information.length==0) {
+                         api.toast({
+                             msg: '暂时没有任务',
+                             duration: 2000,
+                             location: 'bottom'
+                         });
+                       }else{
+                         for (var i = 0;i<information.length;i++) {
+                             //使用information[i]来获取一个个的json对象
+                           var differentobj = "";
+                           obj = '<li class="border" style="margin-top:20px"><div class="left" ><b>项目名称</b></div><div class="right" >'+information[i].project_name+'</div><div style="float:right;margin-right:10px;margin-top:5px;color:#00b2b4">'+information[i].task_type+'</div><div><div class="left"><b>提交时间</b></div><div class="right">'+information[i].submit_time+'</div></div><div><div class="left"><b>审核状态</b></div><div class="right">'+information[i].task_status+'</div>';
+                           if (information[i].task_status=="待审核") {
+                               differentobj =  '<div style="display: inline" id="editID" onclick="editTask('+i+')"><div class="rightEdit" style="float:right;display: inline" >修改</div><img src="../image/edit.png" style="width:8%;float:right;margin-right:5px"></div>';
+                               obj+=differentobj;
+                           }
 
-                          $("#project_list").append(obj);
+                            $("#project_list").append(obj);
+                         }
                        }
+
 
                     }else {
                       api.toast({

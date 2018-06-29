@@ -291,11 +291,13 @@
     function ddelete(v) {
         if (window.confirm('您确定要删除该任务吗？')) {
             var Chosed = eval('[' + api.pageParam.array + ']');
+            code_chosed_delete = "";
+
             for (var i = 0; i < final_information.length; i++) {
               //从new——Test页面跳转过来的可以直接检查还剩下啥  字符串拼接
               //从管理未提交跳转过来要把返回的数据遍历一下
                 if (i!=v) {
-                    if (i < Chosed.length - 1) {
+                    if (i < final_information.length - 1) {
                         code_chosed_delete += '{"first_project_id":"' + final_information[i].first_project_id + '","first_project_name":"' + final_information[i].first_project_name + '","second_project_id":"' + final_information[i].second_project_id + '","second_project_name":"' +
                             final_information[i].second_project_name + '"},';
 
@@ -379,15 +381,18 @@
     function doclick(v) {
         //下方是用来解析json的
 
-        var second_project_name;
-        // if (api.pageParam.flag == 1) {
-        //     second_project_id = final_information[v].second_project_id;
-        //     second_project_name = final_information[v].second_project_name;
-        //
-        // } else
 
-        second_project_id = final_information[v].second_project_id;
-        second_project_name = final_information[v].second_project_name;
+        // if (api.pageParam.flag == 1) {
+        //     // second_project_id = final_information[v].second_project_id;
+        //     // second_project_name = final_information[v].second_project_name;
+        // maintenanceplan_id=;
+        // }
+
+        // second_project_id = final_information[v].second_project_id;
+        // second_project_name = final_information[v].second_project_name;
+
+
+
 
 
         api.openWin({

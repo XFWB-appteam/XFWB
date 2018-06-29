@@ -91,11 +91,11 @@
 
       //api.showProgress();//显示加载进度框
         api.ajax({
-            url: 'http://192.168.0.7:8080/firefighting/Maintenancer/GetMaintenancePlan',
+            url: $api.getStorage('connectUrl')+'/Maintenancer/GetMaintenancePlan',
             method: 'post',
             data: {
                 values: {
-                     userName: "ME0100002"
+                     userName: $api.getStorage('account')
                 },
             }
         },function(ret, err){
@@ -118,7 +118,7 @@
                           id: information[i].project_id,
                           name: information[i].project_name//该项目名称，在后面需要填在a标签里
                         };
-                        ul_menu = document.getElementById('plan');
+                        //ul_menu = document.getElementById('plan');
                         var li_level1 = document.createElement('li');//添加一条li相当于添加了一个项目
 
                         li_level1.setAttribute("id", "num"+i);
@@ -127,7 +127,7 @@
 
                         li_level1.innerHTML += '<ul class="level2" id="number'+i+'"></ul>';
 
-                        ul_menu.appendChild(li_level1);
+                        document.getElementById('plan').appendChild(li_level1);
                         //遍历该项目的完成情况，动态添加li的条数
                        for(var j=0;j<information_plan.length;j++){
                            var s2 = j.toString();
@@ -157,7 +157,7 @@
                             //设置 li 属性，如 id
                             li.setAttribute("id", s1+s2);
                             //alert(li.innerHTML);
-                            ul.append(li);
+                            ul.appendChild(li);
                           //  alert(id_delivery);
                             document.getElementById(s1+s2).addEventListener('click',function(id_delivery_arg){
                                     //alert(array);
@@ -173,12 +173,12 @@
                               }(array),false);
 
                             //alert(ul.innerHTML);
-                            document.getElementById('num'+i).append(ul);
+                            document.getElementById('num'+i).appendChild(ul);
                             //arr.push(temp1.maintenanceplan_name);
                          }
-                         document.getElementById('num'+i).append(ul);
+                         document.getElementById('num'+i).appendChild(ul);
                     }
-                     document.getElementById('div').append(ul_menu);
+                     document.getElementById('div').appendChild(document.getElementById('plan'));
                      //alert(document.getElementById('div').innerHTML);
                      liststyle();
                      //alert(arr);

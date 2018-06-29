@@ -11,7 +11,7 @@
 
    .words{
      font-size: 20px; position: absolute; top:25%; left: 10%; width: 80%;}
-   .imgw{position: fixed}
+   .imgw{position: fixed;}
     img{ height: 100%; width: auto; width:100%;max-width:100%;overflow:hidden; }
     button{
       color:#009688
@@ -23,9 +23,13 @@
         <div class="imgw">
         <img src="img/background.png" style="">
         <div class="words">
-          <img src="img/login.png" style="width:20%;height:20%;margin-left:15%;margin-bottom:-40px;;">
-          <label for="" style="margin-left:42%;margin-bottom:40px;">内蒙古消防综合管理平台</label>
-          <ul>
+          <div class="" style="margin-left:2%;margin-top:-100px;">
+            <img src="img/login.png" style="width:20%;">
+          </div>
+        <div class="" style="margin-bottom:120px;margin-left:26%;margin-top:-53px;">
+          内蒙古消防综合管理平台
+        </div>
+          <ul style="margin-top:-80px;">
           <li style="border-radius: 30px;background-color:#FFFFFF;margin-bottom:20px">
             <label for="" style="float:left;margin-left:4%;margin-top:3%;width:20%"><img src="img/zhanhao.png" style="width:50%"></label>
             <input  class="login" style="width:70%" type="text"/>
@@ -41,11 +45,11 @@
   </body>
   <script type="text/javascript" src="script/api.js"></script>
   <script type="text/javascript" src="script/util.js"></script>
+  <script type="text/javascript" src="script/jquery-3.3.1.min.js"></script>
   <script type="text/javascript">
   var id = 0;
       apiready = function(){
-
-      }
+      };
       var login = document.getElementsByClassName('login');
 
     $api.addEvt($api.byId('button'),'click',function(){
@@ -84,7 +88,7 @@
                       //alert(ret);
                       var recode = $api.strToJson(ret);
                       var status = recode.status;
-                      var role = recode.status;
+                      var roleName = recode.roleName;
                       if (status=="true") {
                          $api.setStorage('account',zhanghao);
                          $api.setStorage('password',password);
@@ -97,11 +101,19 @@
                          $api.setStorage('roleName',recode.roleName);
                          $api.setStorage('enterprise_name',recode.enterprise_name);
                          $api.setStorage('creation_time',recode.creation_time);
+                         $api.setStorage('userId',recode.userId);
+                         if (roleName=='维保工程师') {
+                           api.openWin({
+                               name: 'index.html',
+                               url: 'index.html'
+                           });
+                         }else if (roleName=='消防总队'||roleName=='消防支队') {
+                           api.openWin({
+                               name: 'index_management.html',
+                               url: 'index_management.html'
+                           });
+                         }
 
-                         api.openWin({
-                             name: 'index.html',
-                             url: 'index.html'
-                         });
 
                       }else {
                         //alert(recode.message);
