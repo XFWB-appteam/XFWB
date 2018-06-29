@@ -68,11 +68,10 @@
     };
     function tasklist(){
       api.ajax({
-          url: 'http://192.168.0.7:8080/firefighting/Maintenancer/SignTask',
-          method: 'post',
+          url: $api.getStorage('connectUrl') + '/Maintenancer/SignTask',
           data: {
               values: {
-                  userName: "ME0100002"
+                  userName: $api.getStorage('account'),
               },
           }
       },function(ret1, err1){
@@ -180,7 +179,7 @@
                   };
                   if (ret3.eventType == 'right') {
                     var obj = JSON.stringify(task1[ret2.index]);
-                    alert(obj);
+                    //alert(obj);
                     $api.setStorage('task1',task1[ret2.index]);
                     task2 = $api.getStorage('task1');
                     task = true;
@@ -238,15 +237,16 @@
       }
       else{
         sign_status=true;
+        alert("签到成功");
       }
-      alert(distance);
-      alert(task2.enclosure_length);
+      //alert(distance);
+      //alert(task2.enclosure_length);
       api.ajax({
-          url: 'http://192.168.0.7:8080/firefighting/Maintenancer/SignIn',
+          url: $api.getStorage('connectUrl') + '/Maintenancer/SignIn',
           method: 'post',
           data: {
               values: {
-                  userId: 39,
+                  userId: $api.getStorage('userId'),
                   longitude:$api.getStorage('lon'),
                   latitude:$api.getStorage('lat'),
                   task_id:task2.task_id,
@@ -257,9 +257,9 @@
           }
       },function(ret, err){
           if (ret) {
-              alert( JSON.stringify( ret ) );
+              alert( ret.message );
           } else {
-              alert( JSON.stringify( err ) );
+              alert( err.message );
           }
       });
 

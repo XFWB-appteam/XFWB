@@ -60,12 +60,12 @@
 </head>
 
 <body id="body">
-  <header class="aui-bar aui-bar-nav" style="background-color:#00b2b4">
-      <div class="aui-pull-left aui-btn">
-          <span class="aui-iconfont aui-icon-left" onclick="closewin()"></span>
-      </div>
-      <div class="aui-title">测试任务</div>
-  </header>
+    <header class="aui-bar aui-bar-nav" style="background-color:#00b2b4">
+        <div class="aui-pull-left aui-btn">
+            <span class="aui-iconfont aui-icon-left" onclick="closewin()"></span>
+        </div>
+        <div class="aui-title">测试任务</div>
+    </header>
 
     <div class="" style="margin-top:20px;margin-left:12px;">
         <label for="" style="width:20%;"><h3>设施名称</h3><p style="display:inline;margin-left:20px" id="facility_name"></p></label>
@@ -95,68 +95,85 @@
 <script type="text/javascript" src="../script/jquery-editable-select.min.js"></script>
 </script>
 <script type="text/javascript">
-
-
-
-
-
+    var task_id;
     apiready = function() {
 
-        var UILoading = api.require('UILoading');
-        var id = 0;
-        document.getElementById('facility_name').innerHTML=api.pageParam.second_project_name;
-        // alert(api.pageParam.second_project_name);
-        UILoading.flower({
-            center: {
-                x: 160,
-                y: 240
-            },
-            size: 30,
-            fixed: true
-        }, function(ret) {
-            //alert(JSON.stringify(ret));
-        });
-
-        api.ajax({
-            url: 'http://192.168.0.7:8080/firefighting/Maintenancer/PlanCreateTask',
-            method: 'post',
-            data: {
-                values: {
-                    userId: 39,
-                    task_type: api.pageParam.task_type,
-                    project_name: api.pageParam.project_name,
-                    task_name: api.pageParam.task_name,
-                    //=========================这里需要修改
-                    maintenanceplan_id: 1,
-                    second_project_id:7,
-                    task_character:api.pageParam.task_character
-                }
-            }
-        }, function(ret, err) {
-            UILoading.closeFlower({
-                id: id++ //关闭id 号对应加载提示框
+            var UILoading = api.require('UILoading');
+            var id = 0;
+            document.getElementById('facility_name').innerHTML = api.pageParam.second_project_name;
+            // alert(api.pageParam.second_project_name);
+            UILoading.flower({
+                center: {
+                    x: 160,
+                    y: 240
+                },
+                size: 30,
+                fixed: true
+            }, function(ret) {
+                //alert(JSON.stringify(ret));
             });
-            if (ret) {
-                var project_json = eval(ret);
-                var status = project_json.status;
-                //  alert($api.getStorage('account')+"=="+ api.pageParam.task_type+api.pageParam.project_name+api.pageParam.task_name +api.pageParam.task_character);
-                //  alert(status);
-                if (status == "true") {
-                    var information = eval(project_json.message);
-                    var obj = "";
-                    $("#add").html("");
-                    for (var i = 0; i < information.length; i++) {
-                        obj = '  <li class="aui-list-item" onclick="click_item('+project_json.task_id+','+information[i].maintenance_test_content_id+')"><div class="aui-list-item-inner"><div class="aui-list-item-title" >' + information[i].maintenance_test_content_serial + '.' + information[i].maintenance_test_content_name +
-                            '</div></div><div class="content">' + information[i].maintenance_test_content_all + '</div></li>';
+            // alert($api.getStorage('userId') + "," + api.pageParam.task_type + "." + api.pageParam.task_name + "," + "," + api.pageParam.project_id + "," + api.pageParam.task_character);
 
-                        $("#add").append(obj);
+            // var getinfo=eval(api.pageParam.info);
+            // $("#add").html("");
+            // for(var i=0;i<getinfo.length;i++){
+            //   obj = '  <li class="aui-list-item" onclick="click_item(' + project_json.task_id + ',' + information[i].maintenance_test_content_id + ')"><div class="aui-list-item-inner"><div class="aui-list-item-title" >' +
+            //                     information[i].maintenance_test_content_serial + '.' + information[i].maintenance_test_content_name + '</div></div><div class="content">' + information[i].maintenance_test_content_all + '</div></li>';
+            //                      $("#add").append(obj);
+            // }
+// alert($api.getStorage('userId')+",,"+api.pageParam.task_id+",,"+api.pageParam.maintenanceplan_id+",,"+ api.pageParam.second_project_id);
+            api.ajax({
+
+                url: $api.getStorage('connectUrl') + '/Maintenancer/EditOnExecuteTask',
+                method: 'post',
+                data: {
+                    values: {
+
+                        userId: $api.getStorage('userId'),
+                        task_id: api.pageParam.task_id,
+                        maintenanceplan_id: api.pageParam.maintenanceplan_id,
+                        second_project_id: api.pageParam.second_project_id
+
+
+
+
                     }
+                }
+            }, function(ret, err) {
+                UILoading.closeFlower({
+                    id: id++ //关闭id 号对应加载提示框
+                });
+                if (ret) {
+                    var project_json = eval(ret);
+                    var status = project_json.status;
 
-                } else {}
-            }
-        });
-    };
-    // 弹出列表框
+                    var information;
+                    if (status == "true") {
+                      var task = eval(project_json.task);
+console.log("testwork10_frm获取到的数据是"+JSON.stringify(task));
+                        var obj = "";
+                        $("#add").html("");
+                        for (var i = 0; i < task.length; i++) {
+                            obj = '  <li class="aui-list-item" onclick="click_item(' + project_json.task_id + ',' + information[i].maintenance_test_content_id + ')"><div class="aui-list-item-inner"><div class="aui-list-item-title" >' +
+                                task[i].serial + '.' + task[i].test_name +
+                                '</div></div><div class="content">' + task[i].test_content + '</div></li>';
+
+                            $("#add").append(obj);
+                        }
+
+                    } else {
+                        api.toast({
+                            msg: project_json.message,
+                            duration: 2000,
+                            location: 'bottom'
+                        });
+                    }
+                } else {
+                    alert("服务器异常，请稍后重试");
+                }
+            });
+        }
+        // 弹出列表框
     $("#txt1").click(function() {
         $("#div_items").css('display', 'block');
     });
@@ -188,19 +205,17 @@
     };
     var list = document.getElementsByClassName('aui-list-item');
 
-    function click_item(task_id,maintenance_test_content_id){
-      api.openWin({
-          name: 'executeTestTask_win',
-          url: './executeTestTask_win.html',
-          pageParam: {
-              maintenance_test_content_id: 137,
-              task_id:1
-          }
-      });
+    function click_item(task_id, maintenance_test_content_id) {
+        api.openWin({
+            name: 'executeTestTask_win',
+            url: './executeTestTask_win.html',
+            pageParam: {
+                maintenance_test_content_id: api.pageParam.maintenanceplan_id,
+                task_id: api.pageParam.task_id
+            }
+        });
 
     }
-
-
 </script>
 
 </html>
