@@ -112,7 +112,7 @@
             }, function(ret) {
                 //alert(JSON.stringify(ret));
             });
-            alert($api.getStorage('userId') + "," + api.pageParam.task_type + "." + api.pageParam.task_name + "," + "," + api.pageParam.project_id + "," + api.pageParam.task_character);
+            // alert($api.getStorage('userId') + "," + api.pageParam.task_type + "." + api.pageParam.task_name + "," + "," + api.pageParam.project_id + "," + api.pageParam.task_character);
 
             // var getinfo=eval(api.pageParam.info);
             // $("#add").html("");
@@ -121,7 +121,7 @@
             //                     information[i].maintenance_test_content_serial + '.' + information[i].maintenance_test_content_name + '</div></div><div class="content">' + information[i].maintenance_test_content_all + '</div></li>';
             //                      $("#add").append(obj);
             // }
-alert($api.getStorage('userId')+",,"+api.pageParam.task_id+",,"+api.pageParam.maintenanceplan_id+",,"+ api.pageParam.second_project_id);
+// alert($api.getStorage('userId')+",,"+api.pageParam.task_id+",,"+api.pageParam.maintenanceplan_id+",,"+ api.pageParam.second_project_id);
             api.ajax({
 
                 url: $api.getStorage('connectUrl') + '/Maintenancer/EditOnExecuteTask',

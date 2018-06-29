@@ -68,7 +68,7 @@
         <div>
             <div style="display:inline;margin:0 10%;line-height:60px">项目名称</div>
 
-            <input id="project_name" style="display:inline;width:50%;line-height:30px" placeholder="请输入项目名称" />
+            <input id="project_name" style="display:inline;width:50%;line-height:30px" placeholder="请输入项目名称"  disabled="disabled"/>
 
         </div>
         <HR width="90%" style="margin:0 auto" color=#d3d3d3 SIZE=3>
@@ -104,8 +104,8 @@ console.log(api.pageParam.data);
         temp = eval('[' + c + ']');
         document.getElementById("project_name").value = temp[0].name;
 
-        alert(temp[0].name);
-        alert(api.pageParam.plan);
+        // alert(temp[0].name);
+        // alert(api.pageParam.plan);
 
         information = eval('[' + api.pageParam.data + ']');
         for (var i = 0; i < information.length; i++) {
@@ -137,8 +137,8 @@ console.log(api.pageParam.data);
         }, function(ret) {
             //  alert(JSON.stringify(ret));
         });
-        alert($api.getStorage('userId') + "," + document.getElementById('select').value + "." + temp[0].id + "," + "," + temp[0].name + "," + document.getElementById('task_character').value + "," + temp[1].maintenanceplan_id + "," +
-            second_project_id + ",");
+        // alert($api.getStorage('userId') + "," + document.getElementById('select').value + "." + temp[0].id + "," + "," + temp[0].name + "," + document.getElementById('task_character').value + "," + temp[1].maintenanceplan_id + "," +
+            // second_project_id + ",");
 
         api.ajax({
                 url: $api.getStorage('connectUrl') + '/Maintenancer/PlanCreateTask',
