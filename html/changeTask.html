@@ -72,10 +72,12 @@
     var number = 0;
     var taskID='';
     var taskName ='';
+    var taskType ='';
     apiready = function() {
       var taskInfo = api.pageParam.taskInfo;
       taskID = taskInfo.task_id;
       taskName = taskInfo.task_name;
+      taskType = taskInfo.task_type;
       $("#taskNameID").html(taskName);
       getAllDataFromServer();
         //为传入的DOM元素增加适当的上内边距，避免header与状态栏重叠
@@ -157,8 +159,26 @@
           name: 'Test_Task',
           url: './Test_Task.html',
           pageParam: {
-              name: taskName
+              task_name: taskName,
+              task_id: taskID,
+              task_type:taskType
           }
+
+          // name: 'Test_Task',
+          // url: '../html/Test_Task.html',
+          // pageParam: {
+          //     project_name: temp[0].name,
+          //     project_id: temp[0].id,
+          //     task_name: document.getElementById('task_name').value,
+          //     task_id: task_id,
+          //     maintenanceplan_id: temp[1].maintenanceplan_id,
+          //     maintenanceplan_name: temp[1].maintenanceplan_name,
+          //     task_type: document.getElementById('select').value,
+          //     task_character: document.getElementById('task_character').value,
+          //     array: api.pageParam.data,
+          //     flag:1
+          // }
+
       });
     }
     function closewin(){
