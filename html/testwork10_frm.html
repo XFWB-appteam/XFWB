@@ -62,7 +62,7 @@
 <body id="body">
     <header class="aui-bar aui-bar-nav" style="background-color:#00b2b4">
         <div class="aui-pull-left aui-btn">
-            <span class="aui-iconfont aui-icon-left" onclick="closewin()"></span>
+            <span class="aui-iconfont aui-icon-left" onclick="closewwin()"></span>
         </div>
         <div class="aui-title">测试任务</div>
     </header>
@@ -97,6 +97,11 @@
 <script type="text/javascript">
     var task_id;
     apiready = function() {
+            $api.fixStatusBar($api.dom('.aui-bar'));
+            api.setStatusBarStyle({
+                style: 'dark',
+                color: '#6ab494'
+            });
 
             var UILoading = api.require('UILoading');
             var id = 0;
@@ -121,57 +126,64 @@
             //                     information[i].maintenance_test_content_serial + '.' + information[i].maintenance_test_content_name + '</div></div><div class="content">' + information[i].maintenance_test_content_all + '</div></li>';
             //                      $("#add").append(obj);
             // }
-// alert($api.getStorage('userId')+",,"+api.pageParam.task_id+",,"+api.pageParam.maintenanceplan_id+",,"+ api.pageParam.second_project_id);
+            // alert($api.getStorage('userId') + ",," + api.pageParam.task_id + ",," + api.pageParam.maintenanceplan_id + ",," + api.pageParam.second_project_id);
             api.ajax({
 
-                url: $api.getStorage('connectUrl') + '/Maintenancer/EditOnExecuteTask',
-                method: 'post',
-                data: {
-                    values: {
+                    url: $api.getStorage('connectUrl') + '/Maintenancer/EditOnExecuteTask',
+                    method: 'post',
+                    data: {
+                        values: {
 
-                        userId: $api.getStorage('userId'),
-                        task_id: api.pageParam.task_id,
-                        maintenanceplan_id: api.pageParam.maintenanceplan_id,
-                        second_project_id: api.pageParam.second_project_id
+                            userId: $api.getStorage('userId'),
+                            task_id: api.pageParam.task_id,
+                            maintenanceplan_id: api.pageParam.maintenanceplan_id,
+                            second_project_id: api.pageParam.second_project_id
 
-
-
-
-                    }
-                }
-            }, function(ret, err) {
-                UILoading.closeFlower({
-                    id: id++ //关闭id 号对应加载提示框
-                });
-                if (ret) {
-                    var project_json = eval(ret);
-                    var status = project_json.status;
-
-                    var information;
-                    if (status == "true") {
-                      var task = eval(project_json.task);
-console.log("testwork10_frm获取到的数据是"+JSON.stringify(task));
-                        var obj = "";
-                        $("#add").html("");
-                        for (var i = 0; i < task.length; i++) {
-                            obj = '  <li class="aui-list-item" onclick="click_item(' + project_json.task_id + ',' + information[i].maintenance_test_content_id + ')"><div class="aui-list-item-inner"><div class="aui-list-item-title" >' +
-                                task[i].serial + '.' + task[i].test_name +
-                                '</div></div><div class="content">' + task[i].test_content + '</div></li>';
-
-                            $("#add").append(obj);
                         }
-
-                    } else {
-                        api.toast({
-                            msg: project_json.message,
-                            duration: 2000,
-                            location: 'bottom'
-                        });
                     }
-                } else {
-                    alert("服务器异常，请稍后重试");
-                }
-            });
+                },
+                function(ret, err) {
+                    UILoading.closeFlower({
+                        id: id++ //关闭id 号对应加载提示框
+                    });
+                    if (ret) {
+
+                        // var recode = $api.strToJson(ret);
+                        var status = eval(ret).status;
+                        // alert(status);
+                        var project_json = eval(ret);
+
+
+                        // var status = project_json.status;
+
+                        console.log("testwork10_frm获取到数据是" + status);
+                        var information;
+                        // alert(status);
+                        if (status == "true") {
+                            $("#storage").html(project_json.task_item_finished);
+                            var task = eval(project_json.task_item);
+                            console.log("testwork10_frm获取到的数据是" + JSON.stringify(task));
+                            var obj = "";
+                            $("#add").html("");
+                            for (var i = 0; i < task.length; i++) {
+                                obj = '  <li class="aui-list-item" onclick="click_item()"><div class="aui-list-item-inner"><div class="aui-list-item-title" >' +
+                                    task[i].serial + '.' + task[i].test_name +
+                                    '</div></div><div class="content">' + task[i].test_content + '</div></li>';
+
+                                $("#add").append(obj);
+                            }
+
+                        } else {
+                            api.toast({
+                                msg: project_json.message,
+                                duration: 2000,
+                                location: 'bottom'
+                            });
+                        }
+                    } else {
+                        alert("服务器异常，请稍后重试");
+                    }
+                });
         }
         // 弹出列表框
     $("#txt1").click(function() {
@@ -205,13 +217,18 @@ console.log("testwork10_frm获取到的数据是"+JSON.stringify(task));
     };
     var list = document.getElementsByClassName('aui-list-item');
 
-    function click_item(task_id, maintenance_test_content_id) {
+    function closewwin() {
+        api.closeWin({});
+    }
+
+    function click_item() {
         api.openWin({
             name: 'executeTestTask_win',
             url: './executeTestTask_win.html',
             pageParam: {
                 maintenance_test_content_id: api.pageParam.maintenanceplan_id,
-                task_id: api.pageParam.task_id
+                task_id: api.pageParam.task_id,
+                maintenanceplan_id: api.pageParam.maintenanceplan_id
             }
         });
 

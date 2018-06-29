@@ -60,6 +60,11 @@
     var information = "";
     var final_information = "";
     apiready = function() {
+      $api.fixStatusBar( $api.dom('.aui-bar') );
+      api.setStatusBarStyle({
+          style: 'dark',
+          color: '#6ab494'
+      });
         loadData();
     }
 

@@ -80,9 +80,7 @@
         <div>
             <div style="display:inline;width:20%;margin:0 10%;line-height:60px">任务性质</div>
             <select style="display:inline;width:50%;line-height:30px;" id="task_character">
-            <option value="业主申请">业主申请</option>
             <option value="计划内">计划内</option>
-            <option value="主机警告">主机警告</option>
           </select>
             <img src="../image/down_img.png" style="width:15px;display:inline;" />
         </div>
@@ -97,6 +95,11 @@
 </html>
 <script type="text/javascript">
     apiready = function() {
+      $api.fixStatusBar( $api.dom('.aui-bar') );
+      api.setStatusBarStyle({
+          style: 'dark',
+          color: '#6ab494'
+      });
 
 console.log(api.pageParam.data);
 

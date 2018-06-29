@@ -60,7 +60,6 @@
                 size: 30,
                 fixed: true
             }, function(ret) {
-                //alert(JSON.stringify(ret));
             });
 
             api.ajax({
@@ -87,8 +86,7 @@
 
                     var project_json = eval(ret);
                     var status = project_json.status;
-                    //  alert($api.getStorage('account')+"=="+ api.pageParam.task_type+api.pageParam.project_name+api.pageParam.task_name +api.pageParam.task_character);
-                    //  alert(status);
+
                     if (status == "true") {
                         api.toast({
                             msg: project_json.message,
@@ -158,6 +156,11 @@
     var maintenanceplan_id="";
     // var value = '{first_project_id:'+information[i].first_project_id+',first_project_name:'+information[i].first_project_name+',second_project_id:'+second_project_info[j].second_project_id+',second_project_name:'+second_project_info[j].second_project_name+'}';
     apiready = function() {
+      $api.fixStatusBar( $api.dom('.aui-bar') );
+      api.setStatusBarStyle({
+          style: 'dark',
+          color: '#6ab494'
+      });
         //==1代表新建任务页面传过
         information = "";
         information = eval('[' + api.pageParam.array + ']');
@@ -167,7 +170,6 @@
     }
 
     function loadData() {
-        // alert("loaddata进入");
         var UILoading = api.require('UILoading');
         UILoading.flower({
             center: {
@@ -177,7 +179,6 @@
             size: 30,
             fixed: true
         }, function(ret) {});
-        // alert("ajax开始");
         api.ajax({
             // url: 'http://192.168.0.7:8080/firefighting/App/AppLogin',
             url: $api.getStorage('connectUrl') + '/Maintenancer/CheckOnExecuteTask',
@@ -194,7 +195,6 @@
             });
             if (ret) {
 
-                //alert(ret);
                 var project_json = $api.strToJson(ret);
                 var status = project_json.status;
                 // var json_str={"status": "true","task":[{"id":123,"project_name":"中建国际中心","create_time":"2017-06-10 15:21","maintenanceplan_name":"2017年1月份计划","task_type":"测试"},{"id":123,"project_name":"名敦道项目","create_time":"2017-06-10 15:21","maintenanceplan_name":"2017年8月份计划","task_type":"排查"},{"id":123,"project_name":"0916项目测试","create_time":"2017-06-10 15:21","maintenanceplan_name":"2017年11月份计划","task_type":"维修"}]};
@@ -320,7 +320,6 @@
                 size: 30,
                 fixed: true
             }, function(ret) {
-                //  alert(JSON.stringify(ret));
             });
             api.ajax({
                 url: $api.getStorage('connectUrl') + '/Maintenancer/DeleteTaskItem',
@@ -345,7 +344,6 @@
                 });
 
                 if (ret) {
-                    //alert(ret);
                     var recode = $api.strToJson(ret);
                     var status = recode.status;
 
@@ -357,7 +355,6 @@
                             location: 'bottom'
                         });
                         $("#project_list").html("");
-                        // alert("loaddata开始");
                         final_information = "";
                         loadData();
 
@@ -419,9 +416,7 @@ second_project_id=final_information[v].second_project_id;
             saveToPhotoAlbum: false
         }, function(ret, err) {
             if (ret) {
-                //  $api.setStorage('pictureurl',ret.data);
-                //alert(document.getElementById('img1').src);
-                //alert(ret.data);
+
                 pictureurl = ret.data;
                 var now = new Date();
                 var year = now.getFullYear();
@@ -449,7 +444,6 @@ second_project_id=final_information[v].second_project_id;
                 });
                 picture(timestamp);
             } else {
-                //alert(JSON.stringify(err));
             }
         });
     };
@@ -461,7 +455,6 @@ second_project_id=final_information[v].second_project_id;
             path: pictureurl
         }, function(ret, err) {
             if (ret.status) {
-                //alert( JSON.stringify( ret ) );
                 // var UILoading = api.require('UILoading');
                 // UILoading.flower({
                 //     center: {
@@ -471,7 +464,6 @@ second_project_id=final_information[v].second_project_id;
                 //     size: 30,
                 //     fixed: true
                 // }, function(ret) {
-                //     //alert(JSON.stringify(ret));
                 // });
                 var cav = document.getElementById('mycanvas');
                 cav.width = ret.width; //设置画布宽度
@@ -522,12 +514,10 @@ second_project_id=final_information[v].second_project_id;
             bgColor: '#000'
         }, function(ret, err) {
             if (ret) {
-                //alert(JSON.stringify(ret));
                 if (ret.eventType == "click") {
                     photoBrowser.close();
                 }
             } else {
-                //alert(JSON.stringify(err));
             }
         });
 
