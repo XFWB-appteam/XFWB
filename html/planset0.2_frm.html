@@ -1,161 +1,169 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
     <title>未完成维保项目</title>
-    <link rel="stylesheet" type="text/css" href="../css/api.css"/>
-    <link rel="stylesheet" type="text/css" href="../css/style.css"/>
-    <link rel="stylesheet" type="text/css" href="../css/aui.2.0.css"/>
-    <link rel="stylesheet" type="text/css" href="../css/aui.css"/>
-    <link rel="stylesheet" type="text/css" href="../css/aui-skin.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../css/aui.2.0.css" />
+    <link rel="stylesheet" type="text/css" href="../css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../css/aui-skin.css" />
     <style>
-    .aui-btn-info {
-        color: #ffffff !important;
-        background-color:  #00B2B4 !important;
-    }
+        .aui-btn-info {
+            color: #ffffff !important;
+            background-color: #00B2B4 !important;
+        }
     </style>
 </head>
+
 <body>
-  <ul id="project_list_out" style="margin-left:20px">
-  </ul>
+    <ul id="project_list_out" style="margin-left:20px">
+    </ul>
 
-  <footer class="aui-bar aui-bar-tab">
-      <div class="aui-bar-tab-item">
-          <input class="aui-checkbox"  type="checkbox" id="sall" style="display: inline-block" onchange="chooseAll()">
-          <!-- <div class="aui-btn  aui-btn-info" id="checkboxID" >全选</div> -->
-          <div  style="display: inline-block;font-size:14px" >全选</div>
-          <div class="aui-btn aui-btn-sm aui-btn-info"  style="margin-left:60px;font-size:16px" onclick="jump()"><i class="aui-iconfont aui-font-size-16"></i>新建测试任务</div>
-      </div>
+    <footer class="aui-bar aui-bar-tab">
+        <div class="aui-bar-tab-item">
+            <input class="aui-checkbox" type="checkbox" id="sall" style="display: inline-block" onchange="chooseAll()">
+            <!-- <div class="aui-btn  aui-btn-info" id="checkboxID" >全选</div> -->
+            <div style="display: inline-block;font-size:14px">全选</div>
+            <div class="aui-btn aui-btn-sm aui-btn-info" style="margin-left:60px;font-size:16px" onclick="jump()"><i class="aui-iconfont aui-font-size-16"></i>新建测试任务</div>
+        </div>
 
-  </footer>
+    </footer>
 
 </body>
+
 </html>
 <script type="text/javascript" src="../script/api.js"></script>
 <script type="text/javascript" src="../script/jquery-1.4.2.min.js"></script>
 <script type="text/javascript">
-var information;
-var id = 0;
-var seach = [];
-var array = new Array();//存储勾选的项，传递给下一个界面
-function jump(){
-  //alert(api.pageParam.param2);
-  chooseWhich();
-  api.openWin({
+    var information;
+    var id = 0;
+    var seach = [];
+    var array = new Array(); //存储勾选的项，传递给下一个界面
+    function jump() {
+        //alert(api.pageParam.param2);
+        chooseWhich();
+        api.openWin({
 
-      name: 'new_Task',
-      url: './new_Task.html',
-      pageParam: {
-        data: array,
+            name: 'new_Task',
+            url: './new_Task.html',
+            pageParam: {
+                data: array,
 
-        //task_id:api.pageParam.task_id
-        plan: api.pageParam.param2
+                //task_id:api.pageParam.task_id
+                plan: api.pageParam.param2
+
+            }
+        });
 
     }
-  });
-
-}
-    apiready = function () {
-      //alert(api.pageParam.param2);
-      getAllDataFromServer();
+    apiready = function() {
+        //alert(api.pageParam.param2);
+        getAllDataFromServer();
     }
 
-    function getAllDataFromServer(){
+    function getAllDataFromServer() {
         var UILoading = api.require('UILoading');
-          UILoading.flower({
-              center: {
-                  x: 160,
-                  y: 240
-              },
-              size: 30,
-              fixed: true
-          }, function(ret) {
+        UILoading.flower({
+            center: {
+                x: 160,
+                y: 240
+            },
+            size: 30,
+            fixed: true
+        }, function(ret) {
             //  alert(JSON.stringify(ret));
-          });
+        });
         api.ajax({
-            url: $api.getStorage('connectUrl')+'/Maintenancer/CheckPlanDetail',
+            url: $api.getStorage('connectUrl') + '/Maintenancer/CheckPlanDetail',
             //url:'http://192.168.0.7:8080/firefighting/Maintenancer/CheckPlanDetail',
             method: 'post',
             dataType: 'text', //该参数若不传，则默认为json<div class="aui-tips aui-margin-b-15">2
             data: {
-              values:{userName: $api.getStorage('account'), maintenanceplan_id: JSON.parse(api.pageParam.param3).maintenanceplan_id} //maintenanceplan_id需要从上个界面传过来
-            //  values:{userName: 'ME0100002', first_time: '2000-01-01',second_time:second_time} //键值对
+                values: {
+                    userName: $api.getStorage('account'),
+                    maintenanceplan_id: JSON.parse(api.pageParam.param3).maintenanceplan_id
+                } //maintenanceplan_id需要从上个界面传过来
+                //  values:{userName: 'ME0100002', first_time: '2000-01-01',second_time:second_time} //键值对
             }
-            },function(ret,err){
-              var UILoading = api.require('UILoading');
-              UILoading.closeFlower({
-                   id: id++                         //关闭id 号对应加载提示框
-              });
 
-                  if (ret) {
-                        //alert(ret);
-                        var recode = $api.strToJson(ret);
-                        var status = recode.status;
-                        if (status=="true") {
-                           //alert(ret);
-                           var unfinished_data_info = recode.unfinished;
-                           information = eval(unfinished_data_info);
-                           var obj ="";
-                           var obj_in ="";
-                           $("#project_list_out").html("");
-                           $("#project_list_in").html("");
-                           for (var i = 0;i<information.length;i++) {
-                               //使用information[i]来获取一个个的json对象
-                             obj = '<li  style="margin-top:20px">'+information[i].first_project_name+'';
-                             $("#project_list_out").append(obj);
-                             var second_project_info = eval(information[i].second_project);
-                             //alert(second_project_info.length);
-                             for (var j = 0; j < second_project_info.length; j++) {
-                                var value = '{"first_project_id":"'+information[i].first_project_id+'","first_project_name":"'+information[i].first_project_name+'","second_project_id":"'+second_project_info[j].second_project_id+'","second_project_name":"'+second_project_info[j].second_project_name+'"}';
-                                
-                                obj_in = '<li style="margin-top:10px;margin-left:30px"><tr><td><input class="aui-checkbox" type="checkbox"  name="each" value='+value+'></td><td>'+second_project_info[j].second_project_name+'</tr></li>';
-                                if (j==second_project_info.length-1) {
-                                    obj_in +='<hr style="margin-top:20px " color=#d3d3d3 width=90% size=3>';
-                                }
-                                $("#project_list_out").append(obj_in);
-                             }
-                           }
-
-                        }else {
-                          api.toast({
-                              msg: recode.message,
-                              duration: 2000,
-                              location: 'bottom'
-                          });
-
-                        }
-
-                  } else {
-                    alert("服务器异常，请稍后重试");
-                  };
+        }, function(ret, err) {
+            var UILoading = api.require('UILoading');
+            UILoading.closeFlower({
+                id: id++ //关闭id 号对应加载提示框
             });
+
+            if (ret) {
+                //alert(ret);
+                var recode = $api.strToJson(ret);
+                var status = recode.status;
+                if (status == "true") {
+                    //alert(ret);
+                    var unfinished_data_info = recode.unfinished;
+                    information = eval(unfinished_data_info);
+                    var obj = "";
+                    var obj_in = "";
+                    $("#project_list_out").html("");
+                    $("#project_list_in").html("");
+                    for (var i = 0; i < information.length; i++) {
+                        //使用information[i]来获取一个个的json对象
+                        obj = '<li  style="margin-top:20px">' + information[i].first_project_name + '';
+                        $("#project_list_out").append(obj);
+                        var second_project_info = eval(information[i].second_project);
+                        //alert(second_project_info.length);
+                        for (var j = 0; j < second_project_info.length; j++) {
+                            var value = '{"first_project_id":"' + information[i].first_project_id + '","first_project_name":"' + information[i].first_project_name + '","second_project_id":"' + second_project_info[j].second_project_id +
+                                '","second_project_name":"' + second_project_info[j].second_project_name + '"}';
+
+                            obj_in = '<li style="margin-top:10px;margin-left:30px"><tr><td><input class="aui-checkbox" type="checkbox"  name="each" value=' + value + '></td><td>' + second_project_info[j].second_project_name + '</tr></li>';
+                            if (j == second_project_info.length - 1) {
+                                obj_in += '<hr style="margin-top:20px " color=#d3d3d3 width=90% size=3>';
+                            }
+                            $("#project_list_out").append(obj_in);
+                        }
+                    }
+
+                } else {
+                    api.toast({
+                        msg: recode.message,
+                        duration: 2000,
+                        location: 'bottom'
+                    });
+
+                }
+
+            } else {
+                alert("服务器异常，请稍后重试");
+            };
+        });
     }
 
-    function chooseAll(){
-        var sall=document.getElementById("sall");//获取标题栏中的操作对象
-  		  seach=document.getElementsByName("each");//获取内容栏的对象
-  		  for(var i=0;i<seach.length;i++){
-  			  if (sall.checked) {
-  			  	seach[i].checked=true;
-  			  }else{
-  				  seach[i].checked=false;
-  			  }
-  		}
-    }
-
-    function chooseWhich(){
-
-      array=[];
-
-      seach=document.getElementsByName("each");
-      for(var i=0;i<seach.length;i++){
-        if (seach[i].checked) {
-          seach[i].checked=true;
-          array.push(seach[i].value);
-          //alert(seach[i].value);
+    function chooseAll() {
+        var sall = document.getElementById("sall"); //获取标题栏中的操作对象
+        seach = document.getElementsByName("each"); //获取内容栏的对象
+        for (var i = 0; i < seach.length; i++) {
+            if (sall.checked) {
+                seach[i].checked = true;
+            } else {
+                seach[i].checked = false;
+            }
         }
-      }
-    //  alert(array);
+    }
+
+    function chooseWhich() {
+
+        array = [];
+
+        seach = document.getElementsByName("each");
+        for (var i = 0; i < seach.length; i++) {
+            if (seach[i].checked) {
+                seach[i].checked = true;
+                array.push(seach[i].value);
+                //alert(seach[i].value);
+            }
+        }
+        //  alert(array);
     }
 </script>

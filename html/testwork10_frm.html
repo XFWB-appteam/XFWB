@@ -97,6 +97,11 @@
 <script type="text/javascript">
     var task_id;
     apiready = function() {
+      $api.fixStatusBar( $api.dom('.aui-bar') );
+      api.setStatusBarStyle({
+          style: 'dark',
+          color: '#6ab494'
+      });
 
             var UILoading = api.require('UILoading');
             var id = 0;
@@ -121,7 +126,7 @@
             //                     information[i].maintenance_test_content_serial + '.' + information[i].maintenance_test_content_name + '</div></div><div class="content">' + information[i].maintenance_test_content_all + '</div></li>';
             //                      $("#add").append(obj);
             // }
-// alert($api.getStorage('userId')+",,"+api.pageParam.task_id+",,"+api.pageParam.maintenanceplan_id+",,"+ api.pageParam.second_project_id);
+            // alert($api.getStorage('userId') + ",," + api.pageParam.task_id + ",," + api.pageParam.maintenanceplan_id + ",," + api.pageParam.second_project_id);
             api.ajax({
 
                 url: $api.getStorage('connectUrl') + '/Maintenancer/EditOnExecuteTask',
@@ -134,27 +139,34 @@
                         maintenanceplan_id: api.pageParam.maintenanceplan_id,
                         second_project_id: api.pageParam.second_project_id
 
-
-
-
                     }
                 }
-            }, function(ret, err) {
+            },
+            function(ret, err) {
                 UILoading.closeFlower({
                     id: id++ //关闭id 号对应加载提示框
                 });
                 if (ret) {
-                    var project_json = eval(ret);
-                    var status = project_json.status;
 
+                    // var recode = $api.strToJson(ret);
+                    var status =eval(ret).status;
+// alert(status);
+                    var project_json =eval(ret);
+
+
+                    // var status = project_json.status;
+
+                    console.log("testwork10_frm获取到数据是" + status);
                     var information;
+                    // alert(status);
                     if (status == "true") {
-                      var task = eval(project_json.task);
-console.log("testwork10_frm获取到的数据是"+JSON.stringify(task));
+                        $("#storage").html(project_json.task_item_finished);
+                        var task = eval(project_json.task_item);
+                        console.log("testwork10_frm获取到的数据是" + JSON.stringify(task));
                         var obj = "";
                         $("#add").html("");
                         for (var i = 0; i < task.length; i++) {
-                            obj = '  <li class="aui-list-item" onclick="click_item(' + project_json.task_id + ',' + information[i].maintenance_test_content_id + ')"><div class="aui-list-item-inner"><div class="aui-list-item-title" >' +
+                            obj = '  <li class="aui-list-item" onclick="click_item()"><div class="aui-list-item-inner"><div class="aui-list-item-title" >' +
                                 task[i].serial + '.' + task[i].test_name +
                                 '</div></div><div class="content">' + task[i].test_content + '</div></li>';
 
@@ -205,13 +217,14 @@ console.log("testwork10_frm获取到的数据是"+JSON.stringify(task));
     };
     var list = document.getElementsByClassName('aui-list-item');
 
-    function click_item(task_id, maintenance_test_content_id) {
+    function click_item() {
         api.openWin({
             name: 'executeTestTask_win',
             url: './executeTestTask_win.html',
             pageParam: {
                 maintenance_test_content_id: api.pageParam.maintenanceplan_id,
-                task_id: api.pageParam.task_id
+                task_id: api.pageParam.task_id,
+                maintenanceplan_id:api.pageParam.maintenanceplan_id
             }
         });
 
