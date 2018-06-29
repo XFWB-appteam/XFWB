@@ -108,7 +108,7 @@ function jump(){
                              //alert(second_project_info.length);
                              for (var j = 0; j < second_project_info.length; j++) {
                                 var value = '{"first_project_id":"'+information[i].first_project_id+'","first_project_name":"'+information[i].first_project_name+'","second_project_id":"'+second_project_info[j].second_project_id+'","second_project_name":"'+second_project_info[j].second_project_name+'"}';
-
+                                
                                 obj_in = '<li style="margin-top:10px;margin-left:30px"><tr><td><input class="aui-checkbox" type="checkbox"  name="each" value='+value+'></td><td>'+second_project_info[j].second_project_name+'</tr></li>';
                                 if (j==second_project_info.length-1) {
                                     obj_in +='<hr style="margin-top:20px " color=#d3d3d3 width=90% size=3>';
