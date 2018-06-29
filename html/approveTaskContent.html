@@ -32,7 +32,7 @@
   <script type="text/javascript" src="script/util.js"></script>
   <script type="text/javascript">
       var id = 0;
-      var taskItemID = '2';
+      var taskItemID = '1052';
       apiready = function(){
         getDataFromServe();
       };
@@ -57,7 +57,7 @@
             dataType: 'text',
             data: {
                 values: {
-                     userId:$api.getStorage('userId'),
+                    // userId:$api.getStorage('userId'),
                     // task_item_id:taskItemID
                     userId:'39',
                     task_item_id:taskItemID
@@ -70,37 +70,30 @@
           });
             if (ret) {
                 //alert( JSON.stringify( ret ) );
-                alert(到ret了);
                 var recode = $api.strToJson(ret);
                 var status = recode.status;
                 if (status=="true") {
-                   //alert(ret);
                    var task_item_content = recode.task_item_content;
-                   alert($api.jsonToStr(task_item_content));
                    var data_info = task_item_content.detail_content;
-                   alert($api.jsonToStr(data_info));
                    var information = eval(data_info);
-                   alert('1111111');
                   //alert('detail_content---information:'+$api.jsonToStr(information));
                    var obj ="";
                    $("#project_list").html("");
                    for (var i = 0;i<information.length;i++) {
                        //使用information[i]来获取一个个的json对象
-                       alert(information[i]);
                         var index= i + 1;
                         var itemIndex = 'item_'+index;
-                        alert(itemIndex);
-                        var itemContent = information[i].itemIndex;
-                        alert(itemContent);
+                        var itemContent = information[i][itemIndex];
                         for (var j = 0; j < itemContent.length; j++) {
-                          obj = '<li class="border" style="margin-top:20px"><div class="left" ><b>'+itemContent[j].name+'</b></div><div class="right" >'+itemContent[j].value+'</div><div style="float:right;margin-right:10px;margin-top:5px;color:#00b2b4">'+information[i].task_type+'</div><div><div class="left"><b>提交时间</b></div><div class="right">'+information[i].submit_time+'</div>';
+                          obj = '<li style="margin: 10px auto;width: 93%;"><div class="left"  ><b>'+itemContent[j].name+'</b></div><div class="right" >'+itemContent[j].value+'</div></li>';
+                          $("#project_list").append(obj);
                         }
 
                         //var differentobj = "";
                         //obj = '<li class="border" style="margin-top:20px"><div class="left" ><b>项目名称</b></div><div class="right" >'+information[i].project_name+'</div><div style="float:right;margin-right:10px;margin-top:5px;color:#00b2b4">'+information[i].task_type+'</div><div><div class="left"><b>提交时间</b></div><div class="right">'+information[i].submit_time+'</div></div><div><div class="left"><b>审核状态</b></div><div class="right">'+information[i].task_status+'</div>';
 
 
-                      $("#project_list").append(obj);
+                    //  $("#project_list").append(obj);
                    }
 
                 }else {
