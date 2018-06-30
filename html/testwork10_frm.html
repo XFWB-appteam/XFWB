@@ -128,7 +128,6 @@
             // }
             // alert($api.getStorage('userId') + ",," + api.pageParam.task_id + ",," + api.pageParam.maintenanceplan_id + ",," + api.pageParam.second_project_id);
             api.ajax({
-
                     url: $api.getStorage('connectUrl') + '/Maintenancer/EditOnExecuteTask',
                     method: 'post',
                     data: {
@@ -166,7 +165,7 @@
                             var obj = "";
                             $("#add").html("");
                             for (var i = 0; i < task.length; i++) {
-                                obj = '  <li class="aui-list-item" onclick="click_item()"><div class="aui-list-item-inner"><div class="aui-list-item-title" >' +
+                                obj = '  <li class="aui-list-item" onclick="click_item('+task[i].maintenance_test_content_id+')"><div class="aui-list-item-inner"><div class="aui-list-item-title" >' +
                                     task[i].serial + '.' + task[i].test_name +
                                     '</div></div><div class="content">' + task[i].test_content + '</div></li>';
 
@@ -221,12 +220,12 @@
         api.closeWin({});
     }
 
-    function click_item() {
+    function click_item(v) {
         api.openWin({
             name: 'executeTestTask_win',
             url: './executeTestTask_win.html',
             pageParam: {
-                maintenance_test_content_id: api.pageParam.maintenanceplan_id,
+                maintenance_test_content_id: v,
                 task_id: api.pageParam.task_id,
                 maintenanceplan_id: api.pageParam.maintenanceplan_id
             }
