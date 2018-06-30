@@ -107,6 +107,13 @@
                     var obj_in = "";
                     $("#project_list_out").html("");
                     $("#project_list_in").html("");
+                    if (information.length==0) {
+                      api.toast({
+                          msg: '当前时间段没有任务',
+                          duration: 2000,
+                          location: 'bottom'
+                      });
+                    }else{
                     for (var i = 0; i < information.length; i++) {
                         //使用information[i]来获取一个个的json对象
                         obj = '<li  style="margin-top:20px">' + information[i].first_project_name + '';
@@ -124,11 +131,11 @@
                             $("#project_list_out").append(obj_in);
                         }
                     }
-
+                  }
                 } else {
                     api.toast({
                         msg: recode.message,
-                        duration: 2000,
+                        duration: 1000,
                         location: 'bottom'
                     });
 

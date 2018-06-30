@@ -334,8 +334,11 @@
                         code_chosed_delete: '['+code_chosed_delete+']',
 
 
-                    } //maintenanceplan_id需要从上个界面传过来
+                    }, //maintenanceplan_id需要从上个界面传过来
                     //  values:{userName: 'ME0100002', first_time: '2000-01-01',second_time:second_time} //键值对
+                    files: {
+                       file: 'fs://img/'+pictureid+'.png'
+                   }
                 }
             }, function(ret, err) {
                 var UILoading = api.require('UILoading');

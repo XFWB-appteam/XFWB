@@ -210,6 +210,7 @@
     function submitTask()
     {
       //把所有数据组装json，统一提交
+      getPicturecount();
       var submit_json = {};
       var data = eval(allinformation);
       var control_content = eval(data.control_content);
@@ -313,24 +314,32 @@
       api.ajax({
           url: 'http://192.168.0.7:8080/firefighting/Maintenancer/SubmitTaskItem',//接口地址
           method: 'post',
+          dataType:'json',
           data: {
               values: {
                   maintenance_test_content_id:maintenance_test_content_id,
                   maintenanceplan_id:maintenanceplan_id,
                   task_id:task_id,
                   task_item_json:task_item_json
-              }
+              },
+              files:files1
+      //         files: {
+      //      "photo": "fs://img/"+pictureid+".png",
+      //  }
           }
       },function(ret, err){
+        //alert(JSON.stringify(ret));
+        api.hideProgress();
           if (ret) {
             var status = ret.status;
-               if (status =="true") {
+            //alert(JSON.stringify(ret));
+               if (status == "true") {
                  alert("提交成功");
 
                  api.closeFrame({
                      name: 'executeTestTask_win'
                  });
-                 api.hideProgress();
+
                }
                else {
                  alert("提交失败");
@@ -344,7 +353,7 @@
             console.log(JSON.stringify(err));
             alert("未能与服务器连接");
             api.toast({
-                msg: ret.message,
+                msg: err.message,
                 duration: 2000,
                 location: 'bottom'
             });
@@ -377,6 +386,7 @@ function addTask(){
       voicecontent[num]="";
       photocontent[num]="";
       cannottest[num]="";
+      alert("您点击了添加下一项");
       var new_ul = '<ul id="control_ul'+num+'" class="aui-list aui-select-list"></ul>';
       $("#section").append(new_ul);
       num_int = parseInt(num)+1;
@@ -414,7 +424,7 @@ function addTask(){
                      $("#control_ul"+num).append(tempinputhtml);
                   }
                   else {
-                    alert("数据解析出现问题，请重试");
+                    alert("数据好像有问题，这个数据没法解析");
                   }
               }
         }
@@ -422,7 +432,7 @@ function addTask(){
       }//for
       var  tempalert_content = '<li class="aui-list-item"><div class="aui-list-item-inner" style="color:#F00;">'+alert_content+':</div></li>';
       $("#control_ul"+num).append(tempalert_content);
-      var  tempother = '<li class="aui-list-item"><div class="aui-list-item-inner" align="center"><img class="aligncenter" src="../image/arrows_circle_plus.png" height="40"  width="40" onclick="fnOpenChooseFrame('+num+')"></div></li><li class="aui-list-item"><div class="aui-list-item-inner"><img id="voice'+num+'" style="float:left;margin-left:35px;" src="../image/voice.ico" height="30"  width="30" ><img id="text'+num+'"  style="float:left;margin-left:35px;" src="../image/word.ico" height="30"  width="30" ><img id="video'+num+'" style="float:left;margin-left:35px;" src="../image/video.ico" height="30"  width="30"><img id="image'+num+'" style="float:left;margin-left:35px;" src="../image/Photo.ico" height="30"  width="30"></div></li><li class="aui-list-item"><div class="aui-list-item-inner">测试结果</div></li><li class="aui-list-item"><div class="aui-list-item-inner"><label><input id="normal'+num+'" class="aui-radio" type="radio" name="testresult'+num+'" value="正常" > 正常</label><label><input id="repair'+num+'" class="aui-radio" type="radio" name="testresult'+num+'" value ="需要报价维修"> 需要维修报价</label><label><input id="investigation'+num+'" class="aui-radio" type="radio" name="testresult'+num+'" value="需要进一步排查" > 需要进一步排查</label></div></li><li class="aui-list-item"><div class="aui-list-item-inner"><img class="aligncenter" src="../image/delete.png" height="40"  width="40" onclick="deletecontent('+num+')"></div></li><li class="aui-list-item"><div class="aui-list-item-inner"></div></li>';
+      var  tempother = '<li class="aui-list-item"><div class="aui-list-item-inner" align="center"><img class="aligncenter" src="../image/arrows_circle_plus.png" height="40"  width="40" onclick="fnOpenChooseFrame('+num+')"></div></li><li class="aui-list-item"><div class="aui-list-item-inner"><img id="voice'+num+'" style="float:left;margin-left:35px;" src="../image/voice.ico" height="30"  width="30" ><img id="text'+num+'"  style="float:left;margin-left:35px;" src="../image/word.ico" height="30"  width="30" ><img id="video'+num+'" style="float:left;margin-left:35px;" src="../image/video.ico" height="30"  width="30"><img id="image'+num+'" style="float:left;margin-left:35px;" src="../image/Photo.ico" height="30"  width="30" onclick="fnOpenpicture('+num+')"></div></li><li class="aui-list-item"><div class="aui-list-item-inner">测试结果</div></li><li class="aui-list-item"><div class="aui-list-item-inner"><label><input id="normal'+num+'" class="aui-radio" type="radio" name="testresult'+num+'" value="正常" > 正常</label><label><input id="repair'+num+'" class="aui-radio" type="radio" name="testresult'+num+'" value ="需要报价维修"> 需要维修报价</label><label><input id="investigation'+num+'" class="aui-radio" type="radio" name="testresult'+num+'" value="需要进一步排查" > 需要进一步排查</label></div></li><li class="aui-list-item"><div class="aui-list-item-inner"><img class="aligncenter" src="../image/delete.png" height="40"  width="40" onclick="deletecontent('+num+')"></div></li><li class="aui-list-item"><div class="aui-list-item-inner"></div></li>';
       $("#control_ul"+num).append(tempother);
       $("#testno"+num).click(function(){
 
@@ -476,7 +486,7 @@ function addTask(){
                       dialogName: 'list'
                   });
                   //本项不能测试，把除了不能测试以外的控件全部清零，然后
-                  alert("本项不能测试，请继续其他项的测试工作，并在完成所有测试项后点击提交按钮");
+                  alert("本项不能测试，请继续测试工作，在完成所有测试项后点击提交按钮");
 
                 //
                 $("#control_ul"+num).html("");
@@ -728,12 +738,20 @@ function creatPage(){
         var choice=ret.index;
           if (choice == 0) {
           //调用照片的接口
+          dialogBox.close ({
+              dialogName: 'share'
+          });
+
           addPhotoContent(temp_count);
           }
           else {
             if (choice == 1) {
               //调用文字的接口
+              dialogBox.close ({
+                  dialogName: 'share'
+              });
               addTextContent(temp_count);
+
 
             }
             else {
@@ -759,7 +777,7 @@ function creatPage(){
     mediaValue: 'pic',
     destinationType: 'url',
     allowEdit: true,
-    quality: 10,
+    quality: 9,
     saveToPhotoAlbum:false
 }, function(ret, err) {
     if (ret) {
@@ -848,9 +866,6 @@ function creatPage(){
               dialogBox.close({
                   dialogName: 'list'
               });
-              dialogBox.close({
-                  dialogName: 'share'
-              });
           }
       });
 
@@ -894,10 +909,12 @@ function creatPage(){
     };
     function fnOpenpicture(temp_count){
       // var pictureid = $api.getStorage('pictureid');
+      //alert(photocontent[temp_count]);
       var photoBrowser = api.require('photoBrowser');
+      var tempphoto=photocontent[temp_count].substring(1,photocontent[temp_count].length-1);
       photoBrowser.open({
           images: [
-              "fs://img/"+pictureid+".png"
+              "fs://img/"+tempphoto+".png"
           ],
           bgColor: '#000'
       }, function(ret, err) {
@@ -943,10 +960,12 @@ function creatPage(){
              ctx.textAlign = "left";//对其方式；还有其他对其方式；
              ctx.fillStyle = "#ffffff";//颜色
              ctx.fillText(picturetime,60,100);//第一个参数为内容；后两个为x,y坐标；以图片右上角为起点0，0；偏移多少而已；下面相同
-            var base64code = cav.toDataURL(pictureurl).replace("data:image/png;base64,", "");;
+            var base64code = cav.toDataURL(pictureurl).replace("data:image/png;base64,", "");
+            var base64 = cav.toDataURL(pictureurl);
+            //console.log(cav.toDataURL(pictureurl));
             var trans = api.require('trans');
             //console.log(base64code);
-            photocontent[temp_count] = base64code;
+            photocontent[temp_count] = '"'+pictureid+'"';
             trans.saveImage({
                 base64Str: base64code,
                 album: true,
@@ -960,14 +979,33 @@ function creatPage(){
                   alert("图片存储成功，可以点击查看了！");
                   api.hideProgress();
                 } else {
-                    alert(JSON.stringify(err));
+                    alert(err.message);
                 }
             });
            };
           }else{
-              alert( JSON.stringify( err ) );
+              alert(err.message);
           }
       });
+    };
+    var files1;
+    function getPicturecount(){
+       var tm = new Array();
+      for(var i = 0;i<photocontent.length;i++){
+         //tmp = "files"+":"+files;
+         var tempphoto=photocontent[i].substring(1,photocontent[i].length-1);
+          tm[i]='fs://img/'+tempphoto+'.png';
+      //  tm[i] = "fs://img/"+tempphoto+".png";
+        files1 = {};
+        //alert(tm[i]);
+        // var photo = "photo"+i;
+        // var files={};
+        // files[photo]="fs://img/"+photocontent[i]+".png";
+        //var tmp =  { photo :"fs://img/"+photocontent[i]+".png"};
+
+      };
+        files1["file"] = tm;
+        //alert(JSON.stringify(files1));
     };
 </script>
 </html>
