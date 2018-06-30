@@ -43,6 +43,8 @@
     <script type="text/javascript" src="../script/api.js"></script>
     <script type="text/javascript" src="../script/jquery-1.4.2.min.js"></script>
     <script type="text/javascript">
+        var task_id;
+
         function closewin() {
             api.closeWin({});
 
@@ -51,7 +53,7 @@
         function submit() {
             var UILoading = api.require('UILoading');
             // var id = 0;
-
+            // alert(task_id);
             UILoading.flower({
                 center: {
                     x: 160,
@@ -59,8 +61,7 @@
                 },
                 size: 30,
                 fixed: true
-            }, function(ret) {
-            });
+            }, function(ret) {});
 
             api.ajax({
                 url: $api.getStorage('connectUrl') + '/Maintenancer/SubmitPlanCreateTask',
@@ -68,8 +69,13 @@
                 data: {
                     values: {
                         userId: $api.getStorage('userId'),
-                        task_id: api.pageParam.task_id
+                        task_id: task_id
 
+                    },
+                    //maintenanceplan_id需要从上个界面传过来
+                    //  values:{userName: 'ME0100002', first_time: '2000-01-01',second_time:second_time} //键值对
+                    files: {
+                        file: 'fs://img/' + pictureid + '.png'
                     }
                 }
             }, function(ret, err) {
@@ -153,14 +159,28 @@
     var id = 0;
     var final_information = "";
     var information = "";
-    var maintenanceplan_id="";
+    var maintenanceplan_id = "";
     // var value = '{first_project_id:'+information[i].first_project_id+',first_project_name:'+information[i].first_project_name+',second_project_id:'+second_project_info[j].second_project_id+',second_project_name:'+second_project_info[j].second_project_name+'}';
     apiready = function() {
-      $api.fixStatusBar( $api.dom('.aui-bar') );
-      api.setStatusBarStyle({
-          style: 'dark',
-          color: '#6ab494'
-      });
+
+        task_id = api.pageParam.task_id;
+
+
+        api.addEventListener({
+            name: 'msg_name'
+        }, function(ret) {
+            if (ret) {
+                $("#project_list").html("");
+                loadData();
+            }
+        });
+
+
+        $api.fixStatusBar($api.dom('.aui-bar'));
+        api.setStatusBarStyle({
+            style: 'dark',
+            color: '#6ab494'
+        });
         //==1代表新建任务页面传过
         information = "";
         information = eval('[' + api.pageParam.array + ']');
@@ -208,10 +228,10 @@
                     var task_list = eval(data.task);
                     for (var i = 0; i < task_list.length; i++) {
                         console.log("for循环里");
-                        if (task_list[i].task_id == api.pageParam.task_id) {
+                        if (task_list[i].task_id == task_id) {
                             console.log("if里1--reCode=" + ret);
                             console.log(task_list[i].code_chosed);
-                            maintenanceplan_id=task_list[i].maintenanceplan_id;
+                            maintenanceplan_id = task_list[i].maintenanceplan_id;
                             final_information = eval(task_list[i].code_chosed);
                             console.log("if里2");
                             var information = eval(task_list[i].code_chosed);
@@ -295,15 +315,17 @@
             code_chosed_delete = "";
 
             for (var i = 0; i < final_information.length; i++) {
-              //从new——Test页面跳转过来的可以直接检查还剩下啥  字符串拼接
-              //从管理未提交跳转过来要把返回的数据遍历一下
-                if (i!=v) {
+                //从new——Test页面跳转过来的可以直接检查还剩下啥  字符串拼接
+                //从管理未提交跳转过来要把返回的数据遍历一下
+                if (i != v) {
                     if (i < final_information.length - 1) {
-                        code_chosed_delete += '{"first_project_id":"' + final_information[i].first_project_id + '","first_project_name":"' + final_information[i].first_project_name + '","second_project_id":"' + final_information[i].second_project_id + '","second_project_name":"' +
+                        code_chosed_delete += '{"first_project_id":"' + final_information[i].first_project_id + '","first_project_name":"' + final_information[i].first_project_name + '","second_project_id":"' + final_information[i].second_project_id +
+                            '","second_project_name":"' +
                             final_information[i].second_project_name + '"},';
 
                     } else {
-                        code_chosed_delete += '{"first_project_id":"' + final_information[i].first_project_id + '","first_project_name":"' + final_information[i].first_project_name + '","second_project_id":"' + final_information[i].second_project_id + '","second_project_name":"' +
+                        code_chosed_delete += '{"first_project_id":"' + final_information[i].first_project_id + '","first_project_name":"' + final_information[i].first_project_name + '","second_project_id":"' + final_information[i].second_project_id +
+                            '","second_project_name":"' +
                             final_information[i].second_project_name + '"}';
                     }
                 }
@@ -319,8 +341,7 @@
                 },
                 size: 30,
                 fixed: true
-            }, function(ret) {
-            });
+            }, function(ret) {});
             api.ajax({
                 url: $api.getStorage('connectUrl') + '/Maintenancer/DeleteTaskItem',
                 //url:'http://192.168.0.7:8080/firefighting/Maintenancer/CheckPlanDetail',
@@ -330,15 +351,11 @@
                     values: {
 
                         userId: $api.getStorage('userId'),
-                        task_id: api.pageParam.task_id,
-                        code_chosed_delete: '['+code_chosed_delete+']',
+                        task_id: task_id,
+                        code_chosed_delete: '[' + code_chosed_delete + ']',
 
 
-                    }, //maintenanceplan_id需要从上个界面传过来
-                    //  values:{userName: 'ME0100002', first_time: '2000-01-01',second_time:second_time} //键值对
-                    files: {
-                       file: 'fs://img/'+pictureid+'.png'
-                   }
+                    }
                 }
             }, function(ret, err) {
                 var UILoading = api.require('UILoading');
@@ -381,7 +398,7 @@
 
     function doclick(v) {
         //下方是用来解析json的
-second_project_id=final_information[v].second_project_id;
+        second_project_id = final_information[v].second_project_id;
 
 
         api.openWin({
@@ -393,10 +410,10 @@ second_project_id=final_information[v].second_project_id;
                 project_name: api.pageParam.project_name,
                 project_id: api.pageParam.project_id,
                 task_name: api.pageParam.task_name,
-                task_id: api.pageParam.task_id,
+                task_id: task_id,
                 second_project_id: second_project_id,
                 task_character: api.pageParam.task_character,
-                second_project_name:  final_information[v].second_project_name,
+                second_project_name: final_information[v].second_project_name,
                 maintenanceplan_id: maintenanceplan_id,
                 info: final_information
             }
@@ -446,8 +463,7 @@ second_project_id=final_information[v].second_project_id;
                     modal: false
                 });
                 picture(timestamp);
-            } else {
-            }
+            } else {}
         });
     };
 
@@ -520,8 +536,7 @@ second_project_id=final_information[v].second_project_id;
                 if (ret.eventType == "click") {
                     photoBrowser.close();
                 }
-            } else {
-            }
+            } else {}
         });
 
     };

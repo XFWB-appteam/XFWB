@@ -51,6 +51,12 @@
         })
     };
     function closeWin(){
+
+      api.sendEvent({
+           name: 'msg_name',
+           extra:{ "status":"true" }
+      });
+
         api.closeWin({
         });
     }

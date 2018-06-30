@@ -203,6 +203,11 @@
 
 
     function closeWin(){
+      api.sendEvent({
+           name: 'msg_name',
+           extra:{ "status":"true" }
+      });
+
         api.closeWin({
         });
     }
@@ -335,8 +340,11 @@
             //alert(JSON.stringify(ret));
                if (status == "true") {
                  alert("提交成功");
-
-                 api.closeFrame({
+                 api.sendEvent({
+                      name: 'msg_name',
+                      extra:{ "status":"true" }
+                 });
+                 api.closeWin({
                      name: 'executeTestTask_win'
                  });
 
@@ -359,9 +367,9 @@
             });
           }
       });
-      api.closeWin({
-          name: 'executeTestTask_win'
-      });
+      // api.closeWin({
+      //     name: 'executeTestTask_win'
+      // });
     }
 
 function findTextByName (name){

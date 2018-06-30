@@ -143,6 +143,19 @@ console.log(api.pageParam.data);
         // alert($api.getStorage('userId') + "," + document.getElementById('select').value + "." + temp[0].id + "," + "," + temp[0].name + "," + document.getElementById('task_character').value + "," + temp[1].maintenanceplan_id + "," +
             // second_project_id + ",");
 
+            if(document.getElementById('task_name').value==""){
+              api.toast({
+                  msg: "请输入任务名称",
+                  duration: 2000,
+                  location: 'bottom'
+              });
+              var UILoading = api.require('UILoading');
+              UILoading.closeFlower({
+                  id: id++ //关闭id 号对应加载提示框
+              });
+              return;
+            }
+
         api.ajax({
                 url: $api.getStorage('connectUrl') + '/Maintenancer/PlanCreateTask',
                 method: 'post',
@@ -192,7 +205,6 @@ console.log(api.pageParam.data);
                             location: 'bottom'
                         });
                     }
-
 
                 } else {
                     alert("服务器异常，请稍后重试");
