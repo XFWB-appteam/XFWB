@@ -221,14 +221,47 @@
       var control_content = eval(data.control_content);
       var json_array = [];
       for (var i = 0; i <= count; i++) {
+        //项目的序号为i+1，这里转成int
         var i_int = parseInt(i)+1;
+        //没拍照，警告，不能提交
+        if (photocontent[i]=="") {
+          alert("你的第"+i_int+"项照片未提交，请拍照");
+          return;
+        }
+        //测试结果那一栏没填写，警告，不能提交
+        var temp_result = document.getElementsByName('testresult'+i);
+        var bFlags=false;
+        for (var tt = 0; tt < temp_result.length; tt++) {
+           if (temp_result[i].checked) {
+             bFlags = true;
+             break;
+           }
+        }
+        if (bFlags == false) {
+           alert("你的第"+i_int+"项的测试结果未选择，请选择");
+           return;
+        }
         var item_name = "item_"+i_int;
-
         var item_array=[];
         var temp_json = {};
          for (var j=0;j<control_content.length;j++) {
            var tempcontrol = control_content[j];
            if (tempcontrol.control_type=="radio") {
+             //得出radio的name，然后用name判断这个的radio是否选择过，没有的话break返回;
+              var temp_radio_name = tempcontrol.control_name;
+              var temp_result = document.getElementsByName(temp_radio_name+i);
+              var bFlags=false;
+              for (var tt = 0; tt < temp_result.length; tt++) {
+                 if (temp_result[i].checked) {
+                   bFlags = true;
+                   break;
+                 }
+              }
+              if (bFlags == false) {
+                 alert("你的第"+i_int+"项的内容未全部填写，请补充完整");
+                 return;
+              }
+
              //首先判断这个是不是“能测试”这个radio  是的话直接添加text，不是的话，需要用函数findTextByName来找到它的test
              if (tempcontrol.control_name=='test') {
               //这个radio是  能否测试，直接可以得到前面的文字和结果
@@ -266,6 +299,13 @@
           }
 
            else {
+             //这是后加的，判断点击提交时input里面是否有内容的代码
+             var temp_text_id = tempcontrol.control_id+i;
+             if (document.getElementById(temp_text_id).value=="")
+             {
+               alert("你的第"+i_int+"项的内容未全部填写，请补充完整");
+               return;
+             }
              //如果是input的话，找到对应的txt，然后获取input的val()，组装
                  if (tempcontrol.control_type=='input') {
                    var temp_id = tempcontrol.control_id+i;
@@ -697,7 +737,7 @@ function creatPage(){
         voicecontent.splice(index,1);
         photocontent.splice(index,1);
         count--;
-        var dialogBox = api.require('dialogBox');
+    //    var dialogBox = api.require('dialogBox');
         dialogBox.close({
             dialogName: 'alert'
         });
