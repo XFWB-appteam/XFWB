@@ -300,14 +300,16 @@
 
            else {
              //这是后加的，判断点击提交时input里面是否有内容的代码
-             var temp_text_id = tempcontrol.control_id+i;
-             if (document.getElementById(temp_text_id).value=="")
-             {
-               alert("你的第"+i_int+"项的内容未全部填写，请补充完整");
-               return;
-             }
+
              //如果是input的话，找到对应的txt，然后获取input的val()，组装
                  if (tempcontrol.control_type=='input') {
+                   var temp_text_id = tempcontrol.control_id+i;
+
+                   if (document.getElementById(temp_text_id).value=="")
+                   {
+                     alert("你的第"+i_int+"项的内容未全部填写，请补充完整");
+                     return;
+                   }
                    var temp_id = tempcontrol.control_id+i;
                     var input_value = document.getElementById(temp_id).value;
                     var input_text = findTextByName(tempcontrol.control_name);
@@ -357,7 +359,7 @@
       modal: false
       });
       api.ajax({
-          url: 'http://192.168.0.7:8080/firefighting/Maintenancer/SubmitTaskItem',//接口地址
+          url: $api.getStorage('connectUrl') + '/Maintenancer/SubmitTaskItem',//接口地址
           method: 'post',
           dataType:'json',
           data: {
@@ -924,7 +926,7 @@ function creatPage(){
     {//这个函数是用来从后台获取task的模板，获取调用creatPage()函数构建第一个页面
 
       api.ajax({
-          url: 'http://192.168.0.7:8080/firefighting/Maintenancer/GetTaskTemplate',//接口地址
+          url: $api.getStorage('connectUrl') + '/Maintenancer/GetTaskTemplate',//接口地址
           method: 'post',
           data: {
               values: {
