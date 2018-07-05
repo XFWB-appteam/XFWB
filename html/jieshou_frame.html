@@ -39,7 +39,7 @@
           </div>
         </li> -->
     </ul>
-
+<canvas id="mycanvas" style="display:none"></canvas>
 </body>
 <script type="text/javascript" src="../script/api.js"></script>
 <script type="text/javascript" src="../script/jquery-1.4.2.min.js"></script>
@@ -47,26 +47,15 @@
     //json的获取需要设置为全局变量
     var project_json = "";
     var userName = $api.getStorage('account');
-    var task_id;
     var maintenanceplan_id;
     var project_id;
     apiready = function() {
-        var array = api.pageParam.name;
-        //alert(array);
-        //getId();
-        //alert('hello');
-        var index = array.indexOf('   ');
-        var string1 = array.substring(0, index); //项目id
-        // alert(string1);
-        var string2 = array.substring(index + 3); //任务id
-        // alert(string2);
-        //  var obj_project = JSON.parse(string1);
-        //  var obj_task = JSON.parse(string2);
-        maintenanceplan_id = string2;
-        //  api.pageParam.maintenanceplan_id;
-        project_id = string1;
-        //api.pageParam.maintenanceplan_id;
-
+      var array = api.pageParam.name;
+      var index = array.indexOf('   ');
+      var string1 = array.substring(0, index); //项目id
+      var string2 = array.substring(index + 3); //任务id
+      maintenanceplan_id = string2;
+      project_id = string1;
         getAllInfomation();
     };
 
@@ -122,24 +111,16 @@
 
     function executeTask(index) {
         //执行任务的代码还没写，感觉跟接收任务差不多。
-        var information = project_json;
+
         //alert(information[index].task_id);
-        api.openWin({
-            name: 'Test_Task',
-            url: 'Test_Task.html',
-            pageParam: {
-                task_name: information[index].task_name,
-                task_id: information[index].task_id,
-                task_type: information[index].type,
-                project_id: project_id,
-                maintenanceplan_id:maintenanceplan_id
-            }
-        });
+        opencamera(index);
+
 
     }
 
     function acceptTask(index) {
         //下方是用来解析json的
+
         var information = project_json;
         // api.openWin({
         //     name: 'acceptTask_win',
@@ -206,6 +187,166 @@
         });
 
     }
+    var pictureurl;
+    var pictureid;
+    var picturetime;
+
+    function opencamera(index) {
+        api.getPicture({
+            sourceType: 'camera',
+            encodingType: 'jpg',
+            mediaValue: 'pic',
+            destinationType: 'url',
+            allowEdit: true,
+            quality: 10,
+            saveToPhotoAlbum: false
+        }, function(ret, err) {
+            if (ret) {
+              if(ret.data == ""){
+                alert("您取消了拍照");
+              }else{
+                  pictureurl = ret.data;
+                  var now = new Date();
+                  var year = now.getFullYear();
+                  var month = now.getMonth() + 1;
+                  var day = now.getDate();
+                  var hours = now.getHours();
+                  var minutes = now.getMinutes();
+                  var seconds = now.getSeconds();
+                  var tmp1 = now.toLocaleString();
+                  var tmp = year + "/" + month + "/" + day + "/" + hours + "/" + minutes + "/" + seconds;
+                  var timestamp = Date.parse(new Date());
+                  // $api.setStorage('picturetime',tmp1);
+                  picturetime = tmp1;
+                  // var jsfun = 'picture();';
+                  // api.execScript({
+                  //     frameName: 'testpicture',
+                  //     script: jsfun
+                  // });
+                  pictureid = timestamp;
+                  // $api.setStorage('pictureid',timestamp);
+                  api.showProgress({
+                      title: '图片存储中...',
+                      text: '先喝杯茶...',
+                      modal: false
+                  });
+                  picture(timestamp,index);
+              }
+            } else {
+              alert(JSON.stringify(err));
+            }
+        });
+    };
+
+    function picture(timestamp,index) {
+        // var pictureurl = $api.getStorage('pictureurl');
+        var imageFilter = api.require('imageFilter');
+        imageFilter.getAttr({
+            path: pictureurl
+        }, function(ret, err) {
+            if (ret.status) {
+                // var UILoading = api.require('UILoading');
+                // UILoading.flower({
+                //     center: {
+                //         x: 160,
+                //         y: 240
+                //     },
+                //     size: 30,
+                //     fixed: true
+                // }, function(ret) {
+                // });
+                var cav = document.getElementById('mycanvas');
+                cav.width = ret.width; //设置画布宽度
+                cav.height = ret.height;
+                ctx = cav.getContext('2d');
+                var img = new Image();
+                img.src = pictureurl;
+                // var tmp = $api.getStorage('picturetime');
+                img.onload = function() {
+                    ctx.drawImage(img, 0, 0); //将新new出的img对象放入；                          // 绘制水印
+                    ctx.font = "oblique small-caps bold 80px Arial"; //设置水印字体大小；字体格式；
+                    ctx.textAlign = "left"; //对其方式；还有其他对其方式；
+                    ctx.fillStyle = "#ffffff"; //颜色
+                    ctx.fillText(picturetime, 60, 100); //第一个参数为内容；后两个为x,y坐标；以图片右上角为起点0，0；偏移多少而已；下面相同
+                    var base64code = cav.toDataURL(pictureurl).replace("data:image/png;base64,", "");;
+                    var trans = api.require('trans');
+                    //console.log(base64code);
+                    var imageFilter = api.require('imageFilter');
+                    trans.saveImage({
+                        base64Str: base64code,
+                        album: true,
+                        imgPath: "fs://img/",
+                        imgName: timestamp + ".png"
+                    }, function(ret, err) {
+                        if (ret.status) {
+                            // UILoading.closeFlower({
+                            //      id: id++                                  //关闭id 号对应加载提示框
+                            // });
+                            alert("图片存储成功!");
+                            api.hideProgress();
+                            var information = project_json;
+                            api.ajax({
+                                url: $api.getStorage('connectUrl') + '/Maintenancer/TaskMaintenancerPhoto',
+                                method: 'post',
+                                data: {
+                                    values: {
+                                        userId: $api.getStorage('userId'),
+                                        task_id: information[index].task_id
+                                    },
+                                    files: {
+                                        file: 'fs://img/' + pictureid + '.png'
+                                    }
+                                }
+                            },function(ret, err){
+                                if (ret.status) {
+                                  api.openWin({
+                                    alert("照片上传成功");
+                                      name: 'Test_Task',
+                                      url: 'Test_Task.html',
+                                      pageParam: {
+                                          task_name: information[index].task_name,
+                                          task_id: information[index].task_id,
+                                          task_type: information[index].type,
+                                          project_id: project_id,
+                                          maintenanceplan_id:maintenanceplan_id
+                                      }
+                                  });
+                                }
+                                else if(ret.status == false){
+                                  alert(ret.message);
+                                } else {
+                                    alert( JSON.stringify( err ) );
+                                }
+                            });
+                        } else if(ret.status == false){
+                          alert("图片存储失败!");
+                        }else {
+                            alert(JSON.stringify(err));
+                        }
+                    });
+                };
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    };
+
+    function openpicture() {
+        var photoBrowser = api.require('photoBrowser');
+        photoBrowser.open({
+            images: [
+                "fs://img/" + pictureid + ".png"
+            ],
+            bgColor: '#000'
+        }, function(ret, err) {
+            if (ret) {
+                if (ret.eventType == "click") {
+                    photoBrowser.close();
+                }
+            } else {}
+        });
+
+    };
 </script>
 
 </html>

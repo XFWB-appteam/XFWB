@@ -239,8 +239,8 @@
         sign_status=1;
         alert("签到成功");
       }
+      //alert(parseInt(distance));
       //alert(distance);
-      //alert(task2.enclosure_length);
       api.ajax({
           url: $api.getStorage('connectUrl') + '/Maintenancer/SignIn',
           method: 'post',
@@ -251,13 +251,17 @@
                   latitude:$api.getStorage('lat'),
                   task_id:task2.task_id,
                   sign_status:sign_status,
-                  distance:distance
+                  distance:parseInt(distance)
               },
 
           }
       },function(ret, err){
           if (ret) {
               alert( ret.message );
+              api.closeWin({
+
+              });
+
           } else {
               alert( err.message );
           }

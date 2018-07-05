@@ -834,34 +834,39 @@ function creatPage(){
       //  $api.setStorage('pictureurl',ret.data);
        //alert(document.getElementById('img1').src);
       //alert(ret.data);
-      pictureurl = ret.data;
-      var now=new Date();
-      var year=now.getFullYear();
-      var month=now.getMonth()+1;
-      var day=now.getDate();
-      var hours=now.getHours();
-      var minutes=now.getMinutes();
-      var seconds=now.getSeconds();
-      var tmp1 = now.toLocaleString( );
-      var tmp = year+"/"+month+"/"+day+"/"+hours+"/"+minutes+"/"+seconds;
-      var timestamp = Date.parse(new Date());
-      // $api.setStorage('picturetime',tmp1);
-      picturetime= tmp1;
-      // var jsfun = 'picture();';
-      // api.execScript({
-      //     frameName: 'testpicture',
-      //     script: jsfun
-      // });
-      pictureid = timestamp;
-      // $api.setStorage('pictureid',timestamp);
-      api.showProgress({
-      title: '图片存储中...',
-      text: '先喝杯茶...',
-      modal: false
-  });
-      picture(timestamp,temp_count);
+      if(ret.data == ""){
+        alert("您取消了拍照");
+      }else{
+        pictureurl = ret.data;
+        var now=new Date();
+        var year=now.getFullYear();
+        var month=now.getMonth()+1;
+        var day=now.getDate();
+        var hours=now.getHours();
+        var minutes=now.getMinutes();
+        var seconds=now.getSeconds();
+        var tmp1 = now.toLocaleString( );
+        var tmp = year+"/"+month+"/"+day+"/"+hours+"/"+minutes+"/"+seconds;
+        var timestamp = Date.parse(new Date());
+        // $api.setStorage('picturetime',tmp1);
+        picturetime= tmp1;
+        // var jsfun = 'picture();';
+        // api.execScript({
+        //     frameName: 'testpicture',
+        //     script: jsfun
+        // });
+        pictureid = timestamp;
+        // $api.setStorage('pictureid',timestamp);
+        api.showProgress({
+        title: '图片存储中...',
+        text: '先喝杯茶...',
+        modal: false
+    });
+        picture(timestamp,temp_count);
+      }
+
     } else {
-        //alert(JSON.stringify(err));
+        alert(JSON.stringify(err));
     }
 });
 };
@@ -978,7 +983,7 @@ function creatPage(){
           }
       });
     };
-    function picture(count,temp_count){
+    function picture(timestamp,temp_count){
       // var pictureurl = $api.getStorage('pictureurl');
       var imageFilter = api.require('imageFilter');
       imageFilter.getAttr({
@@ -1020,7 +1025,7 @@ function creatPage(){
                 base64Str: base64code,
                 album: true,
                 imgPath:"fs://img/",
-                imgName: count+".png"
+                imgName: timestamp+".png"
             }, function(ret, err) {
                 if (ret.status) {
                   // UILoading.closeFlower({

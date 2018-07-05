@@ -150,7 +150,6 @@
 
     </div>
     <p id="submit" class=" define-color" style="margin:50px 40px 40px 40px;border-radius:0.2rem;text-align:center;height:1.5rem;color:#000;padding: 0.3rem 0rem;color:white;font-size:16px;" onclick="submit()">提交</p>
-    <canvas id="mycanvas" style="display:none"></canvas>
 </body>
 <script type="text/javascript" src="../script/api.js"></script>
 <script type="text/javascript" src="../script/jquery-1.4.2.min.js"></script>
@@ -412,7 +411,10 @@
             saveToPhotoAlbum: false
         }, function(ret, err) {
             if (ret) {
-
+              //alert(JSON.stringify(ret));
+              if(ret.data == ""){
+                alert("您取消了拍照");
+              }else{
                 pictureurl = ret.data;
                 var now = new Date();
                 var year = now.getFullYear();
@@ -439,11 +441,15 @@
                     modal: false
                 });
                 picture(timestamp);
-            } else {}
+              }
+
+            } else {
+              alert(JSON.stringify(err));
+            }
         });
     };
 
-    function picture(count) {
+    function picture(timestamp) {
         // var pictureurl = $api.getStorage('pictureurl');
         var imageFilter = api.require('imageFilter');
         imageFilter.getAttr({
@@ -481,7 +487,7 @@
                         base64Str: base64code,
                         album: true,
                         imgPath: "fs://img/",
-                        imgName: count + ".png"
+                        imgName: timestamp + ".png"
                     }, function(ret, err) {
                         if (ret.status) {
                             // UILoading.closeFlower({
