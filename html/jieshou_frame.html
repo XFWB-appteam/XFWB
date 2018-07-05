@@ -51,11 +51,16 @@
     var project_id;
     apiready = function() {
       var array = api.pageParam.name;
-      var index = array.indexOf('   ');
-      var string1 = array.substring(0, index); //项目id
-      var string2 = array.substring(index + 3); //任务id
-      maintenanceplan_id = string2;
-      project_id = string1;
+      if(array == undefined){
+        array == "12   3";
+      }else{
+        var index = array.indexOf('   ');
+        var string1 = array.substring(0, index); //项目id
+        var string2 = array.substring(index + 3); //任务id
+        maintenanceplan_id = string2;
+        project_id = string1;
+      }
+
         getAllInfomation();
     };
 
@@ -67,9 +72,9 @@
         // var data = eval(project_json);
         // var data_info = data.message;
         //alert(array);
+          $("#project_list").html("");
         var information = project_json;
         var obj = "";
-        $("#project_list").html("");
         for (var i = 0; i < information.length; i++) {
             //使用information[i]来获取一个个的json对象
             var differentobj = "";
@@ -299,8 +304,8 @@
                                 }
                             },function(ret, err){
                                 if (ret.status) {
+                                    alert("您的照片上传成功");
                                   api.openWin({
-                                    alert("照片上传成功");
                                       name: 'Test_Task',
                                       url: 'Test_Task.html',
                                       pageParam: {

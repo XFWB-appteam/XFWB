@@ -155,6 +155,7 @@
                         var mess =project_json.message;
                         $("#add").html("");
                         var obj = "";
+                          $("#storage").html("");
                         for (var i = 0; i < mess.length; i++) {
                             if (mess[i].maintenance_test_content_state_finished == "已完成") {
                                 $("#storage").append(mess[i].maintenance_test_content_serial + ",");
