@@ -162,10 +162,10 @@
     var maintenanceplan_id = "";
     // var value = '{first_project_id:'+information[i].first_project_id+',first_project_name:'+information[i].first_project_name+',second_project_id:'+second_project_info[j].second_project_id+',second_project_name:'+second_project_info[j].second_project_name+'}';
     apiready = function() {
-
+        maintenanceplan_id = api.pageParam.maintenanceplan_id;
         task_id = api.pageParam.task_id;
 
-
+        //alert(task_id);
         api.addEventListener({
             name: 'msg_name'
         }, function(ret) {
@@ -183,9 +183,11 @@
         });
         //==1代表新建任务页面传过
         information = "";
-        information = eval('[' + api.pageParam.array + ']');
+        // information = eval('[' + api.pageParam.array + ']');
         // final_information = information;
+
         loadData();
+
 
     }
 
@@ -201,12 +203,13 @@
         }, function(ret) {});
         api.ajax({
             // url: 'http://192.168.0.7:8080/firefighting/App/AppLogin',
-            url: $api.getStorage('connectUrl') + '/Maintenancer/CheckOnExecuteTask',
+            url: $api.getStorage('connectUrl') + 'Maintenancer/CheckTaskDetail',
             method: 'post',
             dataType: 'text', //该参数若不传，则默认为json<div class="aui-tips aui-margin-b-15">2
             data: {
                 values: {
-                    userName: $api.getStorage('account')
+                    userName: $api.getStorage('account'),
+                    task_id: api.pageParam.task_id
                 } //键值对
             }
         }, function(ret, err) {
@@ -214,7 +217,7 @@
                 id: id++ //关闭id 号对应加载提示框
             });
             if (ret) {
-
+                // alert(ret);
                 var project_json = $api.strToJson(ret);
                 var status = project_json.status;
                 // var json_str={"status": "true","task":[{"id":123,"project_name":"中建国际中心","create_time":"2017-06-10 15:21","maintenanceplan_name":"2017年1月份计划","task_type":"测试"},{"id":123,"project_name":"名敦道项目","create_time":"2017-06-10 15:21","maintenanceplan_name":"2017年8月份计划","task_type":"排查"},{"id":123,"project_name":"0916项目测试","create_time":"2017-06-10 15:21","maintenanceplan_name":"2017年11月份计划","task_type":"维修"}]};
@@ -223,33 +226,32 @@
                 var data_status = data.status;
                 var obj = "";
                 if (data_status == "true") {
-
-                    var task = eval(data.task);
-                    var task_list = eval(data.task);
+                    // alert("true");
+                    var task_list = eval(data.task_details);
+                    // alert("task_list");
                     for (var i = 0; i < task_list.length; i++) {
-                        console.log("for循环里");
-                        if (task_list[i].task_id == task_id) {
-                            console.log("if里1--reCode=" + ret);
-                            console.log(task_list[i].code_chosed);
-                            maintenanceplan_id = task_list[i].maintenanceplan_id;
-                            final_information = eval(task_list[i].code_chosed);
-                            console.log("if里2");
-                            var information = eval(task_list[i].code_chosed);
-                            console.log("if里3");
-                            console.log("坎坎坷坷扩扩扩扩扩扩扩" + information);
-                            for (var ii = 0; ii < information.length; ii++) {
-                                obj = '<div class="border"> <div style = "margin-top:10px;" ><div class = "left" > <b> 系统名称 </b></div> <div class = "right" style = "red;display:inline"> ' + information[ii].first_project_name +
-                                    '</div></div><div><div class = "left"> <b> 系统分类 </b></div><div class = "right"style = "display:inline"> ' + api.pageParam.task_type +
-                                    ' </div></div><div><div class = "left" > <b> 设施名称 </b></div><div class = "right" style = "display:inline;"> ' + information[ii].second_project_name +
-                                    ' </div></div><div class = "fill"                    style = "margin-bottom:5px;padding-right:8%;margin-top:-5px;text-align:right;" > <img src = "../image/edit.png"style = "width:28px;margin-bottom:-8px;display:inline" onclick="doclick(' +
-                                    +ii + ')" /> <div style = "display:inline" onclick="doclick(' + ii +
-                                    ')"> 编辑 </div>  <img src = "../image/delete.png"  style = "width:20px;display:inline;margin-bottom:-6px;margin-left:20px" onclick="ddelete(' + ii +
-                                    ')"/> <div style = "display:inline" onclick="ddelete(' + ii + ')"> 删除 </div></div></div>';
+                        // alert("waicllll"+task_list.length);
 
-                                $("#project_list").append(obj);
-                            }
-                            break;
+                        console.log("if里1--reCode=" + ret);
+                        final_information = task_list;
+                        // alert("if里2");
+                        var information = eval(task_list[i].second_project);
+                        console.log("if里3");
+                        console.log("坎坎坷坷扩扩扩扩扩扩扩" + information);
+                        for (var ii = 0; ii < information.length; ii++) {
+                            // alert("licccllll"+information.length);
+                            obj = '<div class="border"> <div style = "margin-top:10px;" ><div class = "left" > <b> 系统名称 </b></div> <div class = "right" style = "red;display:inline"> ' + task_list[i].first_project_name +
+                                '</div></div><div><div class = "left"> <b> 系统分类 </b></div><div class = "right"style = "display:inline"> ' + api.pageParam.task_type +
+                                ' </div></div><div><div class = "left" > <b> 设施名称 </b></div><div class = "right" style = "display:inline;"> ' + information[ii].second_project_name +
+                                ' </div></div><div class = "fill"                    style = "margin-bottom:5px;padding-right:8%;margin-top:-5px;text-align:right;" > <img src = "../image/edit.png"style = "width:28px;margin-bottom:-8px;display:inline" onclick="doclick(' +
+                                i + ',' + ii + ')" /> <div style = "display:inline" onclick="doclick(' + i + ',' + ii +
+                                ')"> 编辑 </div>  <img src = "../image/delete.png"  style = "width:20px;display:inline;margin-bottom:-6px;margin-left:20px" onclick="ddelete(' + i + ',' + ii +
+                                ')"/> <div style = "display:inline" onclick="ddelete(' + i + ',' + ii + ')"> 删除 </div></div></div>';
+
+                            $("#project_list").append(obj);
                         }
+
+
                     }
                     // final_information = eval(data.unfinished);
                     // var obj = "";
@@ -309,30 +311,8 @@
     }
     var code_chosed_delete = "";
 
-    function ddelete(v) {
+    function ddelete(x, v) {
         if (window.confirm('您确定要删除该任务吗？')) {
-            var Chosed = eval('[' + api.pageParam.array + ']');
-            code_chosed_delete = "";
-
-            for (var i = 0; i < final_information.length; i++) {
-                //从new——Test页面跳转过来的可以直接检查还剩下啥  字符串拼接
-                //从管理未提交跳转过来要把返回的数据遍历一下
-                if (i != v) {
-                    if (i < final_information.length - 1) {
-                        code_chosed_delete += '{"first_project_id":"' + final_information[i].first_project_id + '","first_project_name":"' + final_information[i].first_project_name + '","second_project_id":"' + final_information[i].second_project_id +
-                            '","second_project_name":"' +
-                            final_information[i].second_project_name + '"},';
-
-                    } else {
-                        code_chosed_delete += '{"first_project_id":"' + final_information[i].first_project_id + '","first_project_name":"' + final_information[i].first_project_name + '","second_project_id":"' + final_information[i].second_project_id +
-                            '","second_project_name":"' +
-                            final_information[i].second_project_name + '"}';
-                    }
-                }
-            }
-            console.log("chosed_code==" + code_chosed_delete);
-
-
             var UILoading = api.require('UILoading');
             UILoading.flower({
                 center: {
@@ -349,15 +329,14 @@
                 dataType: 'text', //该参数若不传，则默认为json<div class="aui-tips aui-margin-b-15">2
                 data: {
                     values: {
-
                         userId: $api.getStorage('userId'),
                         task_id: task_id,
-                        code_chosed_delete: '[' + code_chosed_delete + ']',
-
+                        second_project_id: eval(final_information[x]).second_project[v].second_project_id
 
                     }
                 }
             }, function(ret, err) {
+              // alert( $api.getStorage('userId')+','+task_id+","+eval(final_information[x]).second_project[v].second_project_id);
                 var UILoading = api.require('UILoading');
                 UILoading.closeFlower({
                     id: id++ //关闭id 号对应加载提示框
@@ -374,9 +353,6 @@
                             duration: 2000,
                             location: 'bottom'
                         });
-                        $("#project_list").html("");
-                        final_information = "";
-                        loadData();
 
                     } else {
                         api.toast({
@@ -396,9 +372,9 @@
     }
     var second_project_id;
 
-    function doclick(v) {
+    function doclick(x, v) {
         //下方是用来解析json的
-        second_project_id = final_information[v].second_project_id;
+        second_project_id = eval(final_information[x]).second_project[v].second_project_id;
 
 
         api.openWin({
@@ -413,7 +389,7 @@
                 task_id: task_id,
                 second_project_id: second_project_id,
                 task_character: api.pageParam.task_character,
-                second_project_name: final_information[v].second_project_name,
+                second_project_name: eval(final_information[x]).second_project[v].second_project_name,
                 maintenanceplan_id: maintenanceplan_id,
                 info: final_information
             }

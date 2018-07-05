@@ -100,8 +100,9 @@
     var task;
 
     var id = 0;
+
     function loadData() {
-  var UILoading = api.require('UILoading');
+        var UILoading = api.require('UILoading');
         document.getElementById('facility_name').innerHTML = api.pageParam.second_project_name;
         // alert(api.pageParam.second_project_name);
         UILoading.flower({
@@ -125,20 +126,20 @@
         // }
         // alert($api.getStorage('userId') + ",," + api.pageParam.task_id + ",," + api.pageParam.maintenanceplan_id + ",," + api.pageParam.second_project_id);
         api.ajax({
-                url: $api.getStorage('connectUrl') + '/Maintenancer/EditOnExecuteTask',
+                url: $api.getStorage('connectUrl') + '/Maintenancer/GetTaskMaintenanceContent',
                 method: 'post',
                 data: {
                     values: {
 
-                        userId: $api.getStorage('userId'),
+                        userName: $api.getStorage('account'),
                         task_id: api.pageParam.task_id,
-                        maintenanceplan_id: api.pageParam.maintenanceplan_id,
                         second_project_id: api.pageParam.second_project_id
 
                     }
                 }
             },
             function(ret, err) {
+              // alert(api.pageParam.task_id+',,'+api.pageParam.second_project_id);
                 UILoading.closeFlower({
                     id: id++ //关闭id 号对应加载提示框
                 });
@@ -147,27 +148,36 @@
                     var status = eval(ret).status;
                     // alert(status);
                     var project_json = eval(ret);
-
-
-                    // var status = project_json.status;
-
                     console.log("testwork10_frm获取到数据是" + status);
                     var information;
                     // alert(status);
                     if (status == "true") {
-                        task_item_finished = project_json.task_item_finished;
-                        $("#storage").html(project_json.task_item_finished);
-                        task = eval(project_json.task_item);
-                        console.log("testwork10_frm获取到的数据是" + JSON.stringify(task));
-                        var obj = "";
+                        var mess =project_json.message;
                         $("#add").html("");
-                        for (var i = 0; i < task.length; i++) {
-                            obj = '  <li class="aui-list-item" onclick="click_item(' + task[i].maintenance_test_content_id + ')"><div class="aui-list-item-inner"><div class="aui-list-item-title" >' +
-                                task[i].serial + '.' + task[i].test_name +
-                                '</div></div><div class="content">' + task[i].test_content + '</div></li>';
+                        var obj = "";
+                        for (var i = 0; i < mess.length; i++) {
+                            if (mess[i].maintenance_test_content_state_finished == "已完成") {
+                                $("#storage").append(mess[i].maintenance_test_content_serial + ",");
+                            }
+                            obj = '  <li class="aui-list-item" onclick="click_item(' + mess[i].maintenance_test_content_id + ')"><div class="aui-list-item-inner"><div class="aui-list-item-title" >' +
+                                mess[i].maintenance_test_content_serial + '.' + mess[i].maintenance_test_content_name +
+                                '</div></div><div class="content">' + mess[i].maintenance_test_content_all + '</div></li>';
 
                             $("#add").append(obj);
                         }
+
+
+
+                        // console.log("testwork10_frm获取到的数据是" + JSON.stringify(task));
+                        // var obj = "";
+                        // $("#add").html("");
+                        // for (var i = 0; i < task.length; i++) {
+                        //     obj = '  <li class="aui-list-item" onclick="click_item(' + task[i].maintenance_test_content_id + ')"><div class="aui-list-item-inner"><div class="aui-list-item-title" >' +
+                        //         task[i].serial + '.' + task[i].test_name +
+                        //         '</div></div><div class="content">' + task[i].test_content + '</div></li>';
+                        //
+                        //     $("#add").append(obj);
+                        // }
 
                     } else {
                         api.toast({
@@ -239,28 +249,17 @@
     function closewwin() {
 
 
-        api.sendEvent({
-            name: 'msg_name',
-            extra: {
-                "status": "true"
-            }
+        api.closeWin({
         });
 
-        if ((task_item_finished.length + 1) / 2 == task.length) {
-            // alert(task_item_finished.length);
-            // alert(task.length);
-            // alert("true");
-            api.closeWin({});
-        } else {
-            
-            api.closeWin({});
-        }
+
+
 
 
     }
 
     function click_item(v) {
-
+// alert(v+','+api.pageParam.task_id+','+ api.pageParam.maintenanceplan_id);
         api.openWin({
             name: 'executeTestTask_win',
             url: './executeTestTask_win.html',

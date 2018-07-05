@@ -219,7 +219,7 @@
 
     };
   $api.addEvt($api.byId('footer'),'click',function(){
-    var sign_status=false;
+    var sign_status=0;
     if(task==false) {
       alert("您未选择任务");
       return;
@@ -232,11 +232,11 @@
       });
       var distance = $api.getStorage('distance');
       if(distance > task2.enclosure_length){
-        sign_status=false;
+        sign_status=0;
         alert("未到达目的地！");
       }
       else{
-        sign_status=true;
+        sign_status=1;
         alert("签到成功");
       }
       //alert(distance);
@@ -257,7 +257,7 @@
           }
       },function(ret, err){
           if (ret) {
-              //alert( ret.message );
+              alert( ret.message );
           } else {
               alert( err.message );
           }

@@ -1,130 +1,211 @@
-<!-- <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
     <title>应用</title>
-    <link rel="stylesheet" type="text/css" href="../css/api.css"/>
-    <link rel="stylesheet" type="text/css" href="../css/style.css"/>
-    <link rel="stylesheet" type="text/css" href="../css/aui.2.0.css"/>
-    <link rel="stylesheet" type="text/css" href="../css/aui.css"/>
-    <link rel="stylesheet" type="text/css" href="../css/aui-skin.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../css/aui.2.0.css" />
+    <link rel="stylesheet" type="text/css" href="../css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../css/aui-skin.css" />
     <style>
+
     </style>
 </head>
-<body>
 
+<body>
     <ul id="project_list" class="aui-list aui-media-list">
-      </ul>
+        <!-- <li class="aui-list-item">
+        <div style="color:red;text-align:right">123</div>
+        <div class="aui-media-list-item-inner">
+          <div class="aui-list-item-inner">
+              <div class="aui-list-item-text">
+                <div class="aui-list-item-title">任务名称</div>
+                <div>123</div>
+              </div>
+              <div class="aui-list-item-text">
+                <div class="aui-list-item-title">下发日期</div>
+                <div>123</div>
+              </div>
+              <div class="aui-list-item-text">
+                <div class="aui-list-item-title">执行状态</div>
+                <div>123</div>
+              </div>
+              <div class="aui-btn aui-btn-info"  onclick="acceptTask('+i+')" style="float:right;margin-right:10px;">
+                <span class="aui-iconfont aui-icon-edit" ></span>接收</div>
+            </div>
+          </div>
+        </li> -->
+    </ul>
 
 </body>
-</html>
 <script type="text/javascript" src="../script/api.js"></script>
 <script type="text/javascript" src="../script/jquery-1.4.2.min.js"></script>
-
 <script type="text/javascript">
     //json的获取需要设置为全局变量
-      var project_json =  "";
-      var userName = "";
-    apiready = function () {
-        // userName = $api.getStorage('account');
-        // getAllInfomation();
-        alert("本模块待开发中......");
-        api.closeFrame({
-          name:"jieshou_frame"
+    var project_json = "";
+    var userName = $api.getStorage('account');
+    var task_id;
+    var maintenanceplan_id;
+    var project_id;
+    apiready = function() {
+        var array = api.pageParam.name;
+        //alert(array);
+        //getId();
+        //alert('hello');
+        var index = array.indexOf('   ');
+        var string1 = array.substring(0, index); //项目id
+        // alert(string1);
+        var string2 = array.substring(index + 3); //任务id
+        // alert(string2);
+        //  var obj_project = JSON.parse(string1);
+        //  var obj_task = JSON.parse(string2);
+        maintenanceplan_id = string2;
+        //  api.pageParam.maintenanceplan_id;
+        project_id = string1;
+        //api.pageParam.maintenanceplan_id;
+
+        getAllInfomation();
+    };
+
+    // function getId(){
+    //   var array = api.pageParam.name;
+    //   alert(array);
+    // }
+    function creatPage() {
+        // var data = eval(project_json);
+        // var data_info = data.message;
+        //alert(array);
+        var information = project_json;
+        var obj = "";
+        $("#project_list").html("");
+        for (var i = 0; i < information.length; i++) {
+            //使用information[i]来获取一个个的json对象
+            var differentobj = "";
+            obj = '<li class="aui-list-item">' +
+                '<div style="color:red;text-align:right;margin-right:10px;">' + information[i].type + '</div>' +
+                '<div class="aui-media-list-item-inner">' +
+                '<div class="aui-list-item-inner">' +
+                '<div class="aui-list-item-text">' +
+                '<div class="aui-list-item-title">任务名称</div>' +
+                '<div>' + information[i].task_name + '</div>' +
+                '</div>' +
+                '<div class="aui-list-item-text">' +
+                '<div class="aui-list-item-title">下发日期</div>' +
+                '<div>' + information[i].create_time + '</div>' +
+                '</div>' +
+                '<div class="aui-list-item-text">' +
+                '<div class="aui-list-item-title">执行状态</div>' +
+                '<div>' + information[i].status + '</div>' +
+                '</div>';
+            if (information[i].status == "待接收") {
+                differentobj = '<div class="aui-btn aui-btn-info"onclick="acceptTask(' + i + ')" style="float:right;margin-right:10px;">' +
+                    '<span class="aui-iconfont aui-icon-edit" ></span>接收</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</li>';
+            } else if(information[i].status == "执行中") {
+                differentobj = '<div class="aui-btn aui-btn-info"  onclick="executeTask(' + i + ')" style="float:right;margin-right:10px;">' +
+                    '<span class="aui-iconfont aui-icon-edit" ></span>执行</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</li>';
+            }else{
+              differentobj ='';
+            }
+            obj += differentobj;
+            $("#project_list").append(obj);
+        }
+    }
+
+    function executeTask(index) {
+        //执行任务的代码还没写，感觉跟接收任务差不多。
+        var information = project_json;
+        //alert(information[index].task_id);
+        api.openWin({
+            name: 'Test_Task',
+            url: 'Test_Task.html',
+            pageParam: {
+                task_name: information[index].task_name,
+                task_id: information[index].task_id,
+                task_type: information[index].type,
+                project_id: project_id,
+                maintenanceplan_id:maintenanceplan_id
+            }
         });
 
     }
 
+    function acceptTask(index) {
+        //下方是用来解析json的
+        var information = project_json;
+        // api.openWin({
+        //     name: 'acceptTask_win',
+        //     url: './acceptTask_win.html',
+        //     pageParam: {
+        //         "task_info":information[index]
+        //     }
+        // });
+        //向服务器发送修改任务状态（由待接收为执行中）重新载入页面
+        api.ajax({
+            url: $api.getStorage('connectUrl') + '/Maintenancer/TaskStatusOnExecute', //'http://192.168.0.7:8080/firefighting/Maintenancer/TaskStatusOnExecute',
+            method: 'post',
+            data: {
+                values: {
+                    userName: userName,
+                    task_id: information[index].task_id
+                }
+            }
+        }, function(ret, err) {
+            if (ret) {
+                getAllInfomation();
+            } else {
+                alert(err.message);
+            }
+        });
 
-function creatPage()
-{
-  var data = eval(project_json);
-  var data_info = data.task;
-  var information = eval(data_info);
-  var obj ="";
-  $("#project_list").html("");
-  for (var i = 0;i<information.length;i++) {
-        //使用information[i]来获取一个个的json对象
-      var differentobj = "";
-      obj = '<li class="aui-list-header"></li><li class="aui-list-item aui-list-item-arrow"><div style="color:red;text-align:right">'+information[i].task_type+'</div><div class="aui-media-list-item-inner"><div class="aui-list-item-inner"><div class="aui-list-item-text"><div class="aui-list-item-title">项目名称</div><div>'+information[i].project_name+'</div></div><div class="aui-list-item-text"><div class="aui-list-item-title">任务名称</div><div >'+information[i].task_name+'</div></div><div class="aui-list-item-text"><div class="aui-list-item-title">创建日期</div><div >'+information[i].creat_time+'</div></div><div class="aui-list-item-text"><div class="aui-list-item-title">执行状态</div><div >'+information[i].task_status;
-      if (information[i].task_status=="待接收") {
-        differentobj =   '</div></div><div class="aui-btn aui-btn-info"  onclick="acceptTask('+i+')" style="float:right;"><span class="aui-iconfont aui-icon-edit" ></span>接收</div></div></div></li>';
-      }
-      else {
-        differentobj =   '</div></div><div class="aui-btn aui-btn-info"  onclick="executeTask('+i+')" style="float:right;"><span class="aui-iconfont aui-icon-edit" ></span>执行</div></div></div></li>';
-      }
-      obj+=differentobj;
-       $("#project_list").append(obj);
+
     }
-}
-
-function executeTask(index)
-{
-  //执行任务的代码还没写，感觉跟接收任务差不多。
-  var data = eval(project_json);
-  var data_info = data.task;
-  var information = eval(data_info);
-  api.openWin({
-      name: 'executeTask_win',
-      url: './executeTask_win.html',
-      pageParam: {
-          "task_info":information[index]
-      }
-  });
-}
-  function acceptTask(index)
-  {
-    //下方是用来解析json的
-    var data = eval(project_json);
-    var data_info = data.task;
-    var information = eval(data_info);
-    api.openWin({
-        name: 'acceptTask_win',
-        url: './acceptTask_win.html',
-        pageParam: {
-            "task_info":information[index]
-        }
-    });
-
-  }
 
     function getAllInfomation()
     //函数用来获取json数据，并返回
     {
-      api.ajax({
-          url: 'http://192.168.0.7:8080/XX',//接口地址，这个接口还没写好
-          method: 'post',
-          data: {
-              values: {
-                 userName:userName
-              }
-          }
-      },function(ret, err){
-          if (ret) {
-            var status = ret.status;
-               if (status =="true") {
-                 project_json = ret.task;
-                 creatPage();
-               }
-               else {
-                 alert("数据获取失败，请重试");
-                 api.closeFrame({
-                   name:"jieshou_frame"
-                 });
-               }
-          } else {
-            alert("未能与服务器连接");
-            api.closeFrame({
-                 name:"jieshou_frame"
-            });
-            api.toast({
-                msg: ret.message,
-                duration: 2000,
-                location: 'bottom'
-            });
-          }
-      });
+        // alert(userName);
+        // alert(maintenanceplan_id);
+        api.ajax({
+            url: $api.getStorage('connectUrl') + '/Maintenancer/CheckPlanTask',
+            // url: 'http://192.168.0.7:8080/firefighting/Maintenancer/CheckPlanTask',
+            method: 'post',
+            data: {
+                values: {
+                    userName: userName,
+                    maintenanceplan_id: maintenanceplan_id
+                }
+            }
+        }, function(ret, err) {
+            // alert(ret);
+            if (ret) {
+                var status = ret.status;
+                if (status == "true") {
+                    project_json = ret.message;
+                    creatPage();
+                    //alert(JSON.stringify( project_json));
+                } else {
+                    alert("数据获取失败，请重试");
+                }
+            } else {
+                alert("未能与服务器连接");
+                api.toast({
+                    msg: ret.message,
+                    duration: 2000,
+                    location: 'bottom'
+                });
+            }
+        });
 
     }
-</script> -->
+</script>
+
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+      <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+      <link rel="stylesheet" type="text/css" href="../css/aui.css" />
+  </head>
+  <style media="screen">
+  .aui-bar-nav {
+      top: 0;
+      line-height: 2.25rem;
+      background-color: #00B2B4;
+      color: #ffffff;
+  }
+  </style>
+  <body>
+    <header class="aui-bar aui-bar-nav" id="aui-header">
+        <a class="aui-btn aui-pull-left" tapmode onclick="closeWin()">
+            <span class="aui-iconfont aui-icon-left"></span>
+        </a>
+        <div class="aui-title">任务列表</div>
+    </header>
+  </body>
+  <script type="text/javascript" src="../script/api.js"></script>
+  <script type="text/javascript">
+  apiready = function(){
+      api.parseTapmode();
+      var header = $api.byId('aui-header');
+      $api.fixStatusBar(header);
+      var headerPos = $api.offset(header);
+      var body_h = $api.offset($api.dom('body')).h;
+
+      var array = api.pageParam.name;
+      //alert(array);
+      // var index = array.indexOf('   ');
+      // var string1 = array.substring(0, index);//项目id
+      // //alert(string1);
+      // var string2 = array.substring(index + 3);//任务id
+      // //alert(string2);
+      // //var obj_project = JSON.parse(string1);
+      // var obj_project = JSON.parse(string1);
+      // var obj_task = JSON.parse(string2);
+      // api.openFrame({
+      //     name: 'jieshou_frame',
+      //     url: './jieshou_frame.html',
+      //     bounces: true,
+      //     rect: {
+      //         x: 0,
+      //         y: headerPos.h,
+      //         w: 'auto',
+      //         h: 'auto'
+      //     },
+      //     pageParam:{
+      //       name:api.pageParam.name
+      //     }
+      // })
+      api.openFrame({
+        name: 'jieshou_frame',
+        url: 'jieshou_frame.html',
+        rect: {
+            x: 0,
+            y: headerPos.h,
+            w: 'auto',
+            h: 'auto'
+        },
+        pageParam: {
+            name: array,
+        },
+    });
+  };
+  function closeWin(){
+      api.closeWin({
+      });
+  }
+  </script>
+  </html>

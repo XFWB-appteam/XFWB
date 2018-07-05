@@ -136,12 +136,15 @@
                              maintenanceplan_name: information_plan[j].maintenanceplan_name,//某年某月的计划
                              maintenanceplan_status: information_plan[j].maintenanceplan_status//已完成或未完成
                           };
-                          var array_plan = JSON.stringify(temp); //
-                          var array_info = JSON.stringify(temp1);
-                          var array = array_plan + "   " + array_info;
-                          var id=JSON.stringify(temp1.maintenanceplan_id);//将json对象转化成字符串
-                          localStorage.setItem("id_info",id);//把选择的数据存储在localstorage中
-                          var id_delivery = JSON.parse(localStorage.getItem('id_info'));//向下个页面传递id参数
+                          // var array_plan = JSON.stringify(temp); //
+                          // var array_info = JSON.stringify(temp1);
+                          // var array = array_plan + "   " + array_info;
+                          var array_project = JSON.stringify(temp.id);
+                          var array_maintenanceplan=JSON.stringify(temp1.maintenanceplan_id);//将json对象转化成字符串
+                          var array = array_project + "   " + array_maintenanceplan;
+                          //alert(array);
+                          // localStorage.setItem("id_info",id);//把选择的数据存储在localstorage中
+                          // var id_delivery = JSON.parse(localStorage.getItem('id_info'));//向下个页面传递id参数
                           //alert(id_delivery);
                            //addElementLi
                            var ul = document.getElementById('number'+i);
@@ -159,18 +162,31 @@
                             //alert(li.innerHTML);
                             ul.appendChild(li);
                           //  alert(id_delivery);
-                            document.getElementById(s1+s2).addEventListener('click',function(id_delivery_arg){
-                                    //alert(array);
-                                    return function(){
-                                    api.openWin({
-                                      name: 'planset0',
-                                      url: './planset0_win.html',
-                                      pageParam: {
-                                        name: id_delivery_arg
-                                    }
-                                    //reload:true
-                                  });}
-                              }(array),false);
+                            // document.getElementById(s1+s2).addEventListener('click',function(id_delivery_arg){
+                            //         //alert(array);
+                            //         return function(){
+                            //         api.openWin({
+                            //           name: 'planset0',
+                            //           url: './planset0_win.html',
+                            //           pageParam: {
+                            //             name: id_delivery_arg
+                            //         }
+                            //         //reload:true
+                            //       });}
+                            //   }(array),false);
+
+                              document.getElementById(s1+s2).addEventListener('click',function(id_delivery_arg){
+                                      //alert(array);
+                                      return function(){
+                                      api.openWin({
+                                        name: 'jieshou_win',
+                                        url: './jieshou_win.html',
+                                        pageParam: {
+                                          name: id_delivery_arg
+                                      }
+                                      //reload:true
+                                    });}
+                                }(array),false);
 
                             //alert(ul.innerHTML);
                             document.getElementById('num'+i).appendChild(ul);
